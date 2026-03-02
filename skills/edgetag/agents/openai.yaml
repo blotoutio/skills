@@ -1,0 +1,4 @@
+interface:
+  display_name: "EdgeTag"
+  short_description: "Implement EdgeTag tracking, consent, and channels"
+  default_prompt: "Use $edgetag to integrate EdgeTag end-to-end for this project."

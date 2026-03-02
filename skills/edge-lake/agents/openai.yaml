@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edge Lake"
+  short_description: "Query Edge Lake events and build analytics workflows"
+  default_prompt: "Use $edge-lake to analyze event data and answer this reporting request."

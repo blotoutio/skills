@@ -1,0 +1,40 @@
+---
+description: When working with EdgeTag, Blotout, or @blotoutio SDK implementations, prefer the skill reference files and live documentation over pre-trained knowledge.
+alwaysApply: false
+globs:
+  - "**/*edgetag*"
+  - "**/*edge-tag*"
+  - "**/*blotout*"
+  - "**/edgetag-sdk*"
+  - "**/providers-facebook-sdk*"
+  - "**/providers-google-ads-clicks-sdk*"
+  - "**/providers-tiktok-sdk*"
+  - "**/providers-linkedin-sdk*"
+---
+
+# EdgeTag / Blotout
+
+Your knowledge of EdgeTag APIs may be outdated. Always retrieve current documentation or reference skill files before any EdgeTag implementation task.
+
+## Key APIs
+
+- **JS SDK**: `edgetag('init', ...)`, `edgetag('tag', ...)`, `edgetag('user', ...)`, `edgetag('data', ...)`, `edgetag('consent', ...)`
+- **npm**: `import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js'`
+- **HTTP API**: GET `/tag` (events), POST `/data` (user enrichment)
+- **Script URL**: `https://d.yourdomain.com/load` (NOT track.js)
+
+## Docs
+
+- https://docs.edgetag.io
+- Standard Events: https://docs.edgetag.io/overview/standard-events
+- Browser SDK: https://docs.edgetag.io/implementation/browser
+- Headless SDK: https://docs.edgetag.io/implementation/headless
+- HTTP API: https://docs.edgetag.io/implementation/http
+
+## Common Mistakes
+
+- **NEVER load EdgeTag via GTM** — it must be first-party (direct script tag or npm)
+- **Init takes an object**: `edgetag('init', { edgeURL: '...' })` — not a string
+- **Consent before events** — events are blocked until consent is granted
+- **Providers are objects**: `{ facebook: true }` — not arrays
+- **PII format matters**: email lowercase, phone E.164, names lowercase, dateOfBirth YYYYMMDD

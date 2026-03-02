@@ -1,0 +1,23 @@
+{
+  "name": "blotout-skills",
+  "private": true,
+  "description": "A collection of [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) for implementing Blotout",
+  "scripts": {
+    "format": "biome format --write .",
+    "format:check": "biome format ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blotoutio/skills.git"
+  },
+  "keywords": [],
+  "author": "Blotout",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/blotoutio/skills/issues"
+  },
+  "homepage": "https://github.com/blotoutio/skills#readme",
+  "devDependencies": {
+    "@biomejs/biome": "2.4.4"
+  }
+}

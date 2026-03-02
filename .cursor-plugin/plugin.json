@@ -1,0 +1,26 @@
+{
+  "name": "edgetag",
+  "version": "1.0.0",
+  "description": "Skills for EdgeTag by Blotout: server-side tracking, first-party data infrastructure, identity stitching, consent management, and 50+ channel integrations",
+  "author": {
+    "name": "Blotout",
+    "email": "support@blotout.io",
+    "url": "https://www.blotout.io"
+  },
+  "keywords": [
+    "edgetag",
+    "blotout",
+    "server-side-tagging",
+    "first-party-data",
+    "capi",
+    "conversion-api",
+    "identity-stitching",
+    "consent",
+    "meta-capi",
+    "google-ads",
+    "tiktok",
+    "klaviyo",
+    "shopify",
+    "tracking"
+  ]
+}

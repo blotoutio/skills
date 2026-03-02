@@ -1,0 +1,4 @@
+interface:
+  display_name: "ConsentIQ"
+  short_description: "Analyze consent rates, categories, and regional trends"
+  default_prompt: "Use $consentiq to explain this consent analytics question with clear metrics."

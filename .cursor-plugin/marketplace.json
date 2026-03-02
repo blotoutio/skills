@@ -1,0 +1,13 @@
+{
+  "name": "blotoutio",
+  "owner": {
+    "name": "Blotout"
+  },
+  "plugins": [
+    {
+      "name": "edgetag",
+      "source": "./",
+      "description": "Skills for EdgeTag server-side tracking and first-party data infrastructure"
+    }
+  ]
+}

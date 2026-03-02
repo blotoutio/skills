@@ -1,0 +1,15 @@
+{
+  "$schema": "https://code.claude.com/schemas/marketplace.json",
+  "name": "blotoutio",
+  "owner": {
+    "name": "Blotout",
+    "url": "https://www.blotout.io"
+  },
+  "plugins": [
+    {
+      "name": "blotout",
+      "source": "./",
+      "description": "Skills for Blotout EdgeTag: server-side tracking, first-party data infrastructure, identity stitching, 50+ channel integrations, consent analytics (ConsentIQ), and event data lake with SQL queries (Edge Lake)"
+    }
+  ]
+}
