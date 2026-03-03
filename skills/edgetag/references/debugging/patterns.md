@@ -384,6 +384,8 @@ For each request:
   * No error messages
 ```
 
+**IMPORTANT: Beacon requests** — Events sent with `method: 'beacon'` (AddToCart before redirect, Purchase before navigation, page unload) use `navigator.sendBeacon()` and will NOT appear when filtering by XHR/Fetch. To see them, filter by **All** or **Ping** type instead. If using Chrome MCP or automated tools, see **gotchas.md § Beacon Request Visibility** for how to intercept them.
+
 ### Console Tab Analysis
 
 ```

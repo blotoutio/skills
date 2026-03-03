@@ -51,6 +51,41 @@ Grant all consent and retest. If it works with consent, the issue is consent —
 
 **Recommended formats:** Email: lowercase, trimmed (`user@example.com`). Phone: E.164, digits only with country code (`+14155551234`). Names: lowercase, letters only (`john`). See the events reference for full formatting details and code examples.
 
+## Beacon Request Visibility
+
+### Beacon Requests Are Invisible to Standard Debugging Tools
+
+**Problem:** Events sent with `method: 'beacon'` (e.g., AddToCart before redirect, Purchase before navigation, page unload events) use `navigator.sendBeacon()`, which does NOT appear in:
+- Chrome DevTools Performance Resource Timing API
+- Standard XHR/Fetch network filters
+- Chrome MCP / Puppeteer resource timing captures
+- Most automated testing and monitoring tools
+
+This means an AI assistant using Chrome MCP, a developer filtering Network tab by XHR, or any tool relying on `performance.getEntriesByType('resource')` will **miss beacon requests entirely** and incorrectly conclude events aren't firing.
+
+**Impact:** False negatives during debugging — events are actually firing but appear missing because the debugging tool can't see them.
+
+**How to detect beacon requests:**
+
+1. **Chrome DevTools Network tab** — beacon requests DO appear here, but only if you filter by **All** or **Ping** type (not XHR/Fetch). Look for requests with type "ping" to your edge domain.
+
+2. **Intercept `navigator.sendBeacon`** — Override the function to log calls:
+```javascript
+const originalBeacon = navigator.sendBeacon.bind(navigator);
+navigator.sendBeacon = function(url, data) {
+  console.log('[EdgeTag Beacon]', url, JSON.parse(data));
+  return originalBeacon(url, data);
+};
+```
+
+3. **Chrome MCP / Puppeteer** — If using browser automation tools, you must intercept beacon calls via CDP (Chrome DevTools Protocol) network events or by injecting the override above before the page loads. The Performance Resource Timing API will not capture them.
+
+4. **Server-side verification** — Check the EdgeTag dashboard or use `edgeLakeQuery` via MCP to verify the event was received, rather than relying on client-side network observation.
+
+**When to suspect this issue:** If events that fire during navigation (AddToCart → redirect to cart, Purchase → redirect to confirmation, page unload) appear missing in debugging but other non-navigation events work fine, the missing events are likely using beacon and your debugging tool isn't capturing them.
+
+---
+
 ## Debugging Methodology Mistakes
 
 ### Changing Multiple Things at Once

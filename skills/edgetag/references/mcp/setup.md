@@ -123,6 +123,30 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
   - Meta EMQ → channel with `providerId: "facebook"`
 4. **Query data:** Use the channel's `channelId` and `teamId` with the relevant tool
 
+## Complementary MCP: Chrome DevTools
+
+For debugging EdgeTag implementations, add the Chrome DevTools MCP server alongside EdgeTag MCP. This lets the AI agent inspect browser network requests, JavaScript console errors, and verify events are firing — without manual DevTools inspection.
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics",
+        "--no-performance-crux"
+      ]
+    }
+  }
+}
+```
+
+With both MCP servers connected, the agent can verify events client-side (Chrome DevTools) and server-side (EdgeTag MCP `edgeLakeQuery`).
+
+See [debugging/README.md](../debugging/README.md) for full debugging tool recommendations.
+
 ## Troubleshooting
 
 

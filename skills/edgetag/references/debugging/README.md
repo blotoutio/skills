@@ -18,7 +18,42 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Developers during implementation, QA during testing
 
-### 2. Browser Extensions for Channel Validation
+### 2. Chrome DevTools MCP (AI-Assisted Debugging)
+
+**When to use:** Letting an AI agent (Claude, Cursor, etc.) inspect the browser directly during debugging
+
+Add the Chrome DevTools MCP server so the AI agent can see network requests, JavaScript console errors, and page state in real time — without you having to copy-paste from DevTools.
+
+**Setup** — Add to your MCP config:
+
+```json
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@latest",
+        "--no-usage-statistics",
+        "--no-performance-crux"
+      ]
+    }
+  }
+}
+```
+
+**What the agent can do:**
+- See EdgeTag network requests to your edge domain (e.g., `d.mysite.com`)
+- Read JavaScript console errors and warnings
+- Verify event payloads are being sent correctly
+- Check if consent is blocking events
+- Confirm browser pixels are firing
+
+**Note on beacon requests:** Events sent with `method: 'beacon'` use `navigator.sendBeacon()` and may not appear in standard resource timing captures. See **gotchas.md § Beacon Request Visibility** for how to intercept them.
+
+**Best for:** AI-assisted debugging sessions, automated QA with an AI agent, quickly diagnosing issues without manual DevTools inspection
+
+### 3. Browser Extensions for Channel Validation
 
 **When to use:** Verifying that browser-side signals reach ad platforms correctly
 
@@ -35,7 +70,7 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Confirming browser-side signals are received by the ad platform, catching parameter mismatches between what EdgeTag sends and what the platform sees
 
-### 3. Payload Validator Channel
+### 4. Payload Validator Channel
 
 **When to use:** Automated payload validation during QA
 
@@ -47,7 +82,7 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Catching payload issues before production, testing transforms
 
-### 4. Live Log Streaming
+### 5. Live Log Streaming
 
 **When to use:** Real-time server-side event monitoring
 
@@ -59,7 +94,7 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Real-time troubleshooting, validating server-side setup
 
-### 5. Live Dashboards
+### 6. Live Dashboards
 
 **When to use:** High-level metrics and anomaly detection
 
@@ -71,7 +106,7 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Monitoring production health, spotting issues
 
-### 6. EMQ Score Monitoring
+### 7. EMQ Score Monitoring
 
 **When to use:** Evaluating Meta channel delivery quality
 
@@ -83,7 +118,7 @@ EdgeTag provides multiple tools and methods to validate your implementation at d
 
 **Best for:** Meta-specific troubleshooting, optimization
 
-### 7. Event Validator Dashboard
+### 8. Event Validator Dashboard
 
 **When to use:** Inspecting individual event details
 
