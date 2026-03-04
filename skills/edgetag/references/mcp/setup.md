@@ -61,7 +61,7 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 3. Browser opens the EdgeTag login page (`https://app.edgetag.io`)
 4. User authenticates with their EdgeTag account
 5. Callback returns tokens to the MCP client
-6. Connection is established — all 17 tools are now available
+6. Connection is established — all 20 tools are now available
 
 ## All Available Tools
 
@@ -88,7 +88,7 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 | Tool | Description | Input Params |
 | --- | --- | --- |
 | `edgeLakeQuery` | Execute a single SQL query against the `lake.events` R2 data lake | `channelId` (uuid, edgeLake), `teamId` (uuid), `sql` (string) |
-| `edgeLakeCodeQuery` | Run multiple SQL queries with server-side JavaScript processing | `channelId` (uuid, edgeLake), `teamId` (uuid), `queries` (Record&lt;string, string&gt;), `code` (string) |
+| `edgeLakeCodeQuery` | Execute a JavaScript program server-side against Edge Lake. Write all queries using `codemode.query(sql)` and all processing in a single `code` block. Use `Promise.all()` for parallel queries. Max 20 queries, 80s timeout, 100KB result. | `channelId` (uuid, edgeLake), `teamId` (uuid), `code` (string) |
 | `edgeLakeTrafficAnalysis` | HTTP traffic breakdown by browser, OS, device type, country | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
 | `edgeLakeBotScore` | Bot detection analysis by Cloudflare bot scores (0-100) | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
 | `edgeLakeAttackAnalysis` | WAF attack classification (attack, likely_attack, likely_clean, clean, not_scored) | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
@@ -105,6 +105,14 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 | --- | --- | --- |
 | `consentIQOverview` | Total profiles, marketing opt-in/out by region (EU, UK, CA), last 24h changes. Requires channel with `providerId: "consentIQ"` | `channelId` (uuid, consentIQ), `teamId` (uuid) |
 | `consentIQCategories` | Per-category consent breakdown (marketing, analytics, sale of data, preferences) by region | `channelId` (uuid, consentIQ), `teamId` (uuid), `range` (enum: day/week/month) |
+
+### Real-Time Logger
+
+| Tool | Description | Input Params |
+| --- | --- | --- |
+| `loggerStart` | Start a real-time logger session. Connects to the Cloudflare Worker tail WebSocket and buffers parsed log messages. Auto-closes after 5 minutes — call again to reconnect. | `domainId` (uuid), `teamId` (uuid), `status?` (enum: ok/exception), `events?` (string[], e.g. ["Purchase","AddToCart"]), `path?` (enum: init/tag/data/user/audience/consent/load/providers/webhook), `method?` (enum: POST/GET) |
+| `loggerMessages` | Read buffered messages from an active logger session. Returns structured entries with eventName, channels, meta, outcome, and exceptions. Call repeatedly to poll. | `maxMessages?` (int 1-1000, default 50) |
+| `loggerStop` | Stop an active logger session. Closes the WebSocket and clears the buffer. | _(none)_ |
 
 ### Token Management
 
@@ -144,6 +152,16 @@ For debugging EdgeTag implementations, add the Chrome DevTools MCP server alongs
 ```
 
 With both MCP servers connected, the agent can verify events client-side (Chrome DevTools) and server-side (EdgeTag MCP `edgeLakeQuery`).
+
+## Recommended Debugging Workflow
+
+When debugging event issues, use all three layers together for full visibility:
+
+1. **Chrome DevTools MCP** (client-side) — See network requests, console errors, browser state. Confirms events are leaving the browser. Note: beacon requests need special handling (see debugging/gotchas.md).
+2. **Real-Time Logger** (`loggerStart` → `loggerMessages` → `loggerStop`) (server-side real-time) — See events as EdgeTag processes them: event parsing, channel delivery, errors, and per-channel request/response details. Filter by event name, status, path, or method.
+3. **Analytics & Edge Lake** (`domainAnalytics`, `domainErrors`, `edgeLakeQuery`) (historical) — Verify events were stored correctly, query patterns over time, check error rates and channel delivery.
+
+This three-layer approach catches issues at every stage: client → edge processing → data storage.
 
 See [debugging/README.md](../debugging/README.md) for full debugging tool recommendations.
 

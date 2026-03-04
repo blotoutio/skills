@@ -82,17 +82,24 @@ Add the Chrome DevTools MCP server so the AI agent can see network requests, Jav
 
 **Best for:** Catching payload issues before production, testing transforms
 
-### 5. Live Log Streaming
+### 5. Live Log Streaming (MCP Logger)
 
 **When to use:** Real-time server-side event monitoring
 
-- Watch events as they arrive at EdgeTag edge
-- See which events reach which channels
-- Monitor delivery status
-- Check timestamp accuracy
-- View error messages
+Use the EdgeTag MCP logger tools for real-time visibility into how EdgeTag processes events on the server side:
 
-**Best for:** Real-time troubleshooting, validating server-side setup
+1. **`loggerStart`** — Start a session with optional filters: `status` (ok/exception), `events` (e.g. ["Purchase","AddToCart"]), `path` (API endpoint), `method` (POST/GET). Session auto-closes after 5 minutes.
+2. **`loggerMessages`** — Poll buffered messages. Each message includes: eventName, method, path, timestamp, outcome, exceptions, per-channel requests (URL, headers, request/response body), meta (payload, userProps, hostData, consent), and uncategorized logs.
+3. **`loggerStop`** — End session early and clear buffer.
+
+**What you can see:**
+- Events as they arrive at the EdgeTag edge
+- Per-channel outbound requests (what EdgeTag sends to Meta, Google, etc.)
+- Channel response bodies (success/error from each provider)
+- Event metadata: payload, user props, host data, consent state
+- Exceptions and error details
+
+**Best for:** Real-time troubleshooting, validating server-side delivery, debugging channel-specific errors
 
 ### 6. Live Dashboards
 
@@ -129,6 +136,24 @@ Add the Chrome DevTools MCP server so the AI agent can see network requests, Jav
 - See transformation applied
 
 **Best for:** Debugging specific user/event issues, consent validation
+
+## Recommended AI-Assisted Debugging Workflow
+
+When debugging event issues with an AI agent, combine all three layers for full visibility across the stack:
+
+| Layer | Tool | What It Shows |
+| --- | --- | --- |
+| **Client-side** | Chrome DevTools MCP | Network requests leaving the browser, console errors, page state. Note: beacon requests need interception (see gotchas.md). |
+| **Server-side (real-time)** | EdgeTag MCP Logger (`loggerStart` → `loggerMessages`) | Event processing, per-channel delivery requests/responses, payload parsing, consent enforcement, exceptions. |
+| **Historical** | EdgeTag MCP Analytics (`domainAnalytics`, `domainErrors`, `edgeLakeQuery`) | Event storage verification, error rates over time, channel delivery patterns. |
+
+**Typical flow:**
+1. Start the logger with relevant filters (e.g. `events: ["Purchase"]`, `status: "exception"`)
+2. Use Chrome DevTools MCP to trigger the action in the browser and confirm the request left
+3. Poll `loggerMessages` to see how EdgeTag processed it and what it sent to each channel
+4. If the event should have been stored, query Edge Lake or analytics to verify
+
+See [mcp/setup.md](../mcp/setup.md) for MCP setup and tool details.
 
 ## Common Issues at a Glance
 
