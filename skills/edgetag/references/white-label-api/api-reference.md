@@ -52,7 +52,6 @@ https://app.edgetag.io/oauth/app/login
 
 For sandbox, use `https://app-sandbox.edgetag.io/oauth/app/login`.
 
-
 | Parameter               | Required | Description                                           |
 | ----------------------- | -------- | ----------------------------------------------------- |
 | `client_id`             | Yes      | From OAuth app creation                               |
@@ -63,21 +62,20 @@ For sandbox, use `https://app-sandbox.edgetag.io/oauth/app/login`.
 | `code_challenge_method` | Yes      | `S256` (only option currently)                        |
 | `state`                 | No       | Base64-encoded custom data preserved through the flow |
 
-
 #### Generating code_challenge
 
 ```javascript
-const crypto = require("crypto");
+const crypto = require('crypto')
 
 // Generate and store the verifier (you'll need it later)
-const verifier = crypto.randomBytes(32).toString("base64url");
+const verifier = crypto.randomBytes(32).toString('base64url')
 
 // Hash it for the challenge
 const codeChallenge = crypto
-  .createHash("sha256")
+  .createHash('sha256')
   .update(verifier)
   .digest()
-  .toString("base64url");
+  .toString('base64url')
 ```
 
 #### Redirect example
@@ -85,14 +83,14 @@ const codeChallenge = crypto
 ```javascript
 const params = new URLSearchParams({
   client_id: clientId,
-  redirect_uri: "https://yourapp.com/callback",
-  scope: "full",
-  response_type: "code",
+  redirect_uri: 'https://yourapp.com/callback',
+  scope: 'full',
+  response_type: 'code',
   code_challenge: codeChallenge,
-  code_challenge_method: "S256",
-});
+  code_challenge_method: 'S256',
+})
 
-window.location.href = `https://app.edgetag.io/oauth/app/login?${params}`;
+window.location.href = `https://app.edgetag.io/oauth/app/login?${params}`
 ```
 
 ### 3. Exchange Code for Access Token
@@ -105,38 +103,36 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Basic {base64(client_id:client_secret)}
 ```
 
-
 | Field           | Value                                      |
 | --------------- | ------------------------------------------ |
 | `code`          | From the redirect callback URL             |
 | `code_verifier` | The **plain-text** verifier (not the hash) |
 | `grant_type`    | `authorization_code`                       |
 
-
 #### JavaScript
 
 ```javascript
-const code = new URL(window.location.href).searchParams.get("code");
+const code = new URL(window.location.href).searchParams.get('code')
 
 const body = new URLSearchParams({
   code,
   code_verifier: verifier, // plain text, NOT the hashed challenge
-  grant_type: "authorization_code",
-});
+  grant_type: 'authorization_code',
+})
 
 const response = await fetch(
-  "https://api.edgetag.io/v1/oauth-app/client/token",
+  'https://api.edgetag.io/v1/oauth-app/client/token',
   {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${btoa(clientId + ':' + clientSecret)}`,
     },
     body,
   },
-);
+)
 
-const { access_token, refresh_token, expires_in } = await response.json();
+const { access_token, refresh_token, expires_in } = await response.json()
 // expires_in = 7200 (2 hours)
 ```
 
@@ -172,34 +168,32 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Basic {base64(client_id:client_secret)}
 ```
 
-
 | Field           | Value                                   |
 | --------------- | --------------------------------------- |
 | `refresh_token` | The refresh token from initial exchange |
 | `grant_type`    | `refresh_token`                         |
-
 
 #### JavaScript
 
 ```javascript
 const body = new URLSearchParams({
   refresh_token: refreshToken,
-  grant_type: "refresh_token",
-});
+  grant_type: 'refresh_token',
+})
 
 const response = await fetch(
-  "https://api.edgetag.io/v1/oauth-app/client/token",
+  'https://api.edgetag.io/v1/oauth-app/client/token',
   {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Authorization: `Basic ${btoa(clientId + ":" + clientSecret)}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: `Basic ${btoa(clientId + ':' + clientSecret)}`,
     },
     body,
   },
-);
+)
 
-const { access_token, expires_in } = await response.json();
+const { access_token, expires_in } = await response.json()
 ```
 
 #### Response
@@ -221,12 +215,10 @@ Content-Type: application/x-www-form-urlencoded
 Authorization: Basic {base64(client_id:client_secret)}
 ```
 
-
 | Field             | Value                          |
 | ----------------- | ------------------------------ |
 | `token`           | The access token to invalidate |
 | `token_type_hint` | `access_token`                 |
-
 
 ---
 
@@ -245,7 +237,6 @@ curl --request GET \
 
 **Response fields:**
 
-
 | Field              | Type   | Description                           |
 | ------------------ | ------ | ------------------------------------- |
 | `userId`           | string | User identifier                       |
@@ -255,7 +246,6 @@ curl --request GET \
 | `teams`            | array  | `[{ teamId, name }]`                  |
 | `billingType`      | string | Billing plan type                     |
 | `subscriptionPlan` | string | Current plan                          |
-
 
 ### GET /user/overview
 
@@ -331,7 +321,6 @@ curl --request POST \
   }'
 ```
 
-
 | Field          | Type    | Required    | Description                                                                        |
 | -------------- | ------- | ----------- | ---------------------------------------------------------------------------------- |
 | `name`         | string  | Yes         | Display name for the website                                                       |
@@ -345,7 +334,6 @@ curl --request POST \
 | `platform`     | string  | No          | `EDGETAG`, `SHOPIFY`, `WOOCOMMERCE`, `BIGCOMMERCE`, `MAGENTO`, `SALESFORCE`, `WIX` |
 | `d1UserScale`  | number  | No          | D1 database scaling parameter                                                      |
 | `tagType`      | string  | No          | `ECOMMERCE`, `LEAD_GENERATION`, `HEALTH_AND_WELLNESS`, `HIPAA`                     |
-
 
 **Response:**
 
@@ -367,7 +355,6 @@ Get full tag configuration including scripts, DNS records, consent settings, and
 
 Update tag configuration.
 
-
 | Field                    | Type    | Required | Description                                        |
 | ------------------------ | ------- | -------- | -------------------------------------------------- |
 | `name`                   | string  | Yes      | Display name                                       |
@@ -387,7 +374,6 @@ Update tag configuration.
 | `currencyConversionType` | string  | No       | `OFF`, `DYNAMIC`, `STATIC`                         |
 | `skipZeroPurchaseEvent`  | boolean | No       | Skip zero-value purchase events                    |
 | `strictOrigin`           | boolean | No       | Strict origin validation                           |
-
 
 **Tip:** `GET /tag/{tagId}` first to get current values, then send the update with the required fields plus only the fields you want to change.
 
@@ -438,12 +424,10 @@ curl --request GET \
 
 **Note:** The exact record names and values vary per domain setup. The `records` array contains the precise values the customer must configure in their DNS provider. Always use these values directly -- do not fabricate or guess DNS record names.
 
-
 | Field     | Type    | Description                                                           |
 | --------- | ------- | --------------------------------------------------------------------- |
 | `valid`   | boolean | `true` when all DNS records are properly configured                   |
 | `records` | array   | Remaining records to configure. Already-validated records are omitted |
-
 
 **Polling behavior:** Call this endpoint after the customer configures each record. Once `valid: true`, DNS setup is complete.
 
@@ -473,12 +457,10 @@ curl --request PATCH \
 
 ### Consent Values
 
-
 | Value      | Description                                                                    |
 | ---------- | ------------------------------------------------------------------------------ |
 | `DISABLED` | Consent checks are off — all events fire immediately                           |
 | `CUSTOM`   | Your app manages consent. You control when `edgetag('consent', ...)` is called |
-
 
 For white-label apps, use `**CUSTOM**` or `**DISABLED**`.
 
@@ -517,17 +499,15 @@ curl --request POST \
   }'
 ```
 
-
-| Field             | Type    | Required | Description                                                                                       |
-| ----------------- | ------- | -------- | ------------------------------------------------------------------------------------------------- |
-| `name`            | string  | Yes      | Display name for the channel                                                                      |
-| `providerId`      | string  | Yes      | Channel identifier (e.g., `facebook`, `googleAdsClicks`, `klaviyo`)                               |
-| `tagId`           | string  | Yes      | The tag this channel belongs to                                                                   |
+| Field             | Type    | Required | Description                                                                                                                                                                                                                                       |
+| ----------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`            | string  | Yes      | Display name for the channel                                                                                                                                                                                                                      |
+| `providerId`      | string  | Yes      | Channel identifier (e.g., `facebook`, `googleAdsClicks`, `klaviyo`)                                                                                                                                                                               |
+| `tagId`           | string  | Yes      | The tag this channel belongs to                                                                                                                                                                                                                   |
 | `shouldDeploy`    | boolean | No       | **Deprecated.** Deploy immediately after creation. **Warning:** When `true`, the API call blocks until deployment completes (up to 45 seconds for first deployment). If `false`, changes wait until explicit deploy via `GET /tag/deploy/{tagId}` |
-| `consentCategory` | string  | No       | `necessary`, `advertising`, `analytics`, `functional`, `share_pii`                                |
-| `geoRegions`      | string  | No       | Restrict channel to specific regions. Default: `null` (all regions)                               |
-| `secrets`         | array   | No       | Encrypted credentials. See Secret Encryption below                                                |
-
+| `consentCategory` | string  | No       | `necessary`, `advertising`, `analytics`, `functional`, `share_pii`                                                                                                                                                                                |
+| `geoRegions`      | string  | No       | Restrict channel to specific regions. Default: `null` (all regions)                                                                                                                                                                               |
+| `secrets`         | array   | No       | Encrypted credentials. See Secret Encryption below                                                                                                                                                                                                |
 
 **Response:** `{ "scriptId": "..." }`
 
@@ -558,28 +538,28 @@ Call `GET /user/me` and extract the `publicKey` field. Each environment (sandbox
 Uses AES for the secret value and RSA to protect the AES key:
 
 ```javascript
-const CryptoJS = require("crypto-js");
-const NodeRSA = require("node-rsa");
-const { v4: uuidv4 } = require("uuid");
+const CryptoJS = require('crypto-js')
+const NodeRSA = require('node-rsa')
+const { v4: uuidv4 } = require('uuid')
 
 function generateAESKey() {
-  const key = uuidv4() + uuidv4();
-  const keyStr = key.substr(5, 43);
-  const salt = key.substr(20, 22);
-  const saltArray = CryptoJS.enc.Base64.parse(salt);
+  const key = uuidv4() + uuidv4()
+  const keyStr = key.substr(5, 43)
+  const salt = key.substr(20, 22)
+  const saltArray = CryptoJS.enc.Base64.parse(salt)
 
   return CryptoJS.PBKDF2(keyStr, saltArray, {
     keySize: 256 / 32,
     iterations: 1000,
-  }).toString();
+  }).toString()
 }
 
 function encrypt(publicKey, value) {
-  const message = value.trim();
+  const message = value.trim()
 
   // AES encrypt the secret
-  const aesKey = generateAESKey();
-  const cypher = CryptoJS.AES.encrypt(message, aesKey);
+  const aesKey = generateAESKey()
+  const cypher = CryptoJS.AES.encrypt(message, aesKey)
 
   // Parse AES output
   const parsed = JSON.parse(
@@ -589,25 +569,25 @@ function encrypt(publicKey, value) {
           iv: cypher.iv.toString(),
           s: cypher.salt.toString(),
         })
-      : "{}",
-  );
+      : '{}',
+  )
 
   // RSA encrypt the AES key
-  const rsa = new NodeRSA(publicKey);
-  rsa.setOptions({ encryptionScheme: "pkcs1", type: "public" });
-  const encryptedKey = rsa.encrypt(aesKey, "base64");
+  const rsa = new NodeRSA(publicKey)
+  rsa.setOptions({ encryptionScheme: 'pkcs1', type: 'public' })
+  const encryptedKey = rsa.encrypt(aesKey, 'base64')
 
   return {
     data: parsed.ct, // Encrypted secret value
     key: encryptedKey, // RSA-encrypted AES key
     iv: parsed.iv, // AES initialization vector
     salt: parsed.s, // AES salt
-  };
+  }
 }
 
 // Usage:
-const publicKey = "-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----";
-const secret = encrypt(publicKey, "my-api-key-value");
+const publicKey = '-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----'
+const secret = encrypt(publicKey, 'my-api-key-value')
 // Send secret.data, secret.key, secret.iv, secret.salt in the API request
 ```
 
@@ -641,7 +621,6 @@ Include the encrypted fields in the `secrets` array:
 
 Get analytics data grouped by event status, event name, or channel.
 
-
 | Parameter    | Type   | Required | Description                          |
 | ------------ | ------ | -------- | ------------------------------------ |
 | `type`       | string | Yes      | `status`, `name`, or `provider`      |
@@ -651,7 +630,6 @@ Get analytics data grouped by event status, event name, or channel.
 | `endRange`   | string | Yes      | End timestamp                        |
 | `status`     | number | No       | `1` for success, `0` for errors      |
 | `timezone`   | string | No       | IANA timezone                        |
-
 
 ### GET /tag/analytics/event/{tagId}
 

@@ -33,35 +33,35 @@ init(config: InitConfig): void
 
 ### InitConfig Object
 
-| Parameter             | Type       | Required | Default   | Description                                                        |
-| --------------------- | ---------- | -------- | --------- | ------------------------------------------------------------------ |
-| `edgeURL`             | String     | Yes      | —         | The EdgeTag CNAME endpoint (e.g., `https://d.mysite.com`)          |
-| `disableConsentCheck` | Boolean    | —        | `false`   | If `true`, events are sent immediately without waiting for consent |
+| Parameter             | Type       | Required | Default        | Description                                                                                                                                                          |
+| --------------------- | ---------- | -------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `edgeURL`             | String     | Yes      | —              | The EdgeTag CNAME endpoint (e.g., `https://d.mysite.com`)                                                                                                            |
+| `disableConsentCheck` | Boolean    | —        | `false`        | If `true`, events are sent immediately without waiting for consent                                                                                                   |
 | `userId`              | String     | —        | auto-generated | Pre-set user ID. Only needed in cookieless environments where EdgeTag cannot use cookies. EdgeTag generates this automatically on all standard browser environments. |
-| `providers`           | Provider[] | —        | `[]`      | Array of provider instances for browser pixels                     |
+| `providers`           | Provider[] | —        | `[]`           | Array of provider instances for browser pixels                                                                                                                       |
 
 ### Examples
 
 ```javascript
-import { init } from "@blotoutio/edgetag-sdk-js";
+import { init } from '@blotoutio/edgetag-sdk-js'
 
 // Basic initialization
 init({
-  edgeURL: "https://d.mysite.com",
-});
+  edgeURL: 'https://d.mysite.com',
+})
 ```
 
 ```javascript
-import { init } from "@blotoutio/edgetag-sdk-js";
-import facebook from "@blotoutio/providers-facebook-sdk";
-import googleAds from "@blotoutio/providers-google-ads-clicks-sdk";
-import tiktok from "@blotoutio/providers-tiktok-sdk";
+import { init } from '@blotoutio/edgetag-sdk-js'
+import facebook from '@blotoutio/providers-facebook-sdk'
+import googleAds from '@blotoutio/providers-google-ads-clicks-sdk'
+import tiktok from '@blotoutio/providers-tiktok-sdk'
 
 // With providers (required for browser pixels)
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   providers: [facebook, googleAds, tiktok],
-});
+})
 ```
 
 ```javascript
@@ -69,17 +69,17 @@ init({
 // EdgeTag generates userId automatically in all browser environments.
 // Only pass this in environments where cookies are not available.
 init({
-  edgeURL: "https://d.mysite.com",
-  userId: "user-123-abc",
-});
+  edgeURL: 'https://d.mysite.com',
+  userId: 'user-123-abc',
+})
 ```
 
 ```javascript
 // With consent disabled (not recommended for GDPR/CCPA sites)
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   disableConsentCheck: true,
-});
+})
 ```
 
 ### Notes
@@ -127,53 +127,53 @@ See **events/README.md** for the complete list of standard event names.
 ### Examples
 
 ```javascript
-import { tag } from "@blotoutio/edgetag-sdk-js";
+import { tag } from '@blotoutio/edgetag-sdk-js'
 
 // Basic page view
-tag("PageView");
+tag('PageView')
 
 // With event data
-tag("Purchase", {
-  orderId: "order-456",
+tag('Purchase', {
+  orderId: 'order-456',
   value: 150.0,
-  currency: "USD",
-});
+  currency: 'USD',
+})
 
 // Send custom event to a specific channel
 tag(
-  "NewsletterSignup",
+  'NewsletterSignup',
   {
-    category: "footer-form",
+    category: 'footer-form',
   },
   { klaviyo: true },
-);
+)
 
 // Beacon for unload events
 tag(
-  "SessionEnd",
+  'SessionEnd',
   {
     sessionDuration: Date.now() - sessionStart,
   },
   {},
-  { method: "beacon" },
-);
+  { method: 'beacon' },
+)
 
 // Sync mode to debug channel errors (server collects all channel responses before returning)
 tag(
-  "Purchase",
+  'Purchase',
   {
     orderId: order.id,
     value: order.total,
   },
   null,
   { sync: true },
-);
+)
 
 // Custom event
-tag("VideoPlay", {
-  videoId: "video-123",
+tag('VideoPlay', {
+  videoId: 'video-123',
   duration: 120,
-});
+})
 ```
 
 ---
@@ -192,10 +192,10 @@ user(key: string, value: string, providers?: Record<string, boolean>, options?: 
 
 ### UserOptions
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `method` | `'beacon'` | Use Beacon API instead of fetch (for unload/navigation) |
-| `destination` | String | Target a specific EdgeTag instance when multiple exist |
+| Option        | Type       | Description                                             |
+| ------------- | ---------- | ------------------------------------------------------- |
+| `method`      | `'beacon'` | Use Beacon API instead of fetch (for unload/navigation) |
+| `destination` | String     | Target a specific EdgeTag instance when multiple exist  |
 
 ### Standard User Keys
 
@@ -204,12 +204,12 @@ See **identity/api-reference.md § Standard Keys Reference** for the complete ke
 ### Examples
 
 ```javascript
-import { user } from "@blotoutio/edgetag-sdk-js";
+import { user } from '@blotoutio/edgetag-sdk-js'
 
-user("email", "user@example.com");
-user("firstName", "john");
-user("lastName", "doe");
-user("phone", "+14155552671");
+user('email', 'user@example.com')
+user('firstName', 'john')
+user('lastName', 'doe')
+user('phone', '+14155552671')
 ```
 
 ---
@@ -228,34 +228,34 @@ data(attributes: Record<string, string>, providers?: Record<string, boolean>, op
 
 ### DataOptions
 
-| Option | Type | Description |
-|--------|------|-------------|
-| `method` | `'beacon'` | Use Beacon API instead of fetch (for unload/navigation) |
-| `destination` | String | Target a specific EdgeTag instance when multiple exist |
+| Option        | Type       | Description                                             |
+| ------------- | ---------- | ------------------------------------------------------- |
+| `method`      | `'beacon'` | Use Beacon API instead of fetch (for unload/navigation) |
+| `destination` | String     | Target a specific EdgeTag instance when multiple exist  |
 
 Standard attribute keys and their format requirements are the same as the [Standard User Keys](#standard-user-keys) listed in the `user()` function above. Any keys not in that table are treated as custom attributes.
 
 ### Examples
 
 ```javascript
-import { data } from "@blotoutio/edgetag-sdk-js";
+import { data } from '@blotoutio/edgetag-sdk-js'
 
 // Multiple standard attributes
 data({
-  email: "user@example.com",
-  phone: "+14155552671",
-  firstName: "john",
-  lastName: "doe",
-  dateOfBirth: "19900115",
-  country: "us",
-});
+  email: 'user@example.com',
+  phone: '+14155552671',
+  firstName: 'john',
+  lastName: 'doe',
+  dateOfBirth: '19900115',
+  country: 'us',
+})
 
 // Standard + custom attributes
 data({
-  email: "user@example.com",
-  customerId: "cust-123",
-  accountTier: "premium",
-});
+  email: 'user@example.com',
+  customerId: 'cust-123',
+  accountTier: 'premium',
+})
 ```
 
 ---
@@ -274,8 +274,8 @@ consent(providersObject?: object | null, categoriesObject?: object, options?: Co
 
 ### ConsentOptions
 
-| Option | Type | Description |
-|--------|------|-------------|
+| Option        | Type   | Description                                            |
+| ------------- | ------ | ------------------------------------------------------ |
 | `destination` | String | Target a specific EdgeTag instance when multiple exist |
 
 At least one of `providersObject` or `categoriesObject` must be provided.
@@ -287,22 +287,22 @@ See **consent/api-reference.md § Categories Reference** for available categorie
 ### Examples
 
 ```javascript
-import { consent } from "@blotoutio/edgetag-sdk-js";
+import { consent } from '@blotoutio/edgetag-sdk-js'
 
 // All providers
-consent({ all: true });
+consent({ all: true })
 
 // Specific providers
-consent({ facebook: true, googleAdsClicks: true, tiktok: true });
+consent({ facebook: true, googleAdsClicks: true, tiktok: true })
 
 // Categories only (pass null as first argument)
-consent(null, { advertising: true, analytics: true });
+consent(null, { advertising: true, analytics: true })
 
 // Both
 consent(
   { facebook: true, googleAdsClicks: true },
   { advertising: true, analytics: true },
-);
+)
 
 // Allow all
 consent(
@@ -314,7 +314,7 @@ consent(
     functional: true,
     share_pii: true,
   },
-);
+)
 ```
 
 ### Notes
@@ -339,23 +339,23 @@ getConsent(callback: (consent: object | null, error?: string, consentCategories?
 
 ### GetConsentOptions
 
-| Option | Type | Description |
-|--------|------|-------------|
+| Option        | Type   | Description                                            |
+| ------------- | ------ | ------------------------------------------------------ |
 | `destination` | String | Target a specific EdgeTag instance when multiple exist |
 
 ### Examples
 
 ```javascript
-import { getConsent } from "@blotoutio/edgetag-sdk-js";
+import { getConsent } from '@blotoutio/edgetag-sdk-js'
 
 getConsent((consent, error, consentCategories) => {
   if (error) {
-    console.error("Failed to get consent:", error);
-    return;
+    console.error('Failed to get consent:', error)
+    return
   }
-  console.log("Provider consent:", consent);
-  console.log("Category consent:", consentCategories);
-});
+  console.log('Provider consent:', consent)
+  console.log('Category consent:', consentCategories)
+})
 ```
 
 ---
@@ -374,8 +374,8 @@ getData(keys: string[], callback: (data: Record<string, string | null>) => void,
 
 ### GetDataOptions
 
-| Option | Type | Description |
-|--------|------|-------------|
+| Option        | Type   | Description                                            |
+| ------------- | ------ | ------------------------------------------------------ |
 | `destination` | String | Target a specific EdgeTag instance when multiple exist |
 
 ### Notes
@@ -386,12 +386,12 @@ getData(keys: string[], callback: (data: Record<string, string | null>) => void,
 ### Examples
 
 ```javascript
-import { getData } from "@blotoutio/edgetag-sdk-js";
+import { getData } from '@blotoutio/edgetag-sdk-js'
 
-getData(["email", "firstName", "phone"], (data) => {
-  console.log("User data:", data);
+getData(['email', 'firstName', 'phone'], (data) => {
+  console.log('User data:', data)
   // { email: 'user@example.com', firstName: 'john', phone: '+14155552671' }
-});
+})
 ```
 
 ---
@@ -411,10 +411,10 @@ getUserId(): string | null
 ### Examples
 
 ```javascript
-import { getUserId } from "@blotoutio/edgetag-sdk-js";
+import { getUserId } from '@blotoutio/edgetag-sdk-js'
 
-const userId = getUserId();
-console.log("Current user ID:", userId);
+const userId = getUserId()
+console.log('Current user ID:', userId)
 ```
 
 ### Notes
@@ -447,11 +447,11 @@ setConfig(settings: ConfigSettings): void
 ### Examples
 
 ```javascript
-import { setConfig, tag } from "@blotoutio/edgetag-sdk-js";
+import { setConfig, tag } from '@blotoutio/edgetag-sdk-js'
 
 // On SPA route change
-setConfig({ pageUrl: window.location.href });
-tag("PageView");
+setConfig({ pageUrl: window.location.href })
+tag('PageView')
 ```
 
 ---
@@ -472,27 +472,27 @@ ready(callback: (state: ReadyState) => void): void
 
 ```typescript
 interface ReadyState {
-  destination: string; // EdgeTag endpoint
-  userId: string | null; // Current user ID
-  sessionId: string; // Session identifier
-  isNewUser: boolean; // True if first visit
-  isNewSession: boolean; // True if new session
-  consent: Record<string, boolean>; // Provider consent
-  consentCategories: Record<string, boolean>; // Category consent
-  consentSettings: object; // Raw consent settings
+  destination: string // EdgeTag endpoint
+  userId: string | null // Current user ID
+  sessionId: string // Session identifier
+  isNewUser: boolean // True if first visit
+  isNewSession: boolean // True if new session
+  consent: Record<string, boolean> // Provider consent
+  consentCategories: Record<string, boolean> // Category consent
+  consentSettings: object // Raw consent settings
 }
 ```
 
 ### Examples
 
 ```javascript
-import { ready } from "@blotoutio/edgetag-sdk-js";
+import { ready } from '@blotoutio/edgetag-sdk-js'
 
 ready((state) => {
-  console.log("EdgeTag ready");
-  console.log("User ID:", state.userId);
-  console.log("Is new user:", state.isNewUser);
-});
+  console.log('EdgeTag ready')
+  console.log('User ID:', state.userId)
+  console.log('Is new user:', state.isNewUser)
+})
 ```
 
 ---
@@ -517,29 +517,29 @@ ready((state) => {
 ## TypeScript Definitions
 
 ```typescript
-export function init(config: InitConfig): void;
+export function init(config: InitConfig): void
 export function tag(
   name: string,
   data?: object,
   providers?: Record<string, boolean>,
   options?: TagOptions,
-): void;
+): void
 export function user(
   key: string,
   value: string,
   providers?: Record<string, boolean>,
   options?: UserOptions,
-): void;
+): void
 export function data(
   attributes: Record<string, string>,
   providers?: Record<string, boolean>,
   options?: DataOptions,
-): void;
+): void
 export function consent(
   providersObject?: object,
   categoriesObject?: object,
   options?: ConsentOptions,
-): void;
+): void
 export function getConsent(
   callback: (
     consent: object | null,
@@ -547,64 +547,64 @@ export function getConsent(
     consentCategories?: object,
   ) => void,
   options?: GetConsentOptions,
-): void;
+): void
 export function getData(
   keys: string[],
   callback: (data: Record<string, string | null>) => void,
   options?: GetDataOptions,
-): void;
-export function getUserId(): string | null;
-export function setConfig(settings: ConfigSettings): void;
-export function ready(callback: (state: ReadyState) => void): void;
+): void
+export function getUserId(): string | null
+export function setConfig(settings: ConfigSettings): void
+export function ready(callback: (state: ReadyState) => void): void
 
 interface InitConfig {
-  edgeURL: string;
-  disableConsentCheck?: boolean;
-  userId?: string; // Only for cookieless environments; auto-generated in browsers
-  providers?: Provider[];
+  edgeURL: string
+  disableConsentCheck?: boolean
+  userId?: string // Only for cookieless environments; auto-generated in browsers
+  providers?: Provider[]
 }
 
 interface TagOptions {
-  method?: "beacon" | "fetch";
-  sync?: boolean;
-  destination?: string;
+  method?: 'beacon' | 'fetch'
+  sync?: boolean
+  destination?: string
 }
 
 interface ReadyState {
-  destination: string;
-  userId: string | null;
-  sessionId: string;
-  isNewUser: boolean;
-  isNewSession: boolean;
-  consent: Record<string, boolean>;
-  consentCategories: Record<string, boolean>;
-  consentSettings: object;
+  destination: string
+  userId: string | null
+  sessionId: string
+  isNewUser: boolean
+  isNewSession: boolean
+  consent: Record<string, boolean>
+  consentCategories: Record<string, boolean>
+  consentSettings: object
 }
 
 interface UserOptions {
-  method?: "beacon";
-  destination?: string;
+  method?: 'beacon'
+  destination?: string
 }
 
 interface DataOptions {
-  method?: "beacon";
-  destination?: string;
+  method?: 'beacon'
+  destination?: string
 }
 
 interface ConsentOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface GetConsentOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface GetDataOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface ConfigSettings {
-  pageUrl?: string;
-  destination?: string;
+  pageUrl?: string
+  destination?: string
 }
 ```

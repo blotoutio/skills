@@ -53,19 +53,20 @@ Browser / App
 ```
 
 **Key architecture facts:**
+
 - Data stays first-party: the CNAME subdomain means browsers treat it as same-origin, bypassing ITP and most ad blockers
 - Edge execution: processing happens at the nearest Cloudflare POP, not a centralized server — sub-3ms pixel delivery
 - Self-hosting option: EdgeTag can run inside the customer's own Cloudflare account for full data sovereignty
 
 ## How It Compares
 
-| Approach | Setup effort | Signal coverage | Identity | Cost |
-|----------|-------------|----------------|----------|------|
-| **Client-side pixels** (status quo) | Low | Declining (blocked by ITP, ad blockers) | Third-party cookie only | Free |
-| **Server-side GTM** | High (GCP project, custom containers) | Better, but still third-party hosted | Manual per channel | GCP hosting + eng time |
-| **CDPs** (Segment, mParticle) | Medium-High | Good | Strong | $100K+/yr enterprise |
-| **DIY CAPI integrations** | High per channel | Good per channel | Manual per channel | Eng time × N channels |
-| **EdgeTag** | Low (1-click for Shopify/WooCommerce, npm for headless) | High (first-party + server-side) | Built-in ID graph | Fraction of CDP cost |
+| Approach                            | Setup effort                                            | Signal coverage                         | Identity                | Cost                   |
+| ----------------------------------- | ------------------------------------------------------- | --------------------------------------- | ----------------------- | ---------------------- |
+| **Client-side pixels** (status quo) | Low                                                     | Declining (blocked by ITP, ad blockers) | Third-party cookie only | Free                   |
+| **Server-side GTM**                 | High (GCP project, custom containers)                   | Better, but still third-party hosted    | Manual per channel      | GCP hosting + eng time |
+| **CDPs** (Segment, mParticle)       | Medium-High                                             | Good                                    | Strong                  | $100K+/yr enterprise   |
+| **DIY CAPI integrations**           | High per channel                                        | Good per channel                        | Manual per channel      | Eng time × N channels  |
+| **EdgeTag**                         | Low (1-click for Shopify/WooCommerce, npm for headless) | High (first-party + server-side)        | Built-in ID graph       | Fraction of CDP cost   |
 
 EdgeTag's sweet spot: teams that need CDP-grade signal quality without CDP-grade cost or complexity.
 
@@ -96,16 +97,16 @@ EdgeTag's sweet spot: teams that need CDP-grade signal quality without CDP-grade
 
 ## Supported Platforms
 
-| Platform | Install method | Effort |
-|----------|---------------|--------|
-| Shopify | 1-click app (App Pixel auto-enabled) + optional App Embed toggle | ~5 min |
-| WooCommerce / WordPress | App/plugin install | ~10 min |
-| Wix | App install | ~10 min |
-| BigCommerce | App install | ~10 min |
-| Salesforce Commerce Cloud | Cartridge | ~15 min |
-| React / Next.js / Vue (SPA) | npm package + providers | ~30 min |
-| Custom / headless | npm or script tag + server-side cookie (`truid`) | ~1 hr |
-| Landing pages (Unbounce, etc.) | Script tag snippet | ~5 min |
+| Platform                       | Install method                                                   | Effort  |
+| ------------------------------ | ---------------------------------------------------------------- | ------- |
+| Shopify                        | 1-click app (App Pixel auto-enabled) + optional App Embed toggle | ~5 min  |
+| WooCommerce / WordPress        | App/plugin install                                               | ~10 min |
+| Wix                            | App install                                                      | ~10 min |
+| BigCommerce                    | App install                                                      | ~10 min |
+| Salesforce Commerce Cloud      | Cartridge                                                        | ~15 min |
+| React / Next.js / Vue (SPA)    | npm package + providers                                          | ~30 min |
+| Custom / headless              | npm or script tag + server-side cookie (`truid`)                 | ~1 hr   |
+| Landing pages (Unbounce, etc.) | Script tag snippet                                               | ~5 min  |
 
 ## Key Differentiators
 

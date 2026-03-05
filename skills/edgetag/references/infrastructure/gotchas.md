@@ -209,7 +209,6 @@ Common pitfalls to avoid during EdgeTag deployment and operation.
 
 ## Recap: Critical Gotchas
 
-
 | Gotcha                        | Impact                      | Solution                                  |
 | ----------------------------- | --------------------------- | ----------------------------------------- |
 | DNS propagation delay         | Setup fails immediately     | Wait up to 24 hours                       |
@@ -220,6 +219,3 @@ Common pitfalls to avoid during EdgeTag deployment and operation.
 | Root domain CNAME             | Configuration rejected      | Use subdomain instead                     |
 | Ignoring anomalies            | Silent failures             | Monitor daily, set up alerts              |
 | Insufficient API token        | Self-hosted fails to deploy | Generate with proper permissions          |
-
-
-

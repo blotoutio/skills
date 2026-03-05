@@ -18,14 +18,12 @@ Send events from offline systems or backend. For the full list of standard event
 
 ### Request Specification
 
-
 | Property     | Value                        |
 | ------------ | ---------------------------- |
 | Method       | GET                          |
 | URL          | `https://abc.domain.com/tag` |
 | Content-Type | `application/json`           |
 | Body         | JSON via `--data` parameter  |
-
 
 ### Headers
 
@@ -41,7 +39,7 @@ EdgeTagUserId: [optional - user's EdgeTag ID from browser or your system]
   "data": {
     "value": 99.99,
     "currency": "USD",
-    "contents": [{"name": "Item 1", "quantity": 1}],
+    "contents": [{ "name": "Item 1", "quantity": 1 }],
     "userEmail": "user@example.com",
     "customField": "custom value"
   },
@@ -69,21 +67,19 @@ EdgeTagUserId: [optional - user's EdgeTag ID from browser or your system]
 
 ### Field Descriptions
 
-
-| Field     | Type   | Required | Description                                                                                       |
-| --------- | ------ | -------- | ------------------------------------------------------------------------------------------------- |
-| data      | Object | Yes      | Event data object. Can include: `value`, `currency`, `contents`, `userEmail`, and custom fields   |
+| Field     | Type   | Required | Description                                                                                                                                                                                                                                                                                                |
+| --------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| data      | Object | Yes      | Event data object. Can include: `value`, `currency`, `contents`, `userEmail`, and custom fields                                                                                                                                                                                                            |
 | eventId   | String | Yes      | Unique identifier for this event. EdgeTag forwards every event to channels regardless of eventId — it does not deduplicate. Channels that support deduplication (e.g., Meta) use eventId to avoid double-counting. Send each event only once to prevent inflated numbers on channels without deduplication |
-| eventName | String | Yes      | Event type (e.g., "Purchase", "PageView", "ViewContent", "AddToCart", "Search")                   |
-| pageTitle | String | No       | Title of the page/context where event occurred                                                    |
-| pageUrl   | String | No       | URL of the page/context                                                                           |
-| providers | Array  | No       | List of provider IDs to receive this event (e.g., ["facebook", "klaviyo"])                        |
-| referrer  | String | No       | Referrer URL if applicable                                                                        |
-| search    | String | No       | Search query string if applicable                                                                 |
-| timestamp | Number | Yes      | Event timestamp in milliseconds since epoch (ms not seconds)                                      |
-| userAgent | String | No       | User agent string from client                                                                     |
-| storage   | Object | No       | Storage object for consent and custom data. If consent enabled, include `storage.edgeTag.consentCategories` |
-
+| eventName | String | Yes      | Event type (e.g., "Purchase", "PageView", "ViewContent", "AddToCart", "Search")                                                                                                                                                                                                                            |
+| pageTitle | String | No       | Title of the page/context where event occurred                                                                                                                                                                                                                                                             |
+| pageUrl   | String | No       | URL of the page/context                                                                                                                                                                                                                                                                                    |
+| providers | Array  | No       | List of provider IDs to receive this event (e.g., ["facebook", "klaviyo"])                                                                                                                                                                                                                                 |
+| referrer  | String | No       | Referrer URL if applicable                                                                                                                                                                                                                                                                                 |
+| search    | String | No       | Search query string if applicable                                                                                                                                                                                                                                                                          |
+| timestamp | Number | Yes      | Event timestamp in milliseconds since epoch (ms not seconds)                                                                                                                                                                                                                                               |
+| userAgent | String | No       | User agent string from client                                                                                                                                                                                                                                                                              |
+| storage   | Object | No       | Storage object for consent and custom data. If consent enabled, include `storage.edgeTag.consentCategories`                                                                                                                                                                                                |
 
 ### Example: Event with EdgeTagUserId Header
 
@@ -177,14 +173,12 @@ Enrich the ID graph with user information. Requires EdgeTagUserId.
 
 ### Request Specification
 
-
 | Property      | Value                         |
 | ------------- | ----------------------------- |
 | Method        | POST                          |
 | URL           | `https://abc.domain.com/data` |
 | Content-Type  | `application/json`            |
 | EdgeTagUserId | **REQUIRED**                  |
-
 
 ### Headers
 
@@ -216,7 +210,6 @@ EdgeTagUserId: user-123-abc
 
 ### Field Descriptions
 
-
 | Field         | Type   | Description                  |
 | ------------- | ------ | ---------------------------- |
 | email         | String | User email address           |
@@ -230,7 +223,6 @@ EdgeTagUserId: user-123-abc
 | zip           | String | Postal code                  |
 | country       | String | Country code                 |
 | Custom fields | Any    | Any additional custom fields |
-
 
 ### Example Request
 
@@ -264,20 +256,16 @@ Look up user instances by email or EdgeTag user ID. Use this when you only have 
 
 ### Request Specification
 
-
 | Property | Value                                     |
 | -------- | ----------------------------------------- |
 | Method   | GET                                       |
 | URL      | `https://abc.domain.com/getInstancesData` |
 
-
 ### Query Parameters
-
 
 | Parameter | Required | Description                                                                                       |
 | --------- | -------- | ------------------------------------------------------------------------------------------------- |
 | email     | No       | User's email address. If provided, looks up all EdgeTag user instances associated with this email |
-
 
 If `email` is not provided, the `EdgeTagUserId` header is used instead to find the user's email first, then returns all instances linked to that email.
 
@@ -332,16 +320,13 @@ Upload customer segments to advertising channels for targeting, lookalike audien
 
 ### Request Specification
 
-
 | Property     | Value                             |
 | ------------ | --------------------------------- |
 | Method       | POST                              |
 | URL          | `https://abc.domain.com/audience` |
 | Content-Type | `multipart/form-data`             |
 
-
 ### Required Fields
-
 
 | Field | Type       | Description                                       |
 | ----- | ---------- | ------------------------------------------------- |
@@ -350,16 +335,13 @@ Upload customer segments to advertising channels for targeting, lookalike audien
 | batch | JSON       | Audience metadata (e.g., `startTime`, `dataType`) |
 | users | JSON Array | Array of user objects with identifiers            |
 
-
 ### Optional Query Params
-
 
 | Param         | Type    | Description                                                          |
 | ------------- | ------- | -------------------------------------------------------------------- |
 | channels      | String  | Comma-separated list of channels to target (e.g., `facebook,tiktok`) |
 | disablePrefix | Boolean | Skip field name prefix                                               |
 | sync          | Boolean | Enable bidirectional sync                                            |
-
 
 ### Example Request
 
@@ -407,7 +389,6 @@ EdgeTag returns errors in a standard format:
 
 ### Common Error Codes
 
-
 | Code | Meaning      | Solution                                          |
 | ---- | ------------ | ------------------------------------------------- |
 | 400  | Bad Request  | Check payload format, required fields, data types |
@@ -415,7 +396,6 @@ EdgeTag returns errors in a standard format:
 | 403  | Forbidden    | Check domain/API key permissions                  |
 | 404  | Not Found    | Verify endpoint URL matches dashboard domain      |
 | 500  | Server Error | Try again, contact support if persists            |
-
 
 ### Error Example
 
@@ -505,4 +485,3 @@ curl -X GET "https://abc.domain.com/tag" \
     }
   }'
 ```
-

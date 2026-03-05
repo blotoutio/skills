@@ -4,18 +4,18 @@
 
 The `consentIQOverview` MCP tool (or `GET /{scriptId}/analytics/overview` API) returns:
 
-| Metric | Description |
-|--------|-------------|
-| Total Profiles | Count of all user profiles with consent data |
-| Marketing Opt-In (Overall) | Users who consented to marketing |
-| Marketing Opt-Out (Overall) | Users who declined marketing |
-| Marketing Opt-In (EU) | EU users who consented (GDPR) |
-| Marketing Opt-Out (EU) | EU users who declined |
-| Marketing Opt-In (UK) | UK users who consented (UK GDPR) |
-| Marketing Opt-Out (UK) | UK users who declined |
-| Marketing Opt-In (CA) | Canadian users who consented (CCPA/CPRA) |
-| Marketing Opt-Out (CA) | Canadian users who declined |
-| 24h Marketing Changes | Consent changes in the last 24 hours |
+| Metric                      | Description                                  |
+| --------------------------- | -------------------------------------------- |
+| Total Profiles              | Count of all user profiles with consent data |
+| Marketing Opt-In (Overall)  | Users who consented to marketing             |
+| Marketing Opt-Out (Overall) | Users who declined marketing                 |
+| Marketing Opt-In (EU)       | EU users who consented (GDPR)                |
+| Marketing Opt-Out (EU)      | EU users who declined                        |
+| Marketing Opt-In (UK)       | UK users who consented (UK GDPR)             |
+| Marketing Opt-Out (UK)      | UK users who declined                        |
+| Marketing Opt-In (CA)       | Canadian users who consented (CCPA/CPRA)     |
+| Marketing Opt-Out (CA)      | Canadian users who declined                  |
+| 24h Marketing Changes       | Consent changes in the last 24 hours         |
 
 ### Usage
 
@@ -34,12 +34,12 @@ The `consentIQCategories` MCP tool (or `GET /{scriptId}/analytics/categories-cha
 
 ### Categories Tracked
 
-| Category | Description |
-|----------|-------------|
-| `marketing` | Marketing and advertising consent |
-| `analytics` | Analytics and performance measurement consent |
-| `saleOfData` | Sale of personal data consent (CCPA/CPRA) |
-| `preferences` | Preferences and functional consent |
+| Category      | Description                                   |
+| ------------- | --------------------------------------------- |
+| `marketing`   | Marketing and advertising consent             |
+| `analytics`   | Analytics and performance measurement consent |
+| `saleOfData`  | Sale of personal data consent (CCPA/CPRA)     |
+| `preferences` | Preferences and functional consent            |
 
 ### Response Shape
 
@@ -71,11 +71,11 @@ Parameters:
 
 ### Range Options
 
-| Range | Period |
-|-------|--------|
-| `day` | Last 24 hours |
-| `week` | Last 7 days |
-| `month` | Last 30 days |
+| Range   | Period        |
+| ------- | ------------- |
+| `day`   | Last 24 hours |
+| `week`  | Last 7 days   |
+| `month` | Last 30 days  |
 
 ---
 
@@ -83,12 +83,12 @@ Parameters:
 
 ConsentIQ segments consent data by geographic region for compliance reporting:
 
-| Filter | Region | Regulation |
-|--------|--------|------------|
-| `all` | All regions combined | — |
-| `eu` | European Union | GDPR |
-| `uk` | United Kingdom | UK GDPR |
-| `ca` | Canada | CPRA/PIPEDA |
+| Filter | Region               | Regulation  |
+| ------ | -------------------- | ----------- |
+| `all`  | All regions combined | —           |
+| `eu`   | European Union       | GDPR        |
+| `uk`   | United Kingdom       | UK GDPR     |
+| `ca`   | Canada               | CPRA/PIPEDA |
 
 ---
 
@@ -101,6 +101,7 @@ To track consent trends over time:
 3. Call `consentIQCategories` with `range: "month"` for monthly trends
 
 Compare the summary table across time periods to identify:
+
 - Increasing/decreasing opt-in rates
 - Regional differences in consent behavior
 - Impact of CMP changes on consent rates

@@ -29,12 +29,10 @@ npm install @blotoutio/providers-facebook-sdk
 npm install @blotoutio/providers-google-ads-clicks-sdk
 ```
 
-
 | Platform      | Package Name                                 |
 | ------------- | -------------------------------------------- |
 | Meta/Facebook | `@blotoutio/providers-facebook-sdk`          |
 | Google Ads    | `@blotoutio/providers-google-ads-clicks-sdk` |
-
 
 For the full list of available provider packages, see [Channel Reference](../channels/channel-reference.md).
 
@@ -43,21 +41,21 @@ If you only need server-side conversion APIs (no browser pixels), you can skip p
 ## Quick Start
 
 ```javascript
-import { init, tag, user, data, consent } from "@blotoutio/edgetag-sdk-js";
-import facebook from "@blotoutio/providers-facebook-sdk";
-import googleAds from "@blotoutio/providers-google-ads-clicks-sdk";
+import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js'
+import facebook from '@blotoutio/providers-facebook-sdk'
+import googleAds from '@blotoutio/providers-google-ads-clicks-sdk'
 
 // Initialize once at app startup
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   providers: [facebook, googleAds],
-});
+})
 
 // Set user identity
-user("email", "user@example.com");
+user('email', 'user@example.com')
 
 // Track an event
-tag("PageView");
+tag('PageView')
 ```
 
 ## Key Concepts
@@ -68,13 +66,13 @@ The SDK exports named functions — there is no default export and no `edgeTag` 
 
 ```javascript
 // CORRECT
-import { init, tag, user, data, consent } from "@blotoutio/edgetag-sdk-js";
+import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js'
 
 // WRONG — no default export
-import edgetag from "@blotoutio/edgetag-sdk-js";
+import edgetag from '@blotoutio/edgetag-sdk-js'
 
 // WRONG — there is no "edgeTag" export, the function is called "tag"
-import { edgeTag } from "@blotoutio/edgetag-sdk-js";
+import { edgeTag } from '@blotoutio/edgetag-sdk-js'
 ```
 
 ### Providers Array
@@ -82,14 +80,14 @@ import { edgeTag } from "@blotoutio/edgetag-sdk-js";
 Pass provider instances to `init()` so EdgeTag can load their browser pixels:
 
 ```javascript
-import facebook from "@blotoutio/providers-facebook-sdk";
-import googleAds from "@blotoutio/providers-google-ads-clicks-sdk";
-import tiktok from "@blotoutio/providers-tiktok-sdk";
+import facebook from '@blotoutio/providers-facebook-sdk'
+import googleAds from '@blotoutio/providers-google-ads-clicks-sdk'
+import tiktok from '@blotoutio/providers-tiktok-sdk'
 
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   providers: [facebook, googleAds, tiktok],
-});
+})
 ```
 
 Without providers, server-side conversion APIs still work, but browser pixels won't fire.
@@ -107,12 +105,12 @@ EdgeTag operates through your own domain (e.g., `d.mysite.com`), not a third-par
 By default, events are blocked until user consent is granted:
 
 ```javascript
-import { consent } from "@blotoutio/edgetag-sdk-js";
+import { consent } from '@blotoutio/edgetag-sdk-js'
 
 consent(
   { facebook: true, googleAdsClicks: true },
   { advertising: true, analytics: true },
-);
+)
 ```
 
 ## Available Exports
@@ -129,7 +127,7 @@ import {
   getUserId, // Get tag_user_id
   setConfig, // Update runtime config
   ready, // SDK ready callback
-} from "@blotoutio/edgetag-sdk-js";
+} from '@blotoutio/edgetag-sdk-js'
 ```
 
 ## Documentation Structure
@@ -138,4 +136,3 @@ import {
 - **[api-reference.md](api-reference.md)** — All 10 functions with named import signatures and TypeScript types
 - **[patterns.md](patterns.md)** — React integration, consent hooks, progressive identity, testing, and more
 - **[gotchas.md](gotchas.md)** — Common mistakes with npm installations and how to avoid them
-

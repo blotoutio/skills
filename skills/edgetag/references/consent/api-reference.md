@@ -11,8 +11,8 @@ Set user consent for providers and/or categories. Events are blocked until this 
 edgetag('consent', {
   facebook: true,
   googleAdsClicks: true,
-  klaviyo: false
-});
+  klaviyo: false,
+})
 
 // Category-based consent (GDPR/CCPA)
 edgetag('consent', null, {
@@ -20,26 +20,34 @@ edgetag('consent', null, {
   advertising: true,
   analytics: true,
   functional: false,
-  share_pii: false
-});
+  share_pii: false,
+})
 
 // Both providers and categories
-edgetag('consent', {
-  facebook: true,
-  googleAdsClicks: false
-}, {
-  advertising: true,
-  analytics: false
-});
+edgetag(
+  'consent',
+  {
+    facebook: true,
+    googleAdsClicks: false,
+  },
+  {
+    advertising: true,
+    analytics: false,
+  },
+)
 
 // Enable all, then override specific ones
-edgetag('consent', {
-  all: true,
-  facebook: false // Opt out of Facebook
-}, {
-  all: true,
-  share_pii: false // Opt out of PII sharing
-});
+edgetag(
+  'consent',
+  {
+    all: true,
+    facebook: false, // Opt out of Facebook
+  },
+  {
+    all: true,
+    share_pii: false, // Opt out of PII sharing
+  },
+)
 ```
 
 **Parameters**:
@@ -65,17 +73,17 @@ edgetag('consent', {
 
 ```javascript
 // Valid: Providers only
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 
 // Valid: Categories only
-edgetag('consent', null, { advertising: true });
+edgetag('consent', null, { advertising: true })
 
 // Valid: Both
-edgetag('consent', { facebook: true }, { advertising: true });
+edgetag('consent', { facebook: true }, { advertising: true })
 
 // INVALID: Neither provided
-edgetag('consent'); // Error
-edgetag('consent', null); // Error (no categories either)
+edgetag('consent') // Error
+edgetag('consent', null) // Error (no categories either)
 ```
 
 ---
@@ -86,16 +94,16 @@ Retrieve the current consent settings for the user.
 
 ```javascript
 edgetag('getConsent', (consent, error, consentCategories) => {
-  console.log('Provider Consent:', consent);
+  console.log('Provider Consent:', consent)
   // { facebook: true, googleAdsClicks: true, klaviyo: false, ... }
 
-  console.log('Category Consent:', consentCategories);
+  console.log('Category Consent:', consentCategories)
   // { necessary: true, advertising: true, analytics: false, ... }
 
   if (error) {
-    console.error('Failed to retrieve consent:', error);
+    console.error('Failed to retrieve consent:', error)
   }
-});
+})
 ```
 
 **Parameters**:
@@ -134,7 +142,6 @@ edgetag('getConsent', (consent, error, consentCategories) => {
 
 ### Available Categories
 
-
 | Category      | Purpose                            | Can Opt Out? | Notes                              |
 | ------------- | ---------------------------------- | ------------ | ---------------------------------- |
 | `necessary`   | Essential site functionality       | No           | Always enabled, cannot be disabled |
@@ -142,7 +149,6 @@ edgetag('getConsent', (consent, error, consentCategories) => {
 | `analytics`   | Data analysis, insights            | Yes          | GDPR/CCPA compliant                |
 | `functional`  | Enhanced features, preferences     | Yes          | Non-essential functionality        |
 | `share_pii`   | Share personal data with providers | Yes          | Controls PII distribution          |
-
 
 ---
 
@@ -173,21 +179,30 @@ If you have multiple EdgeTag instances on one page, use `destination`:
 
 ```javascript
 // Instance 1
-edgetag('init', { edgeURL: 'https://d.mysite.com', destination: 'instance1' });
+edgetag('init', { edgeURL: 'https://d.mysite.com', destination: 'instance1' })
 
 // Instance 2
-edgetag('init', { edgeURL: 'https://d.instance2.com', destination: 'instance2' });
+edgetag('init', {
+  edgeURL: 'https://d.instance2.com',
+  destination: 'instance2',
+})
 
 // Set consent for instance 1
-edgetag('consent', { facebook: true }, null, { destination: 'instance1' });
+edgetag('consent', { facebook: true }, null, { destination: 'instance1' })
 
 // Set consent for instance 2
-edgetag('consent', { googleAdsClicks: true }, null, { destination: 'instance2' });
+edgetag('consent', { googleAdsClicks: true }, null, {
+  destination: 'instance2',
+})
 
 // Get consent from instance 1
-edgetag('getConsent', (consent) => {
-  console.log('Instance 1 consent:', consent);
-}, { destination: 'instance1' });
+edgetag(
+  'getConsent',
+  (consent) => {
+    console.log('Instance 1 consent:', consent)
+  },
+  { destination: 'instance1' },
+)
 ```
 
 ---
@@ -201,17 +216,17 @@ In non-GDPR/CCPA regions or for internal sites, you can disable consent gating e
 ```javascript
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  disableConsentCheck: true // Events sent without consent checks
-});
+  disableConsentCheck: true, // Events sent without consent checks
+})
 
 // With disableConsentCheck, events are sent immediately
-edgetag('tag', 'Purchase', { value: 99.99 }); // Sent immediately, no consent needed
+edgetag('tag', 'Purchase', { value: 99.99 }) // Sent immediately, no consent needed
 
 // You can still set and retrieve consent if desired
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 edgetag('getConsent', (consent) => {
-  console.log('Consent (for CMP UI):', consent);
-});
+  console.log('Consent (for CMP UI):', consent)
+})
 ```
 
 **Use Cases**:
@@ -250,22 +265,30 @@ If using EdgeTag's ConsentIQ feature, consent data is automatically tracked:
 ### Accept All
 
 ```javascript
-edgetag('consent', {
-  all: true // Enable all providers
-}, {
-  all: true // Enable all categories (except share_pii might be per-law)
-});
+edgetag(
+  'consent',
+  {
+    all: true, // Enable all providers
+  },
+  {
+    all: true, // Enable all categories (except share_pii might be per-law)
+  },
+)
 ```
 
 ### Reject All
 
 ```javascript
-edgetag('consent', {
-  all: false // Disable all providers
-}, {
-  necessary: true // Only necessary category
-  // Others default to false
-});
+edgetag(
+  'consent',
+  {
+    all: false, // Disable all providers
+  },
+  {
+    necessary: true, // Only necessary category
+    // Others default to false
+  },
+)
 ```
 
 ### Granular Provider Consent
@@ -274,8 +297,8 @@ edgetag('consent', {
 edgetag('consent', {
   facebook: true,
   googleAdsClicks: false,
-  klaviyo: true
-});
+  klaviyo: true,
+})
 ```
 
 ### Granular Category Consent
@@ -286,19 +309,22 @@ edgetag('consent', null, {
   advertising: true,
   analytics: false,
   functional: true,
-  share_pii: false
-});
+  share_pii: false,
+})
 ```
 
 ### Category-Based with Provider Override
 
 ```javascript
 // Set categories and override a specific provider in one call
-edgetag('consent', {
-  facebook: false // Opt out of Facebook despite advertising category
-}, {
-  advertising: true,
-  analytics: true
-});
+edgetag(
+  'consent',
+  {
+    facebook: false, // Opt out of Facebook despite advertising category
+  },
+  {
+    advertising: true,
+    analytics: true,
+  },
+)
 ```
-

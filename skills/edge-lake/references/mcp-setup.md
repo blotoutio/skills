@@ -8,13 +8,13 @@ EdgeTag's MCP server provides access to Edge Lake queries, traffic analysis, bot
 
 After connecting, these tools are available for querying Edge Lake data:
 
-| Tool | Description |
-|------|-------------|
-| `edgeLakeQuery` | Execute a single SQL query against `lake.events` |
-| `edgeLakeCodeQuery` | Run multiple SQL queries with server-side JavaScript processing |
-| `edgeLakeTrafficAnalysis` | Traffic breakdown by browser, OS, device type, country |
-| `edgeLakeBotScore` | Bot detection analysis by Cloudflare bot scores |
-| `edgeLakeAttackAnalysis` | WAF attack classification analysis |
+| Tool                      | Description                                                     |
+| ------------------------- | --------------------------------------------------------------- |
+| `edgeLakeQuery`           | Execute a single SQL query against `lake.events`                |
+| `edgeLakeCodeQuery`       | Run multiple SQL queries with server-side JavaScript processing |
+| `edgeLakeTrafficAnalysis` | Traffic breakdown by browser, OS, device type, country          |
+| `edgeLakeBotScore`        | Bot detection analysis by Cloudflare bot scores                 |
+| `edgeLakeAttackAnalysis`  | WAF attack classification analysis                              |
 
 The MCP server also exposes non-Edge-Lake tools (`me`, `domains`, `domainAnalytics`, `domainErrors`, `channel`, `metaEMQ`, `domainIDGraph`, `consentIQOverview`, `consentIQCategories`, `domainAdd`, `dns`, `revokeToken`).
 

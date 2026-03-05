@@ -88,4 +88,3 @@ The `webhook` channel receives events from external systems (e.g., Shopify order
 - **Channel Details**: See [channel-reference.md](./channel-reference.md) for detailed setup per channel
 - **Common Pitfalls**: See [gotchas.md](./gotchas.md) to avoid integration mistakes
 - **Implementation Patterns**: See [patterns.md](./patterns.md) for real-world setup examples
-

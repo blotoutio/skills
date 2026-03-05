@@ -156,9 +156,9 @@ Add the stub and script to `<head>`:
   window.edgetag =
     window.edgetag ||
     function () {
-      (edgetag.stubs = edgetag.stubs || []).push(arguments);
-    };
-  edgetag("init", { edgeURL: "https://d.yourdomain.com" });
+      ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+    }
+  edgetag('init', { edgeURL: 'https://d.yourdomain.com' })
 </script>
 <script src="https://d.yourdomain.com/load" async></script>
 ```
@@ -166,8 +166,8 @@ Add the stub and script to `<head>`:
 Then track events:
 
 ```javascript
-edgetag("user", "email", "user@example.com");
-edgetag("tag", "PageView");
+edgetag('user', 'email', 'user@example.com')
+edgetag('tag', 'PageView')
 ```
 
 ### Web Implementation (npm / Headless)
@@ -177,11 +177,11 @@ npm install @blotoutio/edgetag-sdk-js
 ```
 
 ```javascript
-import { init, tag, user } from "@blotoutio/edgetag-sdk-js";
+import { init, tag, user } from '@blotoutio/edgetag-sdk-js'
 
-init({ edgeURL: "https://d.yourdomain.com" });
-user("email", "user@example.com");
-tag("PageView");
+init({ edgeURL: 'https://d.yourdomain.com' })
+user('email', 'user@example.com')
+tag('PageView')
 ```
 
 ### Server-Side Implementation

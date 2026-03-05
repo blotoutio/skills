@@ -27,6 +27,7 @@ Authorization: Bearer {accessToken}
 Execute a SQL query against the `lake.events` table.
 
 **Request:**
+
 ```json
 {
   "sql": "SELECT event_name, COUNT(*) FROM lake.events WHERE event_timestamp >= 1706745600000 AND event_timestamp < 1709424000000 GROUP BY event_name LIMIT 100"
@@ -34,6 +35,7 @@ Execute a SQL query against the `lake.events` table.
 ```
 
 **Response:**
+
 ```json
 {
   "rows": [
@@ -57,6 +59,7 @@ All R2 SQL limitations apply — see [sql-reference.md](sql-reference.md) for su
 Conversion funnel analysis across standard event types: PageView → ViewContent → AddToCart → InitiateCheckout → Purchase.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -66,14 +69,15 @@ Conversion funnel analysis across standard event types: PageView → ViewContent
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `startDateTime` | string (ISO 8601) | Yes | Start of the time range |
-| `endDateTime` | string (ISO 8601) | Yes | End of the time range |
-| `granularity` | `DAY` \| `HOUR` \| `MINUTE` | No | Defaults to `DAY` |
-| `timezone` | string (IANA) | No | Timezone for the analysis |
+| Field           | Type                        | Required | Description               |
+| --------------- | --------------------------- | -------- | ------------------------- |
+| `startDateTime` | string (ISO 8601)           | Yes      | Start of the time range   |
+| `endDateTime`   | string (ISO 8601)           | Yes      | End of the time range     |
+| `granularity`   | `DAY` \| `HOUR` \| `MINUTE` | No       | Defaults to `DAY`         |
+| `timezone`      | string (IANA)               | No       | Timezone for the analysis |
 
 **Response:**
+
 ```json
 {
   "steps": [
@@ -95,6 +99,7 @@ Values are approximate distinct session counts for each funnel step.
 Traffic breakdown by browser, OS, device type, and country. Uses Cloudflare zone-level analytics.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -107,6 +112,7 @@ Traffic breakdown by browser, OS, device type, and country. Uses Cloudflare zone
 Same fields as funnel endpoint.
 
 **Response:**
+
 ```json
 {
   "chartData": { "2025-02-01T00:00:00Z": 1234, "2025-02-02T00:00:00Z": 1456 },
@@ -124,6 +130,7 @@ Same fields as funnel endpoint.
 Bot detection analysis using Cloudflare bot scores (0–100). Requires the domain to have a Cloudflare Zone ID configured.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -134,6 +141,7 @@ Bot detection analysis using Cloudflare bot scores (0–100). Requires the domai
 ```
 
 **Response:**
+
 ```json
 {
   "overview": { "0": 500, "1": 120, "2-9": 300, "90-100": 45000 },
@@ -152,6 +160,7 @@ Bot detection analysis using Cloudflare bot scores (0–100). Requires the domai
 WAF attack classification analysis using Cloudflare attack scores.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -162,9 +171,16 @@ WAF attack classification analysis using Cloudflare attack scores.
 ```
 
 **Response:**
+
 ```json
 {
-  "overview": { "clean": 45000, "likely_clean": 3000, "likely_attack": 200, "attack": 50, "not_scored": 1000 },
+  "overview": {
+    "clean": 45000,
+    "likely_clean": 3000,
+    "likely_attack": 200,
+    "attack": 50,
+    "not_scored": 1000
+  },
   "chartData": {
     "2025-02-01T00:00:00Z": { "clean": 1500, "attack": 2 }
   }
@@ -180,6 +196,7 @@ WAF attack classification analysis using Cloudflare attack scores.
 Bot traffic grouped by Cloudflare verified bot category. Requires Zone ID.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -190,6 +207,7 @@ Bot traffic grouped by Cloudflare verified bot category. Requires Zone ID.
 ```
 
 **Response:**
+
 ```json
 {
   "overview": { "Search Engine Crawler": 5000, "Feed Fetcher": 1200 },
@@ -206,6 +224,7 @@ Bot traffic grouped by Cloudflare verified bot category. Requires Zone ID.
 User agents for a specific bot category. Requires Zone ID.
 
 **Request:**
+
 ```json
 {
   "startDateTime": "2025-02-01T00:00:00.000Z",
@@ -216,11 +235,12 @@ User agents for a specific bot category. Requires Zone ID.
 }
 ```
 
-| Field | Type | Required | Description |
-|-------|------|----------|-------------|
-| `category` | string | Yes | Bot category name from `bot-categories` |
+| Field      | Type   | Required | Description                             |
+| ---------- | ------ | -------- | --------------------------------------- |
+| `category` | string | Yes      | Bot category name from `bot-categories` |
 
 **Response:**
+
 ```json
 {
   "userAgents": [
@@ -242,7 +262,7 @@ async function queryEdgeLake(scriptId: string, sql: string, token: string) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({ sql }),
   })
@@ -264,6 +284,6 @@ const result = await queryEdgeLake(
      AND event_timestamp < ${Date.now()}
    GROUP BY attribution_session_utm_source
    LIMIT 100`,
-  accessToken
+  accessToken,
 )
 ```

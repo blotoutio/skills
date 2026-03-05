@@ -47,7 +47,6 @@ npx skills add https://github.com/blotoutio/skills
 
 Clone this repo and copy the skill folders into the appropriate directory for your agent:
 
-
 | Agent        | Skill Directory              | Docs                                                                               |
 | ------------ | ---------------------------- | ---------------------------------------------------------------------------------- |
 | Claude Code  | `~/.claude/skills/`          | [docs](https://code.claude.com/docs/en/skills)                                     |
@@ -56,18 +55,15 @@ Clone this repo and copy the skill folders into the appropriate directory for yo
 | OpenAI Codex | `~/.codex/skills/`           | [docs](https://developers.openai.com/codex/skills/)                                |
 | Pi           | `~/.pi/agent/skills/`        | [docs](https://github.com/badlogic/pi-mono/tree/main/packages/coding-agent#skills) |
 
-
 ## Skills
 
 Skills are contextual and auto-loaded based on your conversation. When a request matches a skill's triggers, the agent loads and applies the relevant skill to provide accurate, up-to-date guidance.
-
 
 | Skill     | Useful for                                                                                                                                                                                                                                                                                                |
 | --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | edgetag   | Comprehensive EdgeTag skill covering the JS SDK, server-side event tracking, identity graph, consent management, 50+ channel integrations (Meta CAPI, Google Ads, TikTok, Klaviyo), platform deployments (Shopify, WooCommerce, React, Next.js), HTTP API, cross-domain identity stitching, and debugging |
 | consentiq | Consent analytics and compliance monitoring — marketing opt-in/opt-out rates, per-category breakdown, regional analysis (EU, UK, CA), and consent trends over time                                                                                                                                        |
 | edge-lake | Querying event data via SQL on Cloudflare R2, funnel analysis, attribution reporting, revenue trends, traffic analysis, bot detection, and WAF attack analysis                                                                                                                                            |
-
 
 ## What's Covered
 
@@ -120,4 +116,3 @@ Browser dev tools, Payload Validator channel, live logs, EMQ scoring, troublesho
 - [HTTP API Reference](https://docs.edgetag.io/implementation/http)
 - [REST API Docs](https://docs.edgetag.io/api)
 - [NPM Package](https://www.npmjs.com/package/@blotoutio/edgetag-sdk-js)
-

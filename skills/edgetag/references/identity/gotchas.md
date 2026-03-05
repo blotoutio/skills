@@ -10,73 +10,73 @@
 
 ```javascript
 // WRONG - has spaces or uppercase
-edgetag('user', 'email', 'John Doe@Example.COM');
+edgetag('user', 'email', 'John Doe@Example.COM')
 
 // RIGHT - lowercase, no spaces
-edgetag('user', 'email', 'john.doe@example.com');
+edgetag('user', 'email', 'john.doe@example.com')
 ```
 
 ### Phone
 
 ```javascript
 // WRONG - missing country code, spaces, or dashes
-edgetag('user', 'phone', '(415) 555-2671');
-edgetag('user', 'phone', '5552671');
+edgetag('user', 'phone', '(415) 555-2671')
+edgetag('user', 'phone', '5552671')
 
 // RIGHT - E.164 format: +{country}{number}
-edgetag('user', 'phone', '+14155552671');
+edgetag('user', 'phone', '+14155552671')
 ```
 
 ### Names
 
 ```javascript
 // WRONG - uppercase, accents, special characters
-edgetag('user', 'firstName', 'José');
-edgetag('user', 'firstName', 'O\'Brien');
+edgetag('user', 'firstName', 'José')
+edgetag('user', 'firstName', "O'Brien")
 
 // RIGHT - lowercase, no accents or punctuation
-edgetag('user', 'firstName', 'jose');
-edgetag('user', 'firstName', 'obrien');
+edgetag('user', 'firstName', 'jose')
+edgetag('user', 'firstName', 'obrien')
 ```
 
 ### Date of Birth
 
 ```javascript
 // WRONG - separators or wrong format
-edgetag('user', 'dateOfBirth', '03/15/1990');
-edgetag('user', 'dateOfBirth', '1990-03-15');
+edgetag('user', 'dateOfBirth', '03/15/1990')
+edgetag('user', 'dateOfBirth', '1990-03-15')
 
 // RIGHT - YYYYMMDD, 8 digits
-edgetag('user', 'dateOfBirth', '19900315');
+edgetag('user', 'dateOfBirth', '19900315')
 ```
 
 ### State
 
 ```javascript
 // WRONG - full name or uppercase
-edgetag('user', 'state', 'Washington');
-edgetag('user', 'state', 'WA');
+edgetag('user', 'state', 'Washington')
+edgetag('user', 'state', 'WA')
 
 // RIGHT - 2-char ANSI lowercase
-edgetag('user', 'state', 'wa');
+edgetag('user', 'state', 'wa')
 ```
 
 ### Normalization Helper
 
 ```javascript
 // Normalize PII before sending
-const phone = rawPhone.replace(/\D/g, ''); // Remove non-digits
-const normalizedPhone = `+1${phone}`; // Add country code
+const phone = rawPhone.replace(/\D/g, '') // Remove non-digits
+const normalizedPhone = `+1${phone}` // Add country code
 
-const email = rawEmail.toLowerCase().trim();
+const email = rawEmail.toLowerCase().trim()
 
 const firstName = rawName
   .toLowerCase()
   .normalize('NFD') // Remove accents
   .replace(/[\u0300-\u036f]/g, '') // Strip diacritics
-  .replace(/[^a-z]/g, ''); // Remove punctuation
+  .replace(/[^a-z]/g, '') // Remove punctuation
 
-edgetag('data', { email, phone: normalizedPhone, firstName });
+edgetag('data', { email, phone: normalizedPhone, firstName })
 ```
 
 ---
@@ -89,14 +89,14 @@ edgetag('data', { email, phone: normalizedPhone, firstName });
 
 ```javascript
 // GOOD: Capture what you have, when you have it
-edgetag('user', 'email', 'user@example.com'); // At sign-up
+edgetag('user', 'email', 'user@example.com') // At sign-up
 
 // Later, capture more
 edgetag('data', {
   firstName: 'john',
   lastName: 'doe',
-  phone: '+14155552671'
-}); // At checkout
+  phone: '+14155552671',
+}) // At checkout
 
 // Don't wait for complete profile before capturing
 ```
@@ -145,7 +145,7 @@ For full implementation examples (Express middleware, Next.js), see [platforms/p
 <script src="https://d.mysite.com/load"></script>
 <script>
   // TOO EARLY - EdgeTag still initializing
-  const id = edgetag('getUserId');
+  const id = edgetag('getUserId')
 </script>
 ```
 
@@ -155,8 +155,8 @@ For full implementation examples (Express middleware, Next.js), see [platforms/p
 <script src="https://d.mysite.com/load"></script>
 <script>
   window.addEventListener('edgetag-initialized', () => {
-    const id = edgetag('getUserId');
-  });
+    const id = edgetag('getUserId')
+  })
 </script>
 ```
 
@@ -170,9 +170,9 @@ For full implementation examples (Express middleware, Next.js), see [platforms/p
 
 ```javascript
 // Works, but multiple calls
-edgetag('user', 'email', 'user@example.com');
-edgetag('user', 'phone', '+14155552671');
-edgetag('user', 'firstName', 'john');
+edgetag('user', 'email', 'user@example.com')
+edgetag('user', 'phone', '+14155552671')
+edgetag('user', 'firstName', 'john')
 ```
 
 **Better**:
@@ -182,8 +182,8 @@ edgetag('user', 'firstName', 'john');
 edgetag('data', {
   email: 'user@example.com',
   phone: '+14155552671',
-  firstName: 'john'
-});
+  firstName: 'john',
+})
 ```
 
 ---
@@ -197,12 +197,12 @@ edgetag('data', {
 ```javascript
 edgetag('getData', ['email', 'phone'], (data, error, categories) => {
   if (error) {
-    console.error('Failed to get identity data:', error);
-    return;
+    console.error('Failed to get identity data:', error)
+    return
   }
-  console.log('Identity data:', data);
-  console.log('Consent categories:', categories);
-});
+  console.log('Identity data:', data)
+  console.log('Consent categories:', categories)
+})
 ```
 
 ---
@@ -217,34 +217,33 @@ edgetag('getData', ['email', 'phone'], (data, error, categories) => {
 
 ```javascript
 // User is identified, but link doesn't transfer identity
-window.location.href = 'https://other-domain.com/checkout';
+window.location.href = 'https://other-domain.com/checkout'
 ```
 
 **Wrong (receiving domain)**:
 
 ```javascript
 // Assumes EdgeTag reads et_uid automatically — it does NOT
-edgetag('init', { edgeURL: 'https://d.other-domain.com' });
+edgetag('init', { edgeURL: 'https://d.other-domain.com' })
 ```
 
 **Right (sending domain)**:
 
 ```javascript
 // Include et_uid to transfer identity
-const userId = edgetag('getUserId');
-window.location.href = `https://other-domain.com/checkout?et_uid=${userId}`;
+const userId = edgetag('getUserId')
+window.location.href = `https://other-domain.com/checkout?et_uid=${userId}`
 ```
 
 **Right (receiving domain)**:
 
 ```javascript
 // Manually read et_uid from URL and pass it to EdgeTag
-const urlParams = new URLSearchParams(window.location.search);
-const etUid = urlParams.get('et_uid');
+const urlParams = new URLSearchParams(window.location.search)
+const etUid = urlParams.get('et_uid')
 
 edgetag('init', {
   edgeURL: 'https://d.other-domain.com',
-  userId: etUid || undefined
-});
+  userId: etUid || undefined,
+})
 ```
-

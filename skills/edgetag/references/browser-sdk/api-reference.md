@@ -4,7 +4,6 @@ All functions use the global `edgetag()` command pattern: `edgetag('command', ..
 
 ## Function Overview
 
-
 | Function     | Purpose                                     | Context                           |
 | ------------ | ------------------------------------------- | --------------------------------- |
 | `init`       | Initialize EdgeTag with configuration       | Required — call once at page load |
@@ -20,7 +19,6 @@ All functions use the global `edgetag()` command pattern: `edgetag('command', ..
 | `setConfig`  | Update runtime configuration                | Page/session settings             |
 | `ready`      | Execute callback when SDK is ready          | Lifecycle management              |
 
-
 ---
 
 ## init
@@ -35,31 +33,33 @@ edgetag('init', config)
 
 ### Config Object
 
-
-| Parameter             | Type    | Required | Default   | Description                                                          |
-| --------------------- | ------- | -------- | --------- | -------------------------------------------------------------------- |
-| `edgeURL`             | String  | Yes      | —         | The EdgeTag CNAME endpoint (e.g., `https://d.mysite.com`)            |
-| `disableConsentCheck` | Boolean | —        | `false`   | If `true`, events are sent immediately without waiting for consent   |
+| Parameter             | Type    | Required | Default        | Description                                                                                                                                                          |
+| --------------------- | ------- | -------- | -------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `edgeURL`             | String  | Yes      | —              | The EdgeTag CNAME endpoint (e.g., `https://d.mysite.com`)                                                                                                            |
+| `disableConsentCheck` | Boolean | —        | `false`        | If `true`, events are sent immediately without waiting for consent                                                                                                   |
 | `userId`              | String  | —        | auto-generated | Pre-set user ID. Only needed in cookieless environments where EdgeTag cannot use cookies. EdgeTag generates this automatically in all standard browser environments. |
-
 
 ### Examples
 
 ```javascript
 // Basic initialization
-window.edgetag=window.edgetag||function(){(edgetag.stubs=edgetag.stubs||[]).push(arguments)};
+window.edgetag =
+  window.edgetag ||
+  function () {
+    ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+  }
 
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 ```
 
 ```javascript
 // With consent disabled (not recommended for GDPR/CCPA sites)
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  disableConsentCheck: true
-});
+  disableConsentCheck: true,
+})
 ```
 
 ```javascript
@@ -68,8 +68,8 @@ edgetag('init', {
 // Only pass this in environments where cookies are not available.
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  userId: 'user-123-abc'
-});
+  userId: 'user-123-abc',
+})
 ```
 
 ### Notes
@@ -93,7 +93,6 @@ edgetag('tag', name, data?, providers?, options?)
 
 ### Parameters
 
-
 | Parameter   | Type                    | Required | Description                                                     |
 | ----------- | ----------------------- | -------- | --------------------------------------------------------------- |
 | `name`      | String                  | Yes      | Event name (e.g., `'PageView'`, `'Purchase'`, `'AddToCart'`)    |
@@ -101,16 +100,13 @@ edgetag('tag', name, data?, providers?, options?)
 | `providers` | Record<string, boolean> | —        | Provider names with boolean values (e.g., `{ facebook: true }`) |
 | `options`   | TagOptions              | —        | Advanced options for this event                                 |
 
-
 ### TagOptions
 
-
-| Option        | Type       | Default   | Description                                    |
-| ------------- | ---------- | --------- | ---------------------------------------------- |
-| `method`      | `'beacon'` | `'fetch'` | `'fetch'`                                      |
+| Option        | Type       | Default   | Description                                                                                                                    |
+| ------------- | ---------- | --------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `method`      | `'beacon'` | `'fetch'` | `'fetch'`                                                                                                                      |
 | `sync`        | Boolean    | `false`   | If `true`, server waits for all channel responses before returning (useful for debugging channel errors; significantly slower) |
-| `destination` | String     | —         | Override default endpoint for this event       |
-
+| `destination` | String     | —         | Override default endpoint for this event                                                                                       |
 
 ### Common Event Names
 
@@ -120,36 +116,47 @@ See **events/README.md** for the complete list of standard event names.
 
 ```javascript
 // Basic page view
-edgetag('tag', 'PageView');
+edgetag('tag', 'PageView')
 
 // With event data
 edgetag('tag', 'Purchase', {
   orderId: 'order-456',
-  value: 150.00,
-  currency: 'USD'
-});
+  value: 150.0,
+  currency: 'USD',
+})
 
 // Send custom event to a specific channel
-edgetag('tag', 'NewsletterSignup', {
-  category: 'footer-form'
-}, { klaviyo: true });
+edgetag(
+  'tag',
+  'NewsletterSignup',
+  {
+    category: 'footer-form',
+  },
+  { klaviyo: true },
+)
 
 // Using beacon for unload events
 window.addEventListener('beforeunload', () => {
-  edgetag('tag', 'SessionEnd', {}, null, { method: 'beacon' });
-});
+  edgetag('tag', 'SessionEnd', {}, null, { method: 'beacon' })
+})
 
 // Sync mode to debug channel errors (server collects all channel responses before returning)
-edgetag('tag', 'Purchase', {
-  value: order.total
-}, null, { sync: true });
+edgetag(
+  'tag',
+  'Purchase',
+  {
+    value: order.total,
+  },
+  null,
+  { sync: true },
+)
 
 // Custom event
 edgetag('tag', 'VideoPlay', {
   videoId: 'video-123',
   duration: 120,
-  autoplay: false
-});
+  autoplay: false,
+})
 ```
 
 ---
@@ -166,7 +173,6 @@ edgetag('user', key, value, providers?, options?)
 
 ### Parameters
 
-
 | Parameter   | Type                    | Required | Description                                    |
 | ----------- | ----------------------- | -------- | ---------------------------------------------- |
 | `key`       | String                  | Yes      | Standard user key (see table below)            |
@@ -174,28 +180,26 @@ edgetag('user', key, value, providers?, options?)
 | `providers` | Record<string, boolean> | —        | Control PII distribution to specific providers |
 | `options`   | UserOptions             | —        | Advanced options (`method`, `destination`)     |
 
-
 ### Standard User Keys
 
 See **identity/api-reference.md § Standard Keys Reference** for the complete keys table with format requirements.
-
 
 ### Examples
 
 ```javascript
 // Single attribute
-edgetag('user', 'email', 'user@example.com');
+edgetag('user', 'email', 'user@example.com')
 
 // Multiple calls
-edgetag('user', 'firstName', 'john');
-edgetag('user', 'lastName', 'doe');
-edgetag('user', 'email', 'john@example.com');
-edgetag('user', 'phone', '+14155552671');
+edgetag('user', 'firstName', 'john')
+edgetag('user', 'lastName', 'doe')
+edgetag('user', 'email', 'john@example.com')
+edgetag('user', 'phone', '+14155552671')
 
 // Format requirements
-edgetag('user', 'firstName', 'john');          // CORRECT - lowercase
-edgetag('user', 'phone', '+14155552671');       // CORRECT - E.164
-edgetag('user', 'dateOfBirth', '19900115');     // CORRECT - YYYYMMDD
+edgetag('user', 'firstName', 'john') // CORRECT - lowercase
+edgetag('user', 'phone', '+14155552671') // CORRECT - E.164
+edgetag('user', 'dateOfBirth', '19900115') // CORRECT - YYYYMMDD
 ```
 
 ---
@@ -212,13 +216,11 @@ edgetag('data', attributes, providers?, options?)
 
 ### Parameters
 
-
 | Parameter    | Type                    | Required | Description                                    |
 | ------------ | ----------------------- | -------- | ---------------------------------------------- |
 | `attributes` | Object                  | Yes      | Key-value pairs of user attributes             |
 | `providers`  | Record<string, boolean> | —        | Control PII distribution to specific providers |
 | `options`    | DataOptions             | —        | Advanced options (`method`, `destination`)     |
-
 
 Standard attribute keys and their format requirements are the same as the [Standard User Keys](#standard-user-keys) listed in the `user` function above. Any keys not in that table are treated as custom attributes.
 
@@ -232,16 +234,16 @@ edgetag('data', {
   firstName: 'john',
   lastName: 'doe',
   dateOfBirth: '19900115',
-  country: 'us'
-});
+  country: 'us',
+})
 
 // Standard + custom attributes
 edgetag('data', {
   email: 'user@example.com',
   customerId: 'cust-123',
   accountTier: 'premium',
-  signupDate: '2024-01-15'
-});
+  signupDate: '2024-01-15',
+})
 ```
 
 ---
@@ -258,13 +260,11 @@ edgetag('consent', providersObject?, categoriesObject?, options?)
 
 ### Parameters
 
-
 | Parameter          | Type                              | Required | Description                                                          |
 | ------------------ | --------------------------------- | -------- | -------------------------------------------------------------------- |
 | `providersObject`  | Record\<string, boolean\> \| null | —        | Provider consent with boolean values (e.g., `{ facebook: true }`)    |
 | `categoriesObject` | Record\<string, boolean\>         | —        | Category consent with boolean values (e.g., `{ advertising: true }`) |
 | `options`          | ConsentOptions                    | —        | Advanced options (`localSave`, `destination`)                        |
-
 
 ### Consent Categories & Provider Names
 
@@ -274,29 +274,37 @@ See **consent/api-reference.md § Categories Reference** for available categorie
 
 ```javascript
 // Grant consent for specific providers
-edgetag('consent', { facebook: true, 'googleAdsClicks': true, tiktok: true });
+edgetag('consent', { facebook: true, googleAdsClicks: true, tiktok: true })
 
 // Grant consent for categories
-edgetag('consent', null, { advertising: true, analytics: true });
+edgetag('consent', null, { advertising: true, analytics: true })
 
 // Both providers and categories
-edgetag('consent',
-  { facebook: true, 'googleAdsClicks': true },
-  { advertising: true, analytics: true }
-);
+edgetag(
+  'consent',
+  { facebook: true, googleAdsClicks: true },
+  { advertising: true, analytics: true },
+)
 
 // Allow all
-edgetag('consent',
+edgetag(
+  'consent',
   { all: true },
-  { necessary: true, advertising: true, analytics: true, functional: true, share_pii: true }
-);
+  {
+    necessary: true,
+    advertising: true,
+    analytics: true,
+    functional: true,
+    share_pii: true,
+  },
+)
 
 // CMP integration
 const cmpConsent = {
-  providers: { facebook: true, 'googleAdsClicks': true },
-  categories: { advertising: true, analytics: true }
-};
-edgetag('consent', cmpConsent.providers, cmpConsent.categories);
+  providers: { facebook: true, googleAdsClicks: true },
+  categories: { advertising: true, analytics: true },
+}
+edgetag('consent', cmpConsent.providers, cmpConsent.categories)
 ```
 
 ### Notes
@@ -320,13 +328,11 @@ edgetag('getConsent', callback, options?)
 
 ### Callback Parameters
 
-
-| Parameter           | Type               | Description                                                                  |
-| ------------------- | ------------------ | ---------------------------------------------------------------------------- |
-| `consent`           | Object | null      | Provider consent status (e.g., `{ facebook: true, googleAdsClicks: false }`) |
-| `error`             | String | undefined | Error message if retrieval failed                                            |
-| `consentCategories` | Object             | Category consent status (e.g., `{ advertising: true, analytics: false }`)    |
-
+| Parameter           | Type   | Description                                                               |
+| ------------------- | ------ | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| `consent`           | Object | null                                                                      | Provider consent status (e.g., `{ facebook: true, googleAdsClicks: false }`) |
+| `error`             | String | undefined                                                                 | Error message if retrieval failed                                            |
+| `consentCategories` | Object | Category consent status (e.g., `{ advertising: true, analytics: false }`) |
 
 ### Examples
 
@@ -334,19 +340,19 @@ edgetag('getConsent', callback, options?)
 // Check current consent
 edgetag('getConsent', (consent, error, consentCategories) => {
   if (error) {
-    console.error('Failed to get consent:', error);
-    return;
+    console.error('Failed to get consent:', error)
+    return
   }
-  console.log('Provider consent:', consent);
-  console.log('Category consent:', consentCategories);
-});
+  console.log('Provider consent:', consent)
+  console.log('Category consent:', consentCategories)
+})
 
 // Conditional event tracking
 edgetag('getConsent', (consent, error, consentCategories) => {
   if (consentCategories.advertising) {
-    edgetag('tag', 'CustomAdEvent', { campaignId: 'camp-123' });
+    edgetag('tag', 'CustomAdEvent', { campaignId: 'camp-123' })
   }
-});
+})
 ```
 
 ---
@@ -363,30 +369,28 @@ edgetag('getData', keys, callback, options?)
 
 ### Parameters
 
-
 | Parameter  | Type           | Required | Description                            |
 | ---------- | -------------- | -------- | -------------------------------------- |
 | `keys`     | String[]       | Yes      | Array of attribute keys to retrieve    |
 | `callback` | Function       | Yes      | Callback invoked with attribute values |
 | `options`  | GetDataOptions | —        | Advanced options                       |
 
-
 ### Examples
 
 ```javascript
 edgetag('getData', ['email', 'firstName', 'phone'], (data) => {
-  console.log('User data:', data);
+  console.log('User data:', data)
   // { email: 'user@example.com', firstName: 'john', phone: '+14155552671' }
-});
+})
 
 // Use for event enrichment
 edgetag('getData', ['email', 'phone', 'firstName'], (data) => {
   edgetag('tag', 'Purchase', {
     orderId: '12345',
     value: 150,
-    ...data
-  });
-});
+    ...data,
+  })
+})
 ```
 
 ---
@@ -403,20 +407,18 @@ edgetag('keys', callback, options?)
 
 ### Parameters
 
-
-| Parameter  | Type         | Required | Description                                   |
-| ---------- | ------------ | -------- | --------------------------------------------- |
-| `callback` | Function     | Yes      | Callback invoked with an array of key strings |
-| `options`  | KeysOptions  | —        | Advanced options (`destination`)              |
-
+| Parameter  | Type        | Required | Description                                   |
+| ---------- | ----------- | -------- | --------------------------------------------- |
+| `callback` | Function    | Yes      | Callback invoked with an array of key strings |
+| `options`  | KeysOptions | —        | Advanced options (`destination`)              |
 
 ### Examples
 
 ```javascript
 edgetag('keys', (keys) => {
-  console.log('Stored attribute keys:', keys);
+  console.log('Stored attribute keys:', keys)
   // e.g., ['email', 'firstName', 'customerId']
-});
+})
 ```
 
 ---
@@ -439,13 +441,13 @@ edgetag('getUserId', options?)
 ### Examples
 
 ```javascript
-const userId = edgetag('getUserId');
-console.log('Current user ID:', userId);
+const userId = edgetag('getUserId')
+console.log('Current user ID:', userId)
 
 // Use for debugging
-const userId = edgetag('getUserId');
+const userId = edgetag('getUserId')
 if (!userId) {
-  console.warn('No user ID assigned yet');
+  console.warn('No user ID assigned yet')
 }
 ```
 
@@ -473,9 +475,9 @@ edgetag('isNewUser', options?)
 ### Examples
 
 ```javascript
-const isNew = edgetag('isNewUser');
+const isNew = edgetag('isNewUser')
 if (isNew) {
-  console.log('Welcome, new visitor!');
+  console.log('Welcome, new visitor!')
 }
 ```
 
@@ -493,27 +495,23 @@ edgetag('setConfig', settings, options?)
 
 ### Settings Object
 
-
 | Parameter | Type   | Description                                              |
 | --------- | ------ | -------------------------------------------------------- |
 | `pageUrl` | String | Override the page URL for this session (useful for SPAs) |
 
-
 ### Options
-
 
 | Parameter     | Type   | Description                                             |
 | ------------- | ------ | ------------------------------------------------------- |
 | `destination` | String | Override the default endpoint for all subsequent events |
-
 
 ### Examples
 
 ```javascript
 // Update page URL (e.g., on SPA navigation)
 edgetag('setConfig', {
-  pageUrl: window.location.href
-});
+  pageUrl: window.location.href,
+})
 ```
 
 ---
@@ -532,14 +530,14 @@ edgetag('ready', callback)
 
 ```typescript
 interface ReadyState {
-  destination: string;              // EdgeTag endpoint
-  userId: string | null;            // Current user ID
-  sessionId: string;                // Session identifier
-  isNewUser: boolean;               // True if first visit
-  isNewSession: boolean;            // True if new session
-  consent: Record<string, boolean>; // Provider consent
-  consentCategories: Record<string, boolean>; // Category consent
-  consentSettings: object;          // Raw consent settings
+  destination: string // EdgeTag endpoint
+  userId: string | null // Current user ID
+  sessionId: string // Session identifier
+  isNewUser: boolean // True if first visit
+  isNewSession: boolean // True if new session
+  consent: Record<string, boolean> // Provider consent
+  consentCategories: Record<string, boolean> // Category consent
+  consentSettings: object // Raw consent settings
 }
 ```
 
@@ -548,19 +546,19 @@ interface ReadyState {
 ```javascript
 // Basic ready callback
 edgetag('ready', (state) => {
-  console.log('EdgeTag is ready');
-  console.log('User ID:', state.userId);
-  console.log('Is new user:', state.isNewUser);
-});
+  console.log('EdgeTag is ready')
+  console.log('User ID:', state.userId)
+  console.log('Is new user:', state.isNewUser)
+})
 
 // Conditional logic
 edgetag('ready', (state) => {
   if (state.isNewUser) {
-    showWelcomePopup();
+    showWelcomePopup()
     // EdgeTag skips non-consented channels automatically
-    edgetag('tag', 'Welcome', { newUser: true });
+    edgetag('tag', 'Welcome', { newUser: true })
   }
-});
+})
 ```
 
 ---
@@ -575,8 +573,8 @@ Fired when the SDK finishes initializing.
 
 ```javascript
 document.addEventListener('edgetag-initialized', (event) => {
-  console.log('EdgeTag initialized');
-});
+  console.log('EdgeTag initialized')
+})
 ```
 
 ### edgetag-consent
@@ -585,30 +583,28 @@ Fired when user consent changes.
 
 ```javascript
 document.addEventListener('edgetag-consent', (event) => {
-  console.log('Consent changed', event.detail);
-});
+  console.log('Consent changed', event.detail)
+})
 ```
 
 ---
 
 ## Return Values Summary
 
-
-| Function    | Sync/Async       | Returns                              |
-| ----------- | ---------------- | ------------------------------------ |
-| `init`      | Sync             | void                                 |
-| `tag`       | Async (queued)   | void                                 |
-| `user`      | Sync             | void                                 |
-| `data`      | Sync             | void                                 |
-| `consent`   | Sync             | void                                 |
-| `getConsent`| Async (callback) | void (result in callback)            |
-| `getData`   | Async (callback) | void (result in callback)            |
-| `keys`      | Async (callback) | void (result in callback)            |
-| `getUserId` | Sync             | string                               |
-| `isNewUser` | Sync             | boolean \| undefined                 |
-| `setConfig` | Sync             | void                                 |
-| `ready`     | Async (callback) | void (result in callback, or Promise)|
-
+| Function     | Sync/Async       | Returns                               |
+| ------------ | ---------------- | ------------------------------------- |
+| `init`       | Sync             | void                                  |
+| `tag`        | Async (queued)   | void                                  |
+| `user`       | Sync             | void                                  |
+| `data`       | Sync             | void                                  |
+| `consent`    | Sync             | void                                  |
+| `getConsent` | Async (callback) | void (result in callback)             |
+| `getData`    | Async (callback) | void (result in callback)             |
+| `keys`       | Async (callback) | void (result in callback)             |
+| `getUserId`  | Sync             | string                                |
+| `isNewUser`  | Sync             | boolean \| undefined                  |
+| `setConfig`  | Sync             | void                                  |
+| `ready`      | Async (callback) | void (result in callback, or Promise) |
 
 ---
 
@@ -629,93 +625,131 @@ type UserKey =
   | 'address'
 
 interface EdgeTagAPI {
-  (command: 'init', config: InitConfig): void;
-  (command: 'tag', name: string, data?: Record<string, unknown>, providers?: Record<string, boolean>, options?: TagOptions): void;
-  (command: 'user', key: UserKey, value: string, providers?: Record<string, boolean>, options?: UserOptions): void;
-  (command: 'data', attributes: Record<string, string>, providers?: Record<string, boolean>, options?: UserOptions): void;
-  (command: 'consent', consentChannels?: Record<string, boolean> | null, consentCategories?: Record<string, boolean>, options?: ConsentOptions): void;
-  (command: 'getConsent', callback: GetConsentCallback, options?: GetConsentOptions): void;
-  (command: 'getData', keys: string[], callback: (data: Record<string, string>) => void, options?: GetDataOptions): void;
-  (command: 'keys', callback: (keys: string[]) => void, options?: KeysOptions): void;
-  (command: 'getUserId', options?: GetUserIdOptions): string;
-  (command: 'isNewUser', options?: IsNewUserOptions): boolean | undefined;
-  (command: 'setConfig', settings: ConfigSettings, options?: ConfigOptions): void;
-  (command: 'ready', callback: ReadyCallback): void;
+  (command: 'init', config: InitConfig): void
+  (
+    command: 'tag',
+    name: string,
+    data?: Record<string, unknown>,
+    providers?: Record<string, boolean>,
+    options?: TagOptions,
+  ): void
+  (
+    command: 'user',
+    key: UserKey,
+    value: string,
+    providers?: Record<string, boolean>,
+    options?: UserOptions,
+  ): void
+  (
+    command: 'data',
+    attributes: Record<string, string>,
+    providers?: Record<string, boolean>,
+    options?: UserOptions,
+  ): void
+  (
+    command: 'consent',
+    consentChannels?: Record<string, boolean> | null,
+    consentCategories?: Record<string, boolean>,
+    options?: ConsentOptions,
+  ): void
+  (
+    command: 'getConsent',
+    callback: GetConsentCallback,
+    options?: GetConsentOptions,
+  ): void
+  (
+    command: 'getData',
+    keys: string[],
+    callback: (data: Record<string, string>) => void,
+    options?: GetDataOptions,
+  ): void
+  (
+    command: 'keys',
+    callback: (keys: string[]) => void,
+    options?: KeysOptions,
+  ): void
+  (command: 'getUserId', options?: GetUserIdOptions): string
+  (command: 'isNewUser', options?: IsNewUserOptions): boolean | undefined
+  (
+    command: 'setConfig',
+    settings: ConfigSettings,
+    options?: ConfigOptions,
+  ): void
+  (command: 'ready', callback: ReadyCallback): void
 }
 
 interface InitConfig {
-  edgeURL: string;
-  disableConsentCheck?: boolean;
-  userId?: string; // Only for cookieless environments; auto-generated in browsers
-  fallbackUserId?: string;
-  storageId?: number;
-  sessionId?: string;
-  skipZeroPurchaseEvent?: boolean;
+  edgeURL: string
+  disableConsentCheck?: boolean
+  userId?: string // Only for cookieless environments; auto-generated in browsers
+  fallbackUserId?: string
+  storageId?: number
+  sessionId?: string
+  skipZeroPurchaseEvent?: boolean
 }
 
 interface TagOptions {
-  method?: 'beacon';
-  sync?: boolean;
-  destination?: string;
+  method?: 'beacon'
+  sync?: boolean
+  destination?: string
 }
 
 interface UserOptions {
-  method?: 'beacon';
-  destination?: string;
+  method?: 'beacon'
+  destination?: string
 }
 
 interface ConsentOptions {
-  localSave?: boolean;
-  destination?: string;
+  localSave?: boolean
+  destination?: string
 }
 
 interface GetConsentOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface GetDataOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface KeysOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface GetUserIdOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface IsNewUserOptions {
-  destination?: string;
+  destination?: string
 }
 
 interface ConfigSettings {
-  pageUrl?: string;
+  pageUrl?: string
 }
 
 interface ConfigOptions {
-  destination?: string;
+  destination?: string
 }
 
 type GetConsentCallback = (
   consent: Record<string, boolean | Record<string, boolean>> | null,
   error?: Error,
-  consentCategories?: Record<string, boolean> | null
-) => void;
+  consentCategories?: Record<string, boolean> | null,
+) => void
 
 interface ReadyCallbackData {
-  destination: string;
-  userId: string | undefined;
-  sessionId: string | undefined;
-  isNewUser: boolean | undefined;
-  isNewSession: boolean;
-  consent: Record<string, boolean>;
-  consentCategories: Record<string, boolean>;
-  consentSetting: Record<string, unknown>;
+  destination: string
+  userId: string | undefined
+  sessionId: string | undefined
+  isNewUser: boolean | undefined
+  isNewSession: boolean
+  consent: Record<string, boolean>
+  consentCategories: Record<string, boolean>
+  consentSetting: Record<string, unknown>
 }
 
-type ReadyCallback = (data: ReadyCallbackData) => unknown | Promise<unknown>;
+type ReadyCallback = (data: ReadyCallbackData) => unknown | Promise<unknown>
 
-declare var edgetag: EdgeTagAPI;
+declare var edgetag: EdgeTagAPI
 ```
-

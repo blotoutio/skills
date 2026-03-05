@@ -41,7 +41,6 @@ See [Setup Guide](references/setup.md) for full details on all methods, required
 
 Remote MCP server at `https://mcp.edgetag.io`. Authenticates via OAuth (redirects to EdgeTag login). See [MCP Setup](references/mcp-setup.md) for connection instructions.
 
-
 | Tool                      | When to Use                                                                       |
 | ------------------------- | --------------------------------------------------------------------------------- |
 | `edgeLakeQuery`           | Simple single SQL queries with small result sets                                  |
@@ -50,22 +49,19 @@ Remote MCP server at `https://mcp.edgetag.io`. Authenticates via OAuth (redirect
 | `edgeLakeBotScore`        | Bot detection analysis by Cloudflare bot scores                                   |
 | `edgeLakeAttackAnalysis`  | WAF attack classification analysis                                                |
 
-
 ### Provider API (programmatic access)
 
 Base URL: `https://api.edgetag.io/v1/provider/edgeLake/{scriptId}`
 
-
-| Endpoint                           | Method | When to Use                                        |
-| ---------------------------------- | ------ | -------------------------------------------------- |
-| `/{scriptId}/query`               | POST   | Execute SQL queries against `lake.events`          |
-| `/{scriptId}/funnel`              | POST   | Conversion funnel analysis (PageView → Purchase)   |
-| `/{scriptId}/traffic-analysis`    | POST   | Traffic breakdown by browser, OS, device, country  |
-| `/{scriptId}/bot-score`           | POST   | Bot detection by Cloudflare bot scores             |
-| `/{scriptId}/attack-analysis`     | POST   | WAF attack classification                          |
-| `/{scriptId}/bot-categories`      | POST   | Bot traffic grouped by verified bot category       |
-| `/{scriptId}/bot-category-detail` | POST   | User agents for a specific bot category            |
-
+| Endpoint                          | Method | When to Use                                       |
+| --------------------------------- | ------ | ------------------------------------------------- |
+| `/{scriptId}/query`               | POST   | Execute SQL queries against `lake.events`         |
+| `/{scriptId}/funnel`              | POST   | Conversion funnel analysis (PageView → Purchase)  |
+| `/{scriptId}/traffic-analysis`    | POST   | Traffic breakdown by browser, OS, device, country |
+| `/{scriptId}/bot-score`           | POST   | Bot detection by Cloudflare bot scores            |
+| `/{scriptId}/attack-analysis`     | POST   | WAF attack classification                         |
+| `/{scriptId}/bot-categories`      | POST   | Bot traffic grouped by verified bot category      |
+| `/{scriptId}/bot-category-detail` | POST   | User agents for a specific bot category           |
 
 See [Provider API Reference](references/provider-api.md) for full request/response shapes and authentication.
 
@@ -96,7 +92,6 @@ See [Provider API Reference](references/provider-api.md) for full request/respon
 
 ## Reference Files
 
-
 | File                                         | Contents                                                             |
 | -------------------------------------------- | -------------------------------------------------------------------- |
 | [Setup Guide](references/setup.md)           | How to add Edge Lake via dashboard or API, schema customization      |
@@ -105,7 +100,6 @@ See [Provider API Reference](references/provider-api.md) for full request/respon
 | [MCP Setup](references/mcp-setup.md)         | How to connect Claude Desktop, Cursor, or Claude Code to EdgeTag MCP |
 | [Provider API](references/provider-api.md)   | REST API endpoints, authentication, request/response shapes          |
 | [Gotchas](references/gotchas.md)             | Common query mistakes and R2 SQL pitfalls                            |
-
 
 ## Key Constraints
 

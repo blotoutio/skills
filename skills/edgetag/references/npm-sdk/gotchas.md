@@ -66,10 +66,10 @@ user("email", "user@example.com");
 
 ```javascript
 // WRONG - No providers, browser pixels won't work
-import { init, tag } from "@blotoutio/edgetag-sdk-js";
+import { init, tag } from '@blotoutio/edgetag-sdk-js'
 
-init({ edgeURL: "https://d.mysite.com" });
-tag("Purchase", { value: 100 }); // Facebook pixel won't fire — no provider packages installed
+init({ edgeURL: 'https://d.mysite.com' })
+tag('Purchase', { value: 100 }) // Facebook pixel won't fire — no provider packages installed
 ```
 
 With the npm approach, browser pixels are **not** loaded automatically. Without provider packages:
@@ -85,15 +85,15 @@ npm install @blotoutio/providers-facebook-sdk
 ```
 
 ```javascript
-import { init, tag } from "@blotoutio/edgetag-sdk-js";
-import facebook from "@blotoutio/providers-facebook-sdk";
+import { init, tag } from '@blotoutio/edgetag-sdk-js'
+import facebook from '@blotoutio/providers-facebook-sdk'
 
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   providers: [facebook],
-});
+})
 
-tag("Purchase", { value: 100 }); // Now works — pixels fire to all consented channels
+tag('Purchase', { value: 100 }) // Now works — pixels fire to all consented channels
 ```
 
 For the full list of available provider packages, see [Channel Reference](../channels/channel-reference.md).
@@ -139,14 +139,14 @@ npm install @blotoutio/providers-tiktok-sdk
 ```
 
 ```javascript
-import facebook from "@blotoutio/providers-facebook-sdk";
-import googleAds from "@blotoutio/providers-google-ads-clicks-sdk";
-import tiktok from "@blotoutio/providers-tiktok-sdk";
+import facebook from '@blotoutio/providers-facebook-sdk'
+import googleAds from '@blotoutio/providers-google-ads-clicks-sdk'
+import tiktok from '@blotoutio/providers-tiktok-sdk'
 
 init({
-  edgeURL: "https://d.mysite.com",
+  edgeURL: 'https://d.mysite.com',
   providers: [facebook, googleAds, tiktok],
-});
+})
 ```
 
 For the full list of available provider packages, see [Channel Reference](../channels/channel-reference.md).
@@ -188,34 +188,34 @@ Before deploying EdgeTag, verify:
 ### Check Initialization
 
 ```javascript
-import { ready } from "@blotoutio/edgetag-sdk-js";
+import { ready } from '@blotoutio/edgetag-sdk-js'
 
 ready((state) => {
-  console.log("EdgeTag initialized:", state);
-  console.log("User ID:", state.userId);
-  console.log("Consent:", state.consent);
-});
+  console.log('EdgeTag initialized:', state)
+  console.log('User ID:', state.userId)
+  console.log('Consent:', state.consent)
+})
 ```
 
 ### Check Consent
 
 ```javascript
-import { getConsent } from "@blotoutio/edgetag-sdk-js";
+import { getConsent } from '@blotoutio/edgetag-sdk-js'
 
 getConsent((consent, error, categories) => {
-  console.log("Provider consent:", consent);
-  console.log("Category consent:", categories);
-});
+  console.log('Provider consent:', consent)
+  console.log('Category consent:', categories)
+})
 ```
 
 ### Verify User Data
 
 ```javascript
-import { getData } from "@blotoutio/edgetag-sdk-js";
+import { getData } from '@blotoutio/edgetag-sdk-js'
 
-getData(["email", "phone", "firstName"], (data) => {
-  console.log("Current user data:", data);
-});
+getData(['email', 'phone', 'firstName'], (data) => {
+  console.log('Current user data:', data)
+})
 ```
 
 ### Browser DevTools

@@ -22,9 +22,9 @@ Add two snippets to your HTML `<head>`:
   window.edgetag =
     window.edgetag ||
     function () {
-      (edgetag.stubs = edgetag.stubs || []).push(arguments);
-    };
-  edgetag("init", { edgeURL: "https://d.mysite.com" });
+      ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+    }
+  edgetag('init', { edgeURL: 'https://d.mysite.com' })
 </script>
 
 <!--2. Load EdgeTag from your first-party domain -->
@@ -47,9 +47,9 @@ The stub function is critical — it lets you call `edgetag()` anywhere on the p
 
 ```javascript
 // These calls are queued in edgetag.stubs[]
-edgetag("init", { edgeURL: "https://d.mysite.com" });
-edgetag("user", "email", "user@example.com");
-edgetag("tag", "PageView");
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
+edgetag('user', 'email', 'user@example.com')
+edgetag('tag', 'PageView')
 
 // Once the SDK loads, all queued calls are replayed in order
 ```
@@ -67,23 +67,23 @@ Always include the stub before any `edgetag()` calls. Without it, you'll get `ed
       window.edgetag =
         window.edgetag ||
         function () {
-          (edgetag.stubs = edgetag.stubs || []).push(arguments);
-        };
+          ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+        }
 
       // Initialize EdgeTag
-      edgetag("init", {
-        edgeURL: "https://d.mysite.com",
-      });
+      edgetag('init', {
+        edgeURL: 'https://d.mysite.com',
+      })
 
       // Track a page view
-      edgetag("tag", "PageView");
+      edgetag('tag', 'PageView')
     </script>
     <script src="https://d.mysite.com/load" async></script>
   </head>
   <body>
     <script>
       // Set user identity (if known from server-side template)
-      edgetag("user", "email", "user@example.com");
+      edgetag('user', 'email', 'user@example.com')
     </script>
   </body>
 </html>
@@ -109,10 +109,10 @@ By default, events are blocked until user consent is granted. Your CMP should ca
 
 ```javascript
 edgetag(
-  "consent",
-  { facebook: true, "googleAdsClicks": true },
+  'consent',
+  { facebook: true, googleAdsClicks: true },
   { advertising: true, analytics: true },
-);
+)
 ```
 
 ### Browser Pixels

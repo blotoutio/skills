@@ -50,21 +50,20 @@ When a user identifies themselves (e.g., sign-in, form submission), EdgeTag auto
 
 ```javascript
 // Get the user ID
-const userId = edgetag('getUserId');
+const userId = edgetag('getUserId')
 
 // Set a single standard key
-edgetag('user', 'email', 'user@example.com');
+edgetag('user', 'email', 'user@example.com')
 
 // Set multiple keys (standard or custom)
 edgetag('data', {
   email: 'user@example.com',
   phone: '+1234567890',
-  customAttribute: 'value'
-});
+  customAttribute: 'value',
+})
 
 // Retrieve identity data (standard keys return {keyExists: boolean})
 edgetag('getData', ['email', 'phone'], (data) => {
-  console.log(data); // { emailExists: true, phoneExists: true }
-});
+  console.log(data) // { emailExists: true, phoneExists: true }
+})
 ```
-

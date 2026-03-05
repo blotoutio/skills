@@ -21,44 +21,41 @@ CRM System → Webhook → Your API Server → EdgeTag HTTP API
 ```javascript
 // Express.js example
 app.post('/webhooks/crm', express.json(), async (req, res) => {
-  const crmEvent = req.body;
+  const crmEvent = req.body
 
   // Map CRM event to EdgeTag event
   const edgeTagEvent = {
     eventId: `crm_${crmEvent.id}_${Date.now()}`,
-    eventName: mapCrmToEdgeTag(crmEvent.type),  // "Lead", "SalesWon", etc.
+    eventName: mapCrmToEdgeTag(crmEvent.type), // "Lead", "SalesWon", etc.
     timestamp: Date.now(),
     pageUrl: crmEvent.source_url,
     data: {
       userEmail: crmEvent.contact_email,
       value: crmEvent.deal_value,
-      currency: crmEvent.currency || "USD"
-    }
-  };
+      currency: crmEvent.currency || 'USD',
+    },
+  }
 
   // Send to EdgeTag
-  await sendToEdgeTag(edgeTagEvent);
-  res.json({ success: true });
-});
+  await sendToEdgeTag(edgeTagEvent)
+  res.json({ success: true })
+})
 ```
 
 **Step 2: Send to EdgeTag**
 
 ```javascript
 async function sendToEdgeTag(event) {
-  const response = await fetch(
-    'https://abc.domain.com/tag',
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(event)
-    }
-  );
+  const response = await fetch('https://abc.domain.com/tag', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(event),
+  })
 
   if (!response.ok) {
-    console.error('EdgeTag error:', await response.json());
+    console.error('EdgeTag error:', await response.json())
   }
 }
 ```
@@ -68,13 +65,13 @@ async function sendToEdgeTag(event) {
 ```javascript
 function mapCrmToEdgeTag(crmEventType) {
   const map = {
-    "lead_created": "Lead",
-    "opportunity_won": "Purchase",
-    "opportunity_lost": "LeadLost",
-    "contact_updated": "Update",
-    "deal_stage_changed": "UpdateCart"
-  };
-  return map[crmEventType] || "Custom";
+    lead_created: 'Lead',
+    opportunity_won: 'Purchase',
+    opportunity_lost: 'LeadLost',
+    contact_updated: 'Update',
+    deal_stage_changed: 'UpdateCart',
+  }
+  return map[crmEventType] || 'Custom'
 }
 ```
 
@@ -120,25 +117,25 @@ INSERT INTO offline_purchases (
 async function sendOfflinePurchases() {
   // Get purchases from last 24 hours
   const purchases = await db.query(
-    'SELECT * FROM offline_purchases WHERE created_at > NOW() - 1 day'
-  );
+    'SELECT * FROM offline_purchases WHERE created_at > NOW() - 1 day',
+  )
 
   for (const purchase of purchases) {
     const event = {
       eventId: `offline_${purchase.purchase_id}`,
-      eventName: "Purchase",
+      eventName: 'Purchase',
       timestamp: purchase.timestamp,
-      pageUrl: "https://mystore.com/offline-checkout",
-      pageTitle: "Offline Purchase",
+      pageUrl: 'https://mystore.com/offline-checkout',
+      pageTitle: 'Offline Purchase',
       data: {
         userEmail: purchase.customer_email,
         value: purchase.amount,
         currency: purchase.currency,
-        contents: purchase.items.map(item => ({
+        contents: purchase.items.map((item) => ({
           name: item.name,
           quantity: item.quantity,
-          price: item.price
-        }))
+          price: item.price,
+        })),
       },
       storage: {
         edgeTag: {
@@ -146,19 +143,19 @@ async function sendOfflinePurchases() {
             marketing: true,
             analytics: true,
             sale_of_data: false,
-            preferences: true
-          }
-        }
+            preferences: true,
+          },
+        },
       },
-      providers: ["facebook", "klaviyo"]
-    };
+      providers: ['facebook', 'klaviyo'],
+    }
 
-    await sendToEdgeTag(event);
+    await sendToEdgeTag(event)
   }
 }
 
 // Run daily
-schedule.every().day().at("02:00").do(sendOfflinePurchases);
+schedule.every().day().at('02:00').do(sendOfflinePurchases)
 ```
 
 **Step 3: Match user to EdgeTag ID**
@@ -171,9 +168,9 @@ schedule.every().day().at("02:00").do(sendOfflinePurchases);
 const event = {
   // ... other fields
   headers: {
-    'EdgeTagUserId': purchase.edgeTag_id  // If you have it stored
-  }
-};
+    EdgeTagUserId: purchase.edgeTag_id, // If you have it stored
+  },
+}
 
 // Option C: First populate user in ID graph
 // Get user into system first via /data endpoint
@@ -181,16 +178,16 @@ await fetch('https://d.mysite.com/data', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'EdgeTagUserId': purchase.edgeTag_id
+    EdgeTagUserId: purchase.edgeTag_id,
   },
   body: JSON.stringify({
     data: {
       email: purchase.customer_email,
       firstName: purchase.first_name,
-      lastName: purchase.last_name
-    }
-  })
-});
+      lastName: purchase.last_name,
+    },
+  }),
+})
 ```
 
 ### Benefits
@@ -239,33 +236,33 @@ URLSession.shared.dataTask(with: URLRequest(
 
 ```javascript
 app.post('/api/events', express.json(), async (req, res) => {
-  const { userId, ...eventData } = req.body;
+  const { userId, ...eventData } = req.body
 
   // Get EdgeTag ID from your user database
-  const user = await db.getUser(userId);
+  const user = await db.getUser(userId)
 
   const edgeTagEvent = {
     ...eventData,
     eventId: `mobile_${eventData.eventId}`,
     timestamp: Date.now(),
-    userAgent: req.headers['user-agent']
-  };
+    userAgent: req.headers['user-agent'],
+  }
 
   try {
     const response = await fetch('https://abc.domain.com/tag', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'EdgeTagUserId': user.edgeTag_id
+        EdgeTagUserId: user.edgeTag_id,
       },
-      body: JSON.stringify(edgeTagEvent)
-    });
+      body: JSON.stringify(edgeTagEvent),
+    })
 
-    res.json({ success: response.ok });
+    res.json({ success: response.ok })
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message })
   }
-});
+})
 ```
 
 **Step 3: Create/maintain EdgeTag ID for app users**
@@ -273,32 +270,32 @@ app.post('/api/events', express.json(), async (req, res) => {
 ```javascript
 // When user signs up in mobile app
 app.post('/api/auth/signup', async (req, res) => {
-  const user = await createUser(req.body);
+  const user = await createUser(req.body)
 
   // Generate unique app user ID
-  const edgeTagId = `app_${user.id}`;
+  const edgeTagId = `app_${user.id}`
 
   // Enrich ID graph
   await fetch('https://abc.domain.com/data', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'EdgeTagUserId': edgeTagId
+      EdgeTagUserId: edgeTagId,
     },
     body: JSON.stringify({
       data: {
         email: user.email,
         firstName: user.firstName,
-        lastName: user.lastName
-      }
-    })
-  });
+        lastName: user.lastName,
+      },
+    }),
+  })
 
   // Store in user record
-  await db.updateUser(user.id, { edgeTag_id: edgeTagId });
+  await db.updateUser(user.id, { edgeTag_id: edgeTagId })
 
-  res.json({ userId: user.id });
-});
+  res.json({ userId: user.id })
+})
 ```
 
 ### Benefits
@@ -326,27 +323,27 @@ Your Services → Event Broker (Kafka/Redis) → Worker → EdgeTag API
 
 ```javascript
 // Any service that processes user actions
-const { EventBus } = require('./events');
+const { EventBus } = require('./events')
 
 class SubscriptionService {
   async handleUpgrade(userId, planId) {
-    await this.database.update('users', { plan_id: planId });
+    await this.database.update('users', { plan_id: planId })
 
     // Publish event for EdgeTag
     EventBus.publish('user:plan:upgraded', {
       userId,
       planId,
-      timestamp: Date.now()
-    });
+      timestamp: Date.now(),
+    })
   }
 
   async handleCancel(userId) {
-    await this.database.update('users', { plan_id: null });
+    await this.database.update('users', { plan_id: null })
 
     EventBus.publish('user:subscription:cancelled', {
       userId,
-      timestamp: Date.now()
-    });
+      timestamp: Date.now(),
+    })
   }
 }
 ```
@@ -354,47 +351,47 @@ class SubscriptionService {
 **Step 2: Worker processes and sends to EdgeTag**
 
 ```javascript
-const { EventBus } = require('./events');
+const { EventBus } = require('./events')
 
 // Subscribe to events
 EventBus.subscribe('user:*', async (event) => {
-  const user = await db.getUser(event.userId);
+  const user = await db.getUser(event.userId)
 
   const edgeTagEvent = {
     eventId: `be_${event.type}_${user.id}_${event.timestamp}`,
     eventName: mapEventName(event.type),
     timestamp: event.timestamp,
     data: {
-      ...event.data
-    }
-  };
+      ...event.data,
+    },
+  }
 
   // If user has EdgeTag ID, use it
   if (user.edgeTag_id) {
     edgeTagEvent.headers = {
-      'EdgeTagUserId': user.edgeTag_id
-    };
+      EdgeTagUserId: user.edgeTag_id,
+    }
   }
 
   // Send to EdgeTag
-  await sendToEdgeTag(edgeTagEvent);
-});
+  await sendToEdgeTag(edgeTagEvent)
+})
 
 function mapEventName(eventType) {
   const map = {
     'user:plan:upgraded': 'Purchase',
     'user:subscription:cancelled': 'Refund',
     'email:sent': 'Send',
-    'course:completed': 'ViewContent'
-  };
-  return map[eventType] || 'Custom';
+    'course:completed': 'ViewContent',
+  }
+  return map[eventType] || 'Custom'
 }
 ```
 
 **Step 3: Batch failures gracefully**
 
 ```javascript
-const maxRetries = 3;
+const maxRetries = 3
 
 async function sendToEdgeTagWithRetry(event, retries = 0) {
   try {
@@ -402,23 +399,23 @@ async function sendToEdgeTagWithRetry(event, retries = 0) {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        ...event.headers
+        ...event.headers,
       },
-      body: JSON.stringify(event)
-    });
+      body: JSON.stringify(event),
+    })
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+      throw new Error(`HTTP ${response.status}`)
     }
   } catch (error) {
     if (retries < maxRetries) {
       // Exponential backoff
-      await sleep(Math.pow(2, retries) * 1000);
-      return sendToEdgeTagWithRetry(event, retries + 1);
+      await sleep(Math.pow(2, retries) * 1000)
+      return sendToEdgeTagWithRetry(event, retries + 1)
     }
 
     // Log failure for manual review
-    logger.error('EdgeTag event failed:', { event, error });
+    logger.error('EdgeTag event failed:', { event, error })
   }
 }
 ```
@@ -451,16 +448,16 @@ CRM / Database → Your Backend → EdgeTag /audience API → Ad Platforms (Face
 const segment = await db.users
   .find({
     totalLifetimeValue: { $gte: 1000 },
-    status: 'active'
+    status: 'active',
   })
   .select(['email', 'phone', 'firstName', 'lastName'])
   .toArray()
 
-const audienceData = segment.map(user => ({
+const audienceData = segment.map((user) => ({
   email: user.email,
   phone: user.phone,
   firstName: user.firstName,
-  lastName: user.lastName
+  lastName: user.lastName,
 }))
 ```
 
@@ -471,18 +468,21 @@ const formData = new FormData()
 
 formData.append('name', 'High Value Customers')
 formData.append('type', 'custom') // or 'primary'
-formData.append('batch', JSON.stringify({
-  startTime: Math.floor(Date.now() / 1000),
-  dataType: 'EMAIL_SHA256' // or PHONE_SHA256, EMAIL_PLAINTEXT
-}))
+formData.append(
+  'batch',
+  JSON.stringify({
+    startTime: Math.floor(Date.now() / 1000),
+    dataType: 'EMAIL_SHA256', // or PHONE_SHA256, EMAIL_PLAINTEXT
+  }),
+)
 formData.append('users', JSON.stringify(audienceData))
 
 const response = await fetch('https://d.mysite.com/audience', {
   method: 'POST',
   headers: {
-    'Authorization': `Bearer ${EDGETAG_API_KEY}`
+    Authorization: `Bearer ${EDGETAG_API_KEY}`,
   },
-  body: formData
+  body: formData,
 })
 
 const result = await response.json()
@@ -497,10 +497,13 @@ Optional query parameters:
 - `disablePrefix=true` (skip field name prefix)
 
 ```javascript
-const response = await fetch('https://d.mysite.com/audience?channels=facebook,tiktok&sync=true', {
-  method: 'POST',
-  body: formData
-})
+const response = await fetch(
+  'https://d.mysite.com/audience?channels=facebook,tiktok&sync=true',
+  {
+    method: 'POST',
+    body: formData,
+  },
+)
 ```
 
 **Step 4: Verify in platform dashboards**
@@ -522,7 +525,7 @@ const response = await fetch('https://d.mysite.com/audience?channels=facebook,ti
 try {
   const response = await fetch('https://d.mysite.com/audience', {
     method: 'POST',
-    body: formData
+    body: formData,
   })
 
   if (!response.ok) {
@@ -554,13 +557,13 @@ try {
 // When user is known via EdgeTag ID
 const headersWithId = {
   'Content-Type': 'application/json',
-  'EdgeTagUserId': user.edgeTag_id
-};
+  EdgeTagUserId: user.edgeTag_id,
+}
 
 // When using email identification
 const headersWithEmail = {
-  'Content-Type': 'application/json'
-};
+  'Content-Type': 'application/json',
+}
 // Include userEmail in data object instead
 ```
 
@@ -573,35 +576,35 @@ const headersWithEmail = {
 ```javascript
 class EdgeTagClient {
   constructor() {
-    this.failureCount = 0;
-    this.successCount = 0;
+    this.failureCount = 0
+    this.successCount = 0
   }
 
   async send(event) {
     // If too many failures, stop trying temporarily
     if (this.failureCount > 10) {
-      throw new Error('Circuit breaker open, retrying in 60s');
+      throw new Error('Circuit breaker open, retrying in 60s')
     }
 
     try {
       const response = await fetch('https://abc.domain.com/tag', {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(event)
-      });
+        body: JSON.stringify(event),
+      })
 
       if (response.ok) {
-        this.successCount++;
+        this.successCount++
         if (this.successCount > 5) {
-          this.failureCount = Math.max(0, this.failureCount - 1);
-          this.successCount = 0;
+          this.failureCount = Math.max(0, this.failureCount - 1)
+          this.successCount = 0
         }
       }
 
-      return response;
+      return response
     } catch (error) {
-      this.failureCount++;
-      throw error;
+      this.failureCount++
+      throw error
     }
   }
 }
@@ -653,12 +656,11 @@ const metrics = {
   eventsSent: 0,
   eventsFailed: 0,
   averageLatency: 0,
-  lastError: null
-};
+  lastError: null,
+}
 
 // Alert if failure rate exceeds threshold
 if (metrics.eventsFailed / metrics.eventsSent > 0.05) {
-  alertOps('EdgeTag API failure rate above 5%');
+  alertOps('EdgeTag API failure rate above 5%')
 }
 ```
-

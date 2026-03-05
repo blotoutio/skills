@@ -12,10 +12,10 @@ When EdgeTag initializes, **all events are blocked** until you call `edgetag('co
 
 ```javascript
 // Events are BLOCKED until this is called
-edgetag('consent', { facebook: true, googleAdsClicks: true });
+edgetag('consent', { facebook: true, googleAdsClicks: true })
 
 // OR
-edgetag('consent', null, { necessary: true, advertising: true });
+edgetag('consent', null, { necessary: true, advertising: true })
 ```
 
 ### Providers vs Categories
@@ -28,31 +28,31 @@ EdgeTag supports two ways to manage consent:
 edgetag('consent', {
   facebook: true,
   googleAdsClicks: true,
-  klaviyo: false
-});
+  klaviyo: false,
+})
 ```
 
 **Categories**: Per-category consent (GDPR/CCPA compliant)
 
 ```javascript
 edgetag('consent', null, {
-  necessary: true,     // Always required
-  advertising: true,   // Marketing/ads
-  analytics: true,     // Data analysis
-  functional: true,    // Site features
-  share_pii: false     // PII sharing
-});
+  necessary: true, // Always required
+  advertising: true, // Marketing/ads
+  analytics: true, // Data analysis
+  functional: true, // Site features
+  share_pii: false, // PII sharing
+})
 ```
 
 ### How Consent Gates Events
 
 ```javascript
 // Without consent, event is BLOCKED
-edgetag('tag', 'Purchase', { value: 99.99 });
+edgetag('tag', 'Purchase', { value: 99.99 })
 
 // After consent granted, event is SENT
-edgetag('consent', { facebook: true });
-edgetag('tag', 'Purchase', { value: 99.99 }); // Now sent to Facebook
+edgetag('consent', { facebook: true })
+edgetag('tag', 'Purchase', { value: 99.99 }) // Now sent to Facebook
 ```
 
 ### CMP Integration
@@ -61,10 +61,10 @@ EdgeTag does NOT provide a consent banner UI. Instead, you wire your existing CM
 
 ```javascript
 // When user makes consent choice in OneTrust
-OneTrust.OnConsentChanged(function() {
-  const consent = GetConsentFromOneTrust(); // Your code
-  edgetag('consent', consent.providers, consent.categories);
-});
+OneTrust.OnConsentChanged(function () {
+  const consent = GetConsentFromOneTrust() // Your code
+  edgetag('consent', consent.providers, consent.categories)
+})
 ```
 
 ## Getting Started
@@ -85,33 +85,32 @@ OneTrust.OnConsentChanged(function() {
 ```javascript
 // Initialize EdgeTag (events blocked by default)
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // User clicks "Accept All"
-edgetag('consent', { all: true });
+edgetag('consent', { all: true })
 
 // Now events are sent
-edgetag('tag', 'Purchase', { value: 99.99 });
+edgetag('tag', 'Purchase', { value: 99.99 })
 
 // Or use categories
 edgetag('consent', null, {
   necessary: true,
   advertising: true,
-  analytics: true
-});
+  analytics: true,
+})
 
 // Check current consent
 edgetag('getConsent', (consent, error, categories) => {
-  console.log('Consent:', consent);
-  console.log('Categories:', categories);
-});
+  console.log('Consent:', consent)
+  console.log('Categories:', categories)
+})
 ```
 
 ## Important Notes
 
 - **At least one of `providers` or `categories` must be provided** to `edgetag('consent', ...)`
-- `**necessary` category is always enabled** (cannot opt-out)
+- `**necessary` category is always enabled\*\* (cannot opt-out)
 - **Use `disableConsentCheck` only if not subject to GDPR/CCPA**
 - **Events remain blocked until consent is granted**
-

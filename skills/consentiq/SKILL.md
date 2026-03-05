@@ -41,8 +41,8 @@ Remote MCP server at `https://mcp.edgetag.io`. Authenticates via OAuth (redirect
 
 Base URL: `https://api.edgetag.io/v1/provider/consentIQ/{scriptId}`
 
-| Endpoint                                     | Method | What It Returns                                                                  |
-| -------------------------------------------- | ------ | -------------------------------------------------------------------------------- |
+| Endpoint                                    | Method | What It Returns                                                                  |
+| ------------------------------------------- | ------ | -------------------------------------------------------------------------------- |
 | `/{scriptId}/analytics/overview`            | GET    | Total profiles, marketing opt-in/out by region, 24h changes                      |
 | `/{scriptId}/analytics/categories-chart`    | GET    | Per-category consent by region (marketing, analytics, sale of data, preferences) |
 | `/{scriptId}/analytics/marketing-chart`     | GET    | Marketing opt-in/out with top regions                                            |

@@ -78,15 +78,18 @@ EdgeTag uses DNS to route traffic and verify domain ownership:
 **All other cases (managed hosting, or domain on a different DNS provider/account):**
 
 1. **TXT Record** (ownership verification)
-  - Name: Provided by EdgeTag dashboard (e.g. `_cf-custom-hostname.<subdomain>` -- exact name varies per setup)
-  - Value: Provided by EdgeTag dashboard (typically a UUID)
-  - Purpose: Prove domain ownership to EdgeTag
-  - Note: Some DNS providers auto-append the domain; check your provider's requirements
+
+- Name: Provided by EdgeTag dashboard (e.g. `_cf-custom-hostname.<subdomain>` -- exact name varies per setup)
+- Value: Provided by EdgeTag dashboard (typically a UUID)
+- Purpose: Prove domain ownership to EdgeTag
+- Note: Some DNS providers auto-append the domain; check your provider's requirements
+
 2. **CNAME Record** (traffic routing)
-  - Name: Your tracking subdomain, chosen during setup (e.g. `d`, `bssql`, etc.)
-  - Points to: Value from EdgeTag dashboard (e.g. `<subdomain>.customers.edgetag.io`)
-  - Purpose: Route traffic to EdgeTag edge location
-  - Note: On Cloudflare, disable the Proxied option (use gray cloud / DNS-only)
+
+- Name: Your tracking subdomain, chosen during setup (e.g. `d`, `bssql`, etc.)
+- Points to: Value from EdgeTag dashboard (e.g. `<subdomain>.customers.edgetag.io`)
+- Purpose: Route traffic to EdgeTag edge location
+- Note: On Cloudflare, disable the Proxied option (use gray cloud / DNS-only)
 
 ### First-Party Subdomain Importance
 

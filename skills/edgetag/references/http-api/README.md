@@ -48,14 +48,12 @@ EdgeTagUserId: user-123-abc
 
 Four endpoints for different purposes:
 
-
-| Endpoint              | Method | Purpose                                                        |
-| --------------------- | ------ | -------------------------------------------------------------- |
-| `/tag`                | GET    | Send events (page views, purchases, etc.)                      |
-| `/data`               | POST   | Enrich ID graph with user information                          |
-| `/getInstancesData`   | GET    | Look up user instances by email or EdgeTag user ID             |
-| `/audience`           | POST   | Upload customer segments to advertising channels               |
-
+| Endpoint            | Method | Purpose                                            |
+| ------------------- | ------ | -------------------------------------------------- |
+| `/tag`              | GET    | Send events (page views, purchases, etc.)          |
+| `/data`             | POST   | Enrich ID graph with user information              |
+| `/getInstancesData` | GET    | Look up user instances by email or EdgeTag user ID |
+| `/audience`         | POST   | Upload customer segments to advertising channels   |
 
 ## Key Concepts
 
@@ -69,4 +67,3 @@ Four endpoints for different purposes:
 - See [API Reference](./api-reference.md) for detailed endpoint specifications and curl examples
 - See [Gotchas](./gotchas.md) for common implementation mistakes
 - See [Patterns](./patterns.md) for real-world integration examples
-

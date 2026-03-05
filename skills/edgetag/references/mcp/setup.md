@@ -67,70 +67,71 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 
 ### Account & Domain Management
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `me` | Get current user info and team memberships | _(none)_ |
-| `domains` | List all domains (tags) with their channels. Returns `domainId`, `teamId`, and channel list with `channelId` and `providerId` for each | _(none)_ |
-| `domainAdd` | Add a new domain to your team | `domain` (string), `teamId` (uuid) |
-| `dns` | Verify DNS records for a domain and see which records still need to be added | `domainId` (uuid), `teamId` (uuid) |
+| Tool        | Description                                                                                                                            | Input Params                       |
+| ----------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `me`        | Get current user info and team memberships                                                                                             | _(none)_                           |
+| `domains`   | List all domains (tags) with their channels. Returns `domainId`, `teamId`, and channel list with `channelId` and `providerId` for each | _(none)_                           |
+| `domainAdd` | Add a new domain to your team                                                                                                          | `domain` (string), `teamId` (uuid) |
+| `dns`       | Verify DNS records for a domain and see which records still need to be added                                                           | `domainId` (uuid), `teamId` (uuid) |
 
 ### Channel & Analytics
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `channel` | Get channel configuration, consent category, and geo region restrictions | `channelId` (uuid), `teamId` (uuid) |
-| `domainAnalytics` | Traffic analytics for a domain, split by event status, event name, and channel | `domainId` (uuid), `teamId` (uuid), `type` (enum: status/name/provider), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
-| `domainAnalyticsProvider` | Event breakdown for a specific channel. Given a provider name (e.g. "facebook", "klaviyo"), returns event counts (PageView, Purchase, etc.) over time. Use after `domainAnalytics` with `type: "provider"` to drill down | `domainId` (uuid), `teamId` (uuid), `provider` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
-| `domainAnalyticsEvent` | Channel breakdown for a specific event. Given an event name (e.g. "PageView", "Purchase"), returns counts per channel over time. Use after `domainAnalytics` with `type: "name"` to drill down | `domainId` (uuid), `teamId` (uuid), `event` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
-| `domainErrors` | Error breakdown for a domain, grouped by channels and categories | `domainId` (uuid), `teamId` (uuid), `startDate` (ISO datetime), `endDate` (ISO datetime) |
-| `metaEMQ` | Facebook Event Match Quality (EMQ) score for the last 24 hours. Requires a channel with `providerId: "facebook"` | `channelId` (uuid), `teamId` (uuid) |
+| Tool                      | Description                                                                                                                                                                                                              | Input Params                                                                                                                                                                                    |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `channel`                 | Get channel configuration, consent category, and geo region restrictions                                                                                                                                                 | `channelId` (uuid), `teamId` (uuid)                                                                                                                                                             |
+| `domainAnalytics`         | Traffic analytics for a domain, split by event status, event name, and channel                                                                                                                                           | `domainId` (uuid), `teamId` (uuid), `type` (enum: status/name/provider), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
+| `domainAnalyticsProvider` | Event breakdown for a specific channel. Given a provider name (e.g. "facebook", "klaviyo"), returns event counts (PageView, Purchase, etc.) over time. Use after `domainAnalytics` with `type: "provider"` to drill down | `domainId` (uuid), `teamId` (uuid), `provider` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string)                 |
+| `domainAnalyticsEvent`    | Channel breakdown for a specific event. Given an event name (e.g. "PageView", "Purchase"), returns counts per channel over time. Use after `domainAnalytics` with `type: "name"` to drill down                           | `domainId` (uuid), `teamId` (uuid), `event` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string)                    |
+| `domainErrors`            | Error breakdown for a domain, grouped by channels and categories                                                                                                                                                         | `domainId` (uuid), `teamId` (uuid), `startDate` (ISO datetime), `endDate` (ISO datetime)                                                                                                        |
+| `metaEMQ`                 | Facebook Event Match Quality (EMQ) score for the last 24 hours. Requires a channel with `providerId: "facebook"`                                                                                                         | `channelId` (uuid), `teamId` (uuid)                                                                                                                                                             |
 
 ### Edge Lake (Event Data)
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `edgeLakeQuery` | Execute a single SQL query against the `lake.events` R2 data lake | `channelId` (uuid, edgeLake), `teamId` (uuid), `sql` (string) |
-| `edgeLakeCodeQuery` | Execute a JavaScript program server-side against Edge Lake. Write all queries using `codemode.query(sql)` and all processing in a single `code` block. Use `Promise.all()` for parallel queries. Max 20 queries, 80s timeout, 100KB result. | `channelId` (uuid, edgeLake), `teamId` (uuid), `code` (string) |
-| `edgeLakeTrafficAnalysis` | HTTP traffic breakdown by browser, OS, device type, country | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
-| `edgeLakeBotScore` | Bot detection analysis by Cloudflare bot scores (0-100) | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
-| `edgeLakeAttackAnalysis` | WAF attack classification (attack, likely_attack, likely_clean, clean, not_scored) | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
+| Tool                      | Description                                                                                                                                                                                                                                 | Input Params                                                                                                                                                               |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `edgeLakeQuery`           | Execute a single SQL query against the `lake.events` R2 data lake                                                                                                                                                                           | `channelId` (uuid, edgeLake), `teamId` (uuid), `sql` (string)                                                                                                              |
+| `edgeLakeCodeQuery`       | Execute a JavaScript program server-side against Edge Lake. Write all queries using `codemode.query(sql)` and all processing in a single `code` block. Use `Promise.all()` for parallel queries. Max 20 queries, 80s timeout, 100KB result. | `channelId` (uuid, edgeLake), `teamId` (uuid), `code` (string)                                                                                                             |
+| `edgeLakeTrafficAnalysis` | HTTP traffic breakdown by browser, OS, device type, country                                                                                                                                                                                 | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
+| `edgeLakeBotScore`        | Bot detection analysis by Cloudflare bot scores (0-100)                                                                                                                                                                                     | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
+| `edgeLakeAttackAnalysis`  | WAF attack classification (attack, likely_attack, likely_clean, clean, not_scored)                                                                                                                                                          | `channelId` (uuid, edgeLake), `teamId` (uuid), `startDateTime` (ISO string), `endDateTime` (ISO string), `granularity?` (enum: DAY/HOUR/MINUTE), `timezone?` (IANA string) |
 
 ### ID Graph (User Data)
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
+| Tool            | Description                                                                                                                                                                                        | Input Params                                             |
+| --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
 | `domainIDGraph` | Query the per-domain user database (D1) via SQL. Tables: `main` (user PII, consent), `cookie` (browser cookies), `custom` (developer-set data), `provider` (channel-specific data like UTM params) | `domainId` (uuid), `teamId` (uuid), `query` (SQL string) |
 
 ### ConsentIQ (Consent Analytics)
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `consentIQOverview` | Total profiles, marketing opt-in/out by region (EU, UK, CA), last 24h changes. Requires channel with `providerId: "consentIQ"` | `channelId` (uuid, consentIQ), `teamId` (uuid) |
-| `consentIQCategories` | Per-category consent breakdown (marketing, analytics, sale of data, preferences) by region | `channelId` (uuid, consentIQ), `teamId` (uuid), `range` (enum: day/week/month) |
+| Tool                  | Description                                                                                                                    | Input Params                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| `consentIQOverview`   | Total profiles, marketing opt-in/out by region (EU, UK, CA), last 24h changes. Requires channel with `providerId: "consentIQ"` | `channelId` (uuid, consentIQ), `teamId` (uuid)                                 |
+| `consentIQCategories` | Per-category consent breakdown (marketing, analytics, sale of data, preferences) by region                                     | `channelId` (uuid, consentIQ), `teamId` (uuid), `range` (enum: day/week/month) |
 
 ### Real-Time Logger
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `loggerStart` | Start a real-time logger session. Connects to the Cloudflare Worker tail WebSocket and buffers parsed log messages. Auto-closes after 5 minutes — call again to reconnect. | `domainId` (uuid), `teamId` (uuid), `status?` (enum: ok/exception), `events?` (string[], e.g. ["Purchase","AddToCart"]), `path?` (enum: init/tag/data/user/audience/consent/load/providers/webhook), `method?` (enum: POST/GET) |
-| `loggerMessages` | Read buffered messages from an active logger session. Returns structured entries with eventName, channels, meta, outcome, and exceptions. Call repeatedly to poll. | `maxMessages?` (int 1-1000, default 50) |
-| `loggerStop` | Stop an active logger session. Closes the WebSocket and clears the buffer. | _(none)_ |
+| Tool             | Description                                                                                                                                                                | Input Params                                                                                                                                                                                                                    |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `loggerStart`    | Start a real-time logger session. Connects to the Cloudflare Worker tail WebSocket and buffers parsed log messages. Auto-closes after 5 minutes — call again to reconnect. | `domainId` (uuid), `teamId` (uuid), `status?` (enum: ok/exception), `events?` (string[], e.g. ["Purchase","AddToCart"]), `path?` (enum: init/tag/data/user/audience/consent/load/providers/webhook), `method?` (enum: POST/GET) |
+| `loggerMessages` | Read buffered messages from an active logger session. Returns structured entries with eventName, channels, meta, outcome, and exceptions. Call repeatedly to poll.         | `maxMessages?` (int 1-1000, default 50)                                                                                                                                                                                         |
+| `loggerStop`     | Stop an active logger session. Closes the WebSocket and clears the buffer.                                                                                                 | _(none)_                                                                                                                                                                                                                        |
 
 ### Token Management
 
-| Tool | Description | Input Params |
-| --- | --- | --- |
-| `revokeToken` | Revoke auth tokens. After revoking, restart the client to re-authenticate | _(none)_ |
-
+| Tool          | Description                                                               | Input Params |
+| ------------- | ------------------------------------------------------------------------- | ------------ |
+| `revokeToken` | Revoke auth tokens. After revoking, restart the client to re-authenticate | _(none)_     |
 
 ## Typical Workflow
 
 1. **Verify identity:** Call `me` to confirm your user and teams
 2. **List domains:** Call `domains` to see all tracked websites with their channels
 3. **Find the right channel:** Each tool needs a specific channel type:
-  - Edge Lake tools → channel with `providerId: "edgeLake"`
-  - ConsentIQ tools → channel with `providerId: "consentIQ"`
-  - Meta EMQ → channel with `providerId: "facebook"`
+
+- Edge Lake tools → channel with `providerId: "edgeLake"`
+- ConsentIQ tools → channel with `providerId: "consentIQ"`
+- Meta EMQ → channel with `providerId: "facebook"`
+
 4. **Query data:** Use the channel's `channelId` and `teamId` with the relevant tool
 
 ## Complementary MCP: Chrome DevTools
@@ -169,7 +170,6 @@ See [debugging/README.md](../debugging/README.md) for full debugging tool recomm
 
 ## Troubleshooting
 
-
 | Problem                              | Solution                                                                                         |
 | ------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | "Invalid token" error                | Call `revokeToken`, then restart the client to re-authenticate                                   |
@@ -178,5 +178,3 @@ See [debugging/README.md](../debugging/README.md) for full debugging tool recomm
 | No channel of expected type          | The feature (Edge Lake, ConsentIQ, etc.) must be enabled for the domain in the EdgeTag dashboard |
 | "Action not permitted!" on Edge Lake | Contact [support@blotout.io](mailto:support@blotout.io) to enable the Edge Lake Querying feature |
 | "Action not permitted!" on ID Graph  | Contact [support@blotout.io](mailto:support@blotout.io) to enable the ID Graph Querying feature  |
-
-

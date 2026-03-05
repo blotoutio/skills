@@ -10,33 +10,33 @@ AddToCart, RemoveFromCart, InitiateCheckout, AddShippingInfo, and AddPaymentInfo
 **Wrong:**
 
 ```javascript
-edgetag("tag", "AddToCart", {
+edgetag('tag', 'AddToCart', {
   contents: [
     {
-      id: "prod-456",
+      id: 'prod-456',
       quantity: 1,
       item_price: 49.99,
     },
   ],
   // Missing currency and value!
-});
+})
 ```
 
 **Right:**
 
 ```javascript
-edgetag("tag", "AddToCart", {
-  currency: "USD",
+edgetag('tag', 'AddToCart', {
+  currency: 'USD',
   value: 49.99,
   contents: [
     {
-      id: "prod-456",
+      id: 'prod-456',
       quantity: 1,
       item_price: 49.99,
-      title: "Wireless Headphones",
+      title: 'Wireless Headphones',
     },
   ],
-});
+})
 ```
 
 ---
@@ -49,23 +49,23 @@ Without matching eventId to orderId, channels that support deduplication (e.g., 
 **Wrong:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-20240226-001",
+  orderId: 'order-20240226-001',
   // Missing eventId! EdgeTag generates a random ID
-});
+})
 ```
 
 **Right:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-20240226-001",
-  eventId: "order-20240226-001", // Match orderId for deduplication
-});
+  orderId: 'order-20240226-001',
+  eventId: 'order-20240226-001', // Match orderId for deduplication
+})
 ```
 
 ---
@@ -84,34 +84,34 @@ Content objects have specific required fields (`id`, `quantity`, `item_price`). 
 **Wrong:**
 
 ```javascript
-edgetag("tag", "AddToCart", {
-  currency: "USD",
+edgetag('tag', 'AddToCart', {
+  currency: 'USD',
   value: 49.99,
   contents: [
     {
-      product_id: "prod-456", // Wrong: should be 'id'
+      product_id: 'prod-456', // Wrong: should be 'id'
       amount: 49.99, // Wrong: should be 'item_price'
       qty: 1, // Wrong: should be 'quantity'
     },
   ],
-});
+})
 ```
 
 **Right:**
 
 ```javascript
-edgetag("tag", "AddToCart", {
-  currency: "USD",
+edgetag('tag', 'AddToCart', {
+  currency: 'USD',
   value: 49.99,
   contents: [
     {
-      id: "prod-456", // Correct
+      id: 'prod-456', // Correct
       quantity: 1, // Correct
       item_price: 49.99, // Correct
-      title: "Wireless Headphones", // Optional but recommended
+      title: 'Wireless Headphones', // Optional but recommended
     },
   ],
-});
+})
 ```
 
 ---
@@ -125,31 +125,31 @@ EdgeTag transforms only standard event names. Using custom names like "BuyNow" o
 
 ```javascript
 // Custom event name - EdgeTag won't transform this
-edgetag("tag", "BuyNow", {
-  currency: "USD",
+edgetag('tag', 'BuyNow', {
+  currency: 'USD',
   value: 99.99,
-});
+})
 
 // Will likely be ignored by channels
-edgetag("tag", "CartAdded", {
+edgetag('tag', 'CartAdded', {
   /* ... */
-});
+})
 ```
 
 **Right:**
 
 ```javascript
 // Use standard event names
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-123",
-});
+  orderId: 'order-123',
+})
 
-edgetag("tag", "AddToCart", {
-  currency: "USD",
+edgetag('tag', 'AddToCart', {
+  currency: 'USD',
   value: 49.99,
-});
+})
 ```
 
 See **events/README.md** for the complete list of standard event names.
@@ -166,18 +166,18 @@ Setting `skipTransformation: true` bypasses all EdgeTag normalization. Your data
 ```javascript
 // No providers specified — this raw payload gets sent to ALL channels,
 // but it only matches Facebook's format. Other channels will reject it.
-edgetag("tag", "Purchase", {
+edgetag('tag', 'Purchase', {
   data: [
     {
-      event_name: "Purchase",
-      event_id: "order-123",
+      event_name: 'Purchase',
+      event_id: 'order-123',
       event_time: Math.floor(Date.now() / 1000),
-      user_data: { em: "abc123..." },
-      custom_data: { value: 99.99, currency: "USD" },
+      user_data: { em: 'abc123...' },
+      custom_data: { value: 99.99, currency: 'USD' },
     },
   ],
   skipTransformation: true,
-});
+})
 ```
 
 **Also wrong:**
@@ -186,57 +186,61 @@ edgetag("tag", "Purchase", {
 // Using skipTransformation with a standard EdgeTag payload — the standard
 // fields won't be transformed into channel-specific format, so no channel
 // will understand them.
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-123",
+  orderId: 'order-123',
   skipTransformation: true,
-});
+})
 ```
 
 **Right:**
 
 ```javascript
 // Let EdgeTag transform - it handles channel-specific formatting for all channels
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-123",
+  orderId: 'order-123',
   // skipTransformation not set - EdgeTag handles it
-});
+})
 
 // Use skipTransformation only with a raw channel-specific payload AND
 // target that specific channel via providers
-edgetag("tag", "Purchase",
+edgetag(
+  'tag',
+  'Purchase',
   {
     // Your hand-crafted Facebook Conversion API payload
     data: [
       {
-        event_name: "Purchase",
-        event_id: "order-123",
+        event_name: 'Purchase',
+        event_id: 'order-123',
         event_time: Math.floor(Date.now() / 1000),
-        user_data: { em: "abc123..." },
-        custom_data: { value: 99.99, currency: "USD" },
+        user_data: { em: 'abc123...' },
+        custom_data: { value: 99.99, currency: 'USD' },
       },
     ],
     skipTransformation: true,
   },
-  { facebook: true } // Target only Facebook — the payload is Facebook-specific
-);
+  { facebook: true }, // Target only Facebook — the payload is Facebook-specific
+)
 
 // If you need to send to multiple channels with skipTransformation,
 // send separate events with each channel's specific payload format
-edgetag("tag", "Purchase",
+edgetag(
+  'tag',
+  'Purchase',
   {
     // TikTok-specific payload
-    event: "CompletePayment",
-    event_id: "order-123",
+    event: 'CompletePayment',
+    event_id: 'order-123',
     timestamp: new Date().toISOString(),
-    properties: { value: 99.99, currency: "USD" },
+    properties: { value: 99.99, currency: 'USD' },
     skipTransformation: true,
   },
-  { tiktok: true } // Target only TikTok
-);
+  { tiktok: true }, // Target only TikTok
+)
 ```
 
 ---
@@ -250,28 +254,28 @@ Copying example code and forgetting to replace hardcoded values results in ident
 
 ```javascript
 // Copy-paste fail - same order every time!
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-20240226-001", // Same every time!
+  orderId: 'order-20240226-001', // Same every time!
   contents: [
     {
-      id: "prod-456", // Same every time!
+      id: 'prod-456', // Same every time!
       quantity: 1,
       item_price: 49.99,
-      title: "Wireless Headphones", // Same every time!
+      title: 'Wireless Headphones', // Same every time!
     },
   ],
-});
+})
 ```
 
 **Right:**
 
 ```javascript
 // Use dynamic values from page state or backend
-const order = getCurrentOrder(); // Get actual order
+const order = getCurrentOrder() // Get actual order
 
-edgetag("tag", "Purchase", {
+edgetag('tag', 'Purchase', {
   currency: order.currency, // Dynamic
   value: order.total, // Dynamic
   orderId: order.id, // Dynamic
@@ -283,7 +287,7 @@ edgetag("tag", "Purchase", {
     title: item.name, // Dynamic
     category: item.category, // Dynamic
   })),
-});
+})
 ```
 
 ---
@@ -297,19 +301,19 @@ Tracking the same event multiple times (double-click handlers, re-running init s
 
 ```javascript
 // In global init script
-edgetag("tag", "Purchase", {
+edgetag('tag', 'Purchase', {
   /* ... */
-});
+})
 
 // Also in checkout page script
-edgetag("tag", "Purchase", {
+edgetag('tag', 'Purchase', {
   /* ... */
-});
+})
 
 // Also in order confirmation email tracking
-edgetag("tag", "Purchase", {
+edgetag('tag', 'Purchase', {
   /* ... */
-});
+})
 // Same purchase tracked 3 times!
 ```
 
@@ -317,15 +321,15 @@ edgetag("tag", "Purchase", {
 
 ```javascript
 // Track purchase ONCE - on order confirmation page load
-if (window.location.pathname === "/order-confirmation") {
-  const orderId = new URLSearchParams(window.location.search).get("order_id");
+if (window.location.pathname === '/order-confirmation') {
+  const orderId = new URLSearchParams(window.location.search).get('order_id')
 
-  edgetag("tag", "Purchase", {
-    currency: "USD",
+  edgetag('tag', 'Purchase', {
+    currency: 'USD',
     value: 99.99,
     orderId: orderId,
     eventId: orderId, // Deduplication safety net
-  });
+  })
 }
 ```
 
@@ -339,31 +343,31 @@ Invalid or misspelled currency codes (like 'US' instead of 'USD') may cause chan
 **Wrong:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "US", // Invalid - should be ISO 4217
+edgetag('tag', 'Purchase', {
+  currency: 'US', // Invalid - should be ISO 4217
   value: 99.99,
-  orderId: "order-123",
-});
+  orderId: 'order-123',
+})
 
-edgetag("tag", "AddToCart", {
-  currency: "usd", // Wrong case - should be uppercase
+edgetag('tag', 'AddToCart', {
+  currency: 'usd', // Wrong case - should be uppercase
   value: 49.99,
-});
+})
 ```
 
 **Right:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "USD", // Correct ISO 4217 code
+edgetag('tag', 'Purchase', {
+  currency: 'USD', // Correct ISO 4217 code
   value: 99.99,
-  orderId: "order-123",
-});
+  orderId: 'order-123',
+})
 
-edgetag("tag", "AddToCart", {
-  currency: "EUR", // Correct
+edgetag('tag', 'AddToCart', {
+  currency: 'EUR', // Correct
   value: 49.99,
-});
+})
 ```
 
 ---
@@ -376,37 +380,37 @@ Content objects require `id`, `quantity`, and `item_price`. These are essential 
 **Wrong:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-123",
+  orderId: 'order-123',
   contents: [
     {
-      title: "Wireless Headphones",
+      title: 'Wireless Headphones',
       // Missing: id, quantity, item_price
     },
   ],
-});
+})
 ```
 
 **Right:**
 
 ```javascript
-edgetag("tag", "Purchase", {
-  currency: "USD",
+edgetag('tag', 'Purchase', {
+  currency: 'USD',
   value: 99.99,
-  orderId: "order-123",
+  orderId: 'order-123',
   contents: [
     {
-      id: "prod-456",
+      id: 'prod-456',
       quantity: 1,
       item_price: 99.99,
-      title: "Wireless Headphones",
-      category: "audio",
-      brand: "SoundMax",
+      title: 'Wireless Headphones',
+      category: 'audio',
+      brand: 'SoundMax',
     },
   ],
-});
+})
 ```
 
 ---
@@ -423,82 +427,88 @@ Do not use beacon for events where the user stays on the same page. Standard fet
 ```javascript
 // User stays on the page after viewing content — beacon is unnecessary here
 edgetag(
-  "tag",
-  "ViewContent",
+  'tag',
+  'ViewContent',
   {
-    currency: "USD",
+    currency: 'USD',
     value: 49.99,
   },
   null,
   {
-    method: "beacon", // Wrong — no navigation happening, use standard fetch
+    method: 'beacon', // Wrong — no navigation happening, use standard fetch
   },
-);
+)
 ```
 
 **Wrong — no beacon when page immediately redirects:**
 
 ```javascript
 // User clicks "Add to Cart" and page redirects to cart — event will be lost!
-document.getElementById("add-to-cart").addEventListener("click", () => {
-  edgetag("tag", "AddToCart", {
-    currency: "USD",
+document.getElementById('add-to-cart').addEventListener('click', () => {
+  edgetag('tag', 'AddToCart', {
+    currency: 'USD',
     value: 49.99,
-  });
+  })
   // Page redirects to /cart — the fetch above gets canceled mid-flight
-  window.location.href = "/cart";
-});
+  window.location.href = '/cart'
+})
 ```
 
 **Right:**
 
 ```javascript
 // Action causes immediate redirect — use beacon so the event survives navigation
-document.getElementById("add-to-cart").addEventListener("click", () => {
+document.getElementById('add-to-cart').addEventListener('click', () => {
   edgetag(
-    "tag",
-    "AddToCart",
+    'tag',
+    'AddToCart',
     {
-      currency: "USD",
+      currency: 'USD',
       value: 49.99,
     },
     null,
     {
-      method: "beacon", // Survives the redirect to /cart
+      method: 'beacon', // Survives the redirect to /cart
     },
-  );
-  window.location.href = "/cart";
-});
+  )
+  window.location.href = '/cart'
+})
 
 // Checkout button redirects to payment provider
-document.getElementById("checkout-button").addEventListener("click", () => {
+document.getElementById('checkout-button').addEventListener('click', () => {
   edgetag(
-    "tag",
-    "InitiateCheckout",
+    'tag',
+    'InitiateCheckout',
     {
-      currency: "USD",
+      currency: 'USD',
       value: 199.99,
     },
     null,
     {
-      method: "beacon", // Survives redirect to payment page
+      method: 'beacon', // Survives redirect to payment page
     },
-  );
-  window.location.href = paymentProviderUrl;
-});
+  )
+  window.location.href = paymentProviderUrl
+})
 
 // Page exit / tab close — also needs beacon
-window.addEventListener("beforeunload", () => {
-  edgetag("tag", "SessionEnd", { sessionDuration: Date.now() - sessionStart }, null, {
-    method: "beacon",
-  });
-});
+window.addEventListener('beforeunload', () => {
+  edgetag(
+    'tag',
+    'SessionEnd',
+    { sessionDuration: Date.now() - sessionStart },
+    null,
+    {
+      method: 'beacon',
+    },
+  )
+})
 
 // Normal events where user stays on page — standard fetch, no beacon needed
-edgetag("tag", "ViewContent", {
-  currency: "USD",
+edgetag('tag', 'ViewContent', {
+  currency: 'USD',
   value: 49.99,
-});
+})
 ```
 
 ---
@@ -516,4 +526,3 @@ Before shipping event tracking code:
 - Events tracked only once per action
 - Consent set via `consent()` before firing events (EdgeTag skips non-consented channels automatically)
 - No skipTransformation unless absolutely necessary — and always with `providers` targeting a specific channel
-

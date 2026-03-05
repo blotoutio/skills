@@ -98,43 +98,43 @@ Complete browser-side integration that works with any CMP:
 
   async function sendConsentToConsentIQ(consentData) {
     const body = {
-      analyticsAllowed: "unknown",
-      marketingAllowed: "unknown",
-      saleOfDataAllowed: "unknown",
-      preferencesAllowed: "unknown",
+      analyticsAllowed: 'unknown',
+      marketingAllowed: 'unknown',
+      saleOfDataAllowed: 'unknown',
+      preferencesAllowed: 'unknown',
       ...consentData,
-    };
+    }
 
-    await fetch("https://d.yoursite.com/providers/consentIQ/save-data", {
-      method: "POST",
+    await fetch('https://d.yoursite.com/providers/consentIQ/save-data', {
+      method: 'POST',
       body: JSON.stringify(body),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
   }
 
   // On new session — read consent from your CMP and send
-  window.addEventListener("edgetag-initialized", async (e) => {
-    if (!e.detail.session.isNewSession) return;
+  window.addEventListener('edgetag-initialized', async (e) => {
+    if (!e.detail.session.isNewSession) return
 
     sendConsentToConsentIQ({
       analyticsAllowed: getAnalyticsConsent(), // your CMP logic
       marketingAllowed: getMarketingConsent(),
       saleOfDataAllowed: getSaleOfDataConsent(),
       preferencesAllowed: getPreferencesConsent(),
-    });
-  });
+    })
+  })
 
   // On consent change — send updated values
   // Hook into your CMP's consent-change callback:
   yourCMP.onConsentChange((consent) => {
     sendConsentToConsentIQ({
-      analyticsAllowed: consent.analytics ? "1" : "0",
-      marketingAllowed: consent.marketing ? "1" : "0",
-      saleOfDataAllowed: consent.saleOfData ? "1" : "0",
-      preferencesAllowed: consent.preferences ? "1" : "0",
-    });
-  });
+      analyticsAllowed: consent.analytics ? '1' : '0',
+      marketingAllowed: consent.marketing ? '1' : '0',
+      saleOfDataAllowed: consent.saleOfData ? '1' : '0',
+      preferencesAllowed: consent.preferences ? '1' : '0',
+    })
+  })
 </script>
 ```
 
@@ -149,33 +149,33 @@ The Shopify app embed includes built-in support for reading consent from these C
 ```javascript
 const consent = {
   analyticsAllowed: window.Shopify.customerPrivacy.analyticsProcessingAllowed()
-    ? "1"
-    : "0",
+    ? '1'
+    : '0',
   marketingAllowed: window.Shopify.customerPrivacy.marketingAllowed()
-    ? "1"
-    : "0",
+    ? '1'
+    : '0',
   saleOfDataAllowed: window.Shopify.customerPrivacy.saleOfDataAllowed()
-    ? "1"
-    : "0",
+    ? '1'
+    : '0',
   preferencesAllowed:
-    window.Shopify.customerPrivacy.preferencesProcessingAllowed() ? "1" : "0",
+    window.Shopify.customerPrivacy.preferencesProcessingAllowed() ? '1' : '0',
   saleOfDataRegion: window.Shopify.customerPrivacy.saleOfDataRegion()
-    ? "1"
-    : "0",
-};
+    ? '1'
+    : '0',
+}
 ```
 
 Listen for changes via the `visitorConsentCollected` event:
 
 ```javascript
-document.addEventListener("visitorConsentCollected", (event) => {
+document.addEventListener('visitorConsentCollected', (event) => {
   sendConsentToConsentIQ({
-    analyticsAllowed: event.detail.analyticsAllowed ? "1" : "0",
-    marketingAllowed: event.detail.marketingAllowed ? "1" : "0",
-    saleOfDataAllowed: event.detail.saleOfDataAllowed ? "1" : "0",
-    preferencesAllowed: event.detail.preferencesAllowed ? "1" : "0",
-  });
-});
+    analyticsAllowed: event.detail.analyticsAllowed ? '1' : '0',
+    marketingAllowed: event.detail.marketingAllowed ? '1' : '0',
+    saleOfDataAllowed: event.detail.saleOfDataAllowed ? '1' : '0',
+    preferencesAllowed: event.detail.preferencesAllowed ? '1' : '0',
+  })
+})
 ```
 
 ### OneTrust
@@ -184,26 +184,26 @@ Read consent from the `OptanonConsent` cookie:
 
 ```javascript
 function getOnetrustConsent() {
-  const cookie = document.cookie.match(/(^| )OptanonConsent=([^;]+)/);
-  if (!cookie || cookie.length < 3) return null;
+  const cookie = document.cookie.match(/(^| )OptanonConsent=([^;]+)/)
+  if (!cookie || cookie.length < 3) return null
 
-  const match = decodeURIComponent(cookie[2]).match(/&groups=([^&]+)/);
-  if (!match || match.length < 2) return null;
+  const match = decodeURIComponent(cookie[2]).match(/&groups=([^&]+)/)
+  if (!match || match.length < 2) return null
 
-  const groups = match[1].split(",");
+  const groups = match[1].split(',')
   return {
     analyticsAllowed:
-      groups.includes("C0002") || groups.includes("2") ? "1" : "0",
+      groups.includes('C0002') || groups.includes('2') ? '1' : '0',
     marketingAllowed:
-      groups.includes("C0004") ||
-      groups.includes("4") ||
-      groups.includes("C0005") ||
-      groups.includes("5")
-        ? "1"
-        : "0",
+      groups.includes('C0004') ||
+      groups.includes('4') ||
+      groups.includes('C0005') ||
+      groups.includes('5')
+        ? '1'
+        : '0',
     preferencesAllowed:
-      groups.includes("C0003") || groups.includes("3") ? "1" : "0",
-  };
+      groups.includes('C0003') || groups.includes('3') ? '1' : '0',
+  }
 }
 ```
 
@@ -212,11 +212,11 @@ function getOnetrustConsent() {
 ```javascript
 function getOsanoConsent() {
   return {
-    analyticsAllowed: Osano.cm.analytics ? "1" : "0",
-    marketingAllowed: Osano.cm.marketing ? "1" : "0",
-    preferencesAllowed: Osano.cm.personalization ? "1" : "0",
-    saleOfDataAllowed: Osano.cm.optOut ? "0" : "1",
-  };
+    analyticsAllowed: Osano.cm.analytics ? '1' : '0',
+    marketingAllowed: Osano.cm.marketing ? '1' : '0',
+    preferencesAllowed: Osano.cm.personalization ? '1' : '0',
+    saleOfDataAllowed: Osano.cm.optOut ? '0' : '1',
+  }
 }
 ```
 

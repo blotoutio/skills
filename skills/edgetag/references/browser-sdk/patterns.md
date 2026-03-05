@@ -13,36 +13,38 @@ The standard integration for traditional websites.
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>My Website</title>
+  <head>
+    <meta charset="UTF-8" />
+    <title>My Website</title>
 
-  <!-- EdgeTag Script Tag (async load) -->
-  <script src="https://d.mysite.com/load" async></script>
-</head>
-<body>
-  <!-- Your website content -->
+    <!-- EdgeTag Script Tag (async load) -->
+    <script src="https://d.mysite.com/load" async></script>
+  </head>
+  <body>
+    <!-- Your website content -->
 
-  <!-- EdgeTag Initialization Snippet -->
-  <script>
-    // Stub function - queues calls before SDK loads
-    window.edgetag = window.edgetag || function() {
-      (edgetag.stubs=edgetag.stubs||[]).push(arguments);
-    };
+    <!-- EdgeTag Initialization Snippet -->
+    <script>
+      // Stub function - queues calls before SDK loads
+      window.edgetag =
+        window.edgetag ||
+        function () {
+          ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+        }
 
-    // Initialize EdgeTag
-    edgetag('init', {
-      edgeURL: 'https://d.mysite.com'
-    });
+      // Initialize EdgeTag
+      edgetag('init', {
+        edgeURL: 'https://d.mysite.com',
+      })
 
-    // (Optional) Set user identity from page context
-    // This might come from your backend template
-    edgetag('user', 'email', '{{ user.email }}');
+      // (Optional) Set user identity from page context
+      // This might come from your backend template
+      edgetag('user', 'email', '{{ user.email }}')
 
-    // Track page view
-    edgetag('tag', 'PageView');
-  </script>
-</body>
+      // Track page view
+      edgetag('tag', 'PageView')
+    </script>
+  </body>
 </html>
 ```
 
@@ -94,36 +96,36 @@ Use these console commands to verify your script tag installation.
 
 ```javascript
 // 1. Check user ID
-var userId = edgetag('getUserId');
-console.log('User ID:', userId);
+var userId = edgetag('getUserId')
+console.log('User ID:', userId)
 
 // 2. Check first-party cookie
-console.log('Cookies:', document.cookie);
+console.log('Cookies:', document.cookie)
 // Look for tag_user_id=...
 
 // 3. Test event tracking
-edgetag('tag', 'TestEvent', { test: true });
+edgetag('tag', 'TestEvent', { test: true })
 // Check Network tab for request to your edgeURL
 
 // 4. Test user identity
-edgetag('user', 'email', 'test@example.com');
-edgetag('getData', ['email'], function(data) {
-  console.log('User data set:', data);
-});
+edgetag('user', 'email', 'test@example.com')
+edgetag('getData', ['email'], function (data) {
+  console.log('User data set:', data)
+})
 
 // 5. Test consent
-edgetag('consent', { facebook: true }, { advertising: true });
-edgetag('getConsent', function(consent, error, categories) {
-  console.log('Consent status:', consent);
-  console.log('Categories:', categories);
-});
+edgetag('consent', { facebook: true }, { advertising: true })
+edgetag('getConsent', function (consent, error, categories) {
+  console.log('Consent status:', consent)
+  console.log('Categories:', categories)
+})
 
 // 6. Check ready state
-edgetag('ready', function(state) {
-  console.log('Ready state:', state);
-  console.log('Is new user:', state.isNewUser);
-  console.log('Session ID:', state.sessionId);
-});
+edgetag('ready', function (state) {
+  console.log('Ready state:', state)
+  console.log('Is new user:', state.isNewUser)
+  console.log('Session ID:', state.sessionId)
+})
 ```
 
 ### Network Tab Verification
@@ -138,15 +140,13 @@ edgetag('ready', function(state) {
 
 ## Quick Reference: Pattern Selection
 
-
-| Scenario             | Pattern                | Notes                                   |
-| -------------------- | ---------------------- | --------------------------------------- |
-| Standard website     | Pattern 1 (Script Tag) | Start here for any traditional site     |
-| CMP integration      | Pattern 2 (CMP)        | Wire OneTrust, Cookiebot, or custom CMP |
-| Unload/exit tracking | Pattern 3 (Beacon)     | Use `method: 'beacon'` for reliability  |
+| Scenario             | Pattern                | Notes                                       |
+| -------------------- | ---------------------- | ------------------------------------------- |
+| Standard website     | Pattern 1 (Script Tag) | Start here for any traditional site         |
+| CMP integration      | Pattern 2 (CMP)        | Wire OneTrust, Cookiebot, or custom CMP     |
+| Unload/exit tracking | Pattern 3 (Beacon)     | Use `method: 'beacon'` for reliability      |
 | Debug channel errors | Pattern 4 (Sync)       | Use `sync: true` to verify channel delivery |
-| QA / debugging       | Pattern 5 (Testing)    | Run checks in browser console           |
-
+| QA / debugging       | Pattern 5 (Testing)    | Run checks in browser console               |
 
 ---
 
@@ -160,4 +160,3 @@ edgetag('ready', function(state) {
 6. **Wire your CMP early** — consent must be granted before events fire
 7. **Use beacon for unload** — standard fetch may not complete on page close
 8. **Use sync only for debugging** — verifies channel delivery but is significantly slower; do not use on pages that navigate away
-

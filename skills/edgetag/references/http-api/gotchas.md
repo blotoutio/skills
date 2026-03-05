@@ -343,5 +343,3 @@ curl "https://abc.domain.com/tag" \
 - Consent object included if consent is enabled
 - All required fields present
 - No sensitive data in eventId or pageUrl
-
-

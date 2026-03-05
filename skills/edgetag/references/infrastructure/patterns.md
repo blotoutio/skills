@@ -422,5 +422,3 @@ Use Cloudflare dashboard: Workers Analytics → Your Worker Script
 8. **Plan for multiple domains** in subscription tier upfront
 9. **Test failover** if using high-availability pattern
 10. **Keep backups** of critical configurations
-
-

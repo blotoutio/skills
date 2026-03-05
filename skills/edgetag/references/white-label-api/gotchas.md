@@ -19,15 +19,15 @@
 const body = new URLSearchParams({
   code,
   code_verifier: codeChallenge, // This is the hash!
-  grant_type: "authorization_code",
-});
+  grant_type: 'authorization_code',
+})
 
 // RIGHT — sending the original plain-text verifier
 const body = new URLSearchParams({
   code,
   code_verifier: verifier, // Original unhashed string
-  grant_type: "authorization_code",
-});
+  grant_type: 'authorization_code',
+})
 ```
 
 **Impact:** Token exchange fails silently or returns an auth error.
@@ -44,15 +44,15 @@ const body = new URLSearchParams({
 
 ```javascript
 // WRONG — fire and forget
-const { access_token } = await getToken();
+const { access_token } = await getToken()
 // Use access_token forever...
 
 // RIGHT — track expiry and refresh proactively
-const { access_token, refresh_token, expires_in } = await getToken();
-const expiresAt = Date.now() + expires_in * 800; // 80% of TTL
+const { access_token, refresh_token, expires_in } = await getToken()
+const expiresAt = Date.now() + expires_in * 800 // 80% of TTL
 // Before each API call, check if refresh is needed
 if (Date.now() > expiresAt) {
-  await refreshAccessToken(refresh_token);
+  await refreshAccessToken(refresh_token)
 }
 ```
 
@@ -141,9 +141,9 @@ curl --url https://api.edgetag.io/v1/tag \
   window.edgetag =
     window.edgetag ||
     function () {
-      (edgetag.stubs = edgetag.stubs || []).push(arguments);
-    };
-  edgetag("init", { edgeURL: "https://{domain}" });
+      ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+    }
+  edgetag('init', { edgeURL: 'https://{domain}' })
 </script>
 ```
 
@@ -155,11 +155,11 @@ Where `{domain}` is the first-party subdomain returned by `POST /tag` (e.g., `d.
 
 ```javascript
 // WRONG — creating tag without host
-await fetch("/tag", { body: JSON.stringify({ managed: false, hostId: "" }) });
+await fetch('/tag', { body: JSON.stringify({ managed: false, hostId: '' }) })
 
 // RIGHT — get hostId from dashboard first
-const hostId = "..." // copied from EdgeTag dashboard → Hosts
-await fetch("/tag", { body: JSON.stringify({ managed: false, hostId }) });
+const hostId = '...' // copied from EdgeTag dashboard → Hosts
+await fetch('/tag', { body: JSON.stringify({ managed: false, hostId }) })
 ```
 
 ---
@@ -173,4 +173,3 @@ await fetch("/tag", { body: JSON.stringify({ managed: false, hostId }) });
 5. **Channel not working?** → Verify secrets were encrypted with the correct environment's public key
 6. **No events flowing?** → Confirm the SDK snippet is installed on the website with the correct `domain`
 7. **OAuth redirect fails?** → Verify `redirect_uri` exactly matches one registered in the OAuth app (OAuth only)
-

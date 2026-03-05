@@ -10,19 +10,19 @@ EdgeTag's event system provides a unified way to track user actions across your 
 
 ## The 11 Standard Events
 
-| Event | Purpose | Key Data |
-|-------|---------|----------|
-| **PageView** | Track page visits | No required parameters |
-| **ViewContent** | Product or landing page visits | Optional: currency, value, contents |
-| **AddToCart** | Product added to shopping cart | Required: currency, value |
-| **RemoveFromCart** | Product removed from cart | Required: currency, value |
-| **InitiateCheckout** | User enters checkout flow | Required: currency, value |
-| **AddShippingInfo** | Shipping address submitted | Required: currency, value |
-| **AddPaymentInfo** | Payment method added | Required: currency, value |
-| **Purchase** | Transaction completed | Required: currency, value, orderId |
-| **Subscribe** | Paid subscription created | Optional: currency, value, sourceId |
-| **Search** | Search query performed | Optional: currency, value, search |
-| **Lead** | Sign-up or lead capture | Optional: currency, value, name, category |
+| Event                | Purpose                        | Key Data                                  |
+| -------------------- | ------------------------------ | ----------------------------------------- |
+| **PageView**         | Track page visits              | No required parameters                    |
+| **ViewContent**      | Product or landing page visits | Optional: currency, value, contents       |
+| **AddToCart**        | Product added to shopping cart | Required: currency, value                 |
+| **RemoveFromCart**   | Product removed from cart      | Required: currency, value                 |
+| **InitiateCheckout** | User enters checkout flow      | Required: currency, value                 |
+| **AddShippingInfo**  | Shipping address submitted     | Required: currency, value                 |
+| **AddPaymentInfo**   | Payment method added           | Required: currency, value                 |
+| **Purchase**         | Transaction completed          | Required: currency, value, orderId        |
+| **Subscribe**        | Paid subscription created      | Optional: currency, value, sourceId       |
+| **Search**           | Search query performed         | Optional: currency, value, search         |
+| **Lead**             | Sign-up or lead capture        | Optional: currency, value, name, category |
 
 ## Getting Started
 
@@ -44,10 +44,10 @@ edgetag('tag', 'Purchase', {
       quantity: 1,
       item_price: 99.99,
       title: 'Premium Widget',
-      category: 'electronics'
-    }
-  ]
-});
+      category: 'electronics',
+    },
+  ],
+})
 ```
 
 ## Implementation Guide

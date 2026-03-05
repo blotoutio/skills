@@ -8,11 +8,13 @@
 ## Installation
 
 1. **Clone the skills repository:**
+
    ```bash
    git clone https://github.com/blotoutio/skills.git ~/.config/opencode/blotout-skills
    ```
 
 2. **Symlink skills:**
+
    ```bash
    mkdir -p ~/.config/opencode/skills
    ln -s ~/.config/opencode/blotout-skills/skills ~/.config/opencode/skills/blotout

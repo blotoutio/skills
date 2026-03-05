@@ -160,4 +160,3 @@ See [npm-sdk/gotchas.md § Using Default Import Instead of Named Import](../npm-
 - Server-side cookie set for headless sites
 - SPA app initializes SDK only once per page load
 - Using named imports (not default imports)
-

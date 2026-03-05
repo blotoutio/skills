@@ -27,6 +27,7 @@ Authorization: Bearer {accessToken}
 Total profiles, marketing opt-in/opt-out overall and by region, plus last 24 hours changes.
 
 **Response:**
+
 ```json
 {
   "totalProfiles": 125000,
@@ -46,31 +47,50 @@ Per-category consent breakdown by region.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window: last 24h, 7 days, or 30 days |
+| Param   | Type                       | Required | Description                               |
+| ------- | -------------------------- | -------- | ----------------------------------------- |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window: last 24h, 7 days, or 30 days |
 
 **Response:**
+
 ```json
 {
   "marketing": [
     { "filter": "all", "allowed": "1", "count": "85000" },
     { "filter": "eu", "allowed": "1", "count": "30000" }
   ],
-  "analytics": [
-    { "filter": "all", "allowed": "1", "count": "90000" }
-  ],
-  "saleOfData": [
-    { "filter": "all", "allowed": "1", "count": "60000" }
-  ],
-  "preferences": [
-    { "filter": "all", "allowed": "1", "count": "95000" }
-  ],
+  "analytics": [{ "filter": "all", "allowed": "1", "count": "90000" }],
+  "saleOfData": [{ "filter": "all", "allowed": "1", "count": "60000" }],
+  "preferences": [{ "filter": "all", "allowed": "1", "count": "95000" }],
   "table": [
-    { "filter": "all", "marketing": "85000", "analytics": "90000", "saleOfData": "60000", "preferences": "95000" },
-    { "filter": "eu", "marketing": "30000", "analytics": "35000", "saleOfData": "20000", "preferences": "38000" },
-    { "filter": "uk", "marketing": "12000", "analytics": "13000", "saleOfData": "9000", "preferences": "14000" },
-    { "filter": "ca", "marketing": "8000", "analytics": "9000", "saleOfData": "6000", "preferences": "9500" }
+    {
+      "filter": "all",
+      "marketing": "85000",
+      "analytics": "90000",
+      "saleOfData": "60000",
+      "preferences": "95000"
+    },
+    {
+      "filter": "eu",
+      "marketing": "30000",
+      "analytics": "35000",
+      "saleOfData": "20000",
+      "preferences": "38000"
+    },
+    {
+      "filter": "uk",
+      "marketing": "12000",
+      "analytics": "13000",
+      "saleOfData": "9000",
+      "preferences": "14000"
+    },
+    {
+      "filter": "ca",
+      "marketing": "8000",
+      "analytics": "9000",
+      "saleOfData": "6000",
+      "preferences": "9500"
+    }
   ]
 }
 ```
@@ -83,11 +103,12 @@ Marketing opt-in/opt-out totals with top 10 regions.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window |
+| Param   | Type                       | Required | Description |
+| ------- | -------------------------- | -------- | ----------- |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window |
 
 **Response:**
+
 ```json
 {
   "totalOptIn": 85000,
@@ -107,6 +128,7 @@ Marketing opt-in/opt-out totals with top 10 regions.
 Marketing opt-in counts per region, aggregated across day/week/month windows.
 
 **Response:**
+
 ```json
 {
   "filter": {
@@ -125,11 +147,12 @@ Marketing consent opt-in/opt-out trends over time.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window. `day` returns hourly buckets, `week`/`month` return daily buckets |
+| Param   | Type                       | Required | Description                                                                    |
+| ------- | -------------------------- | -------- | ------------------------------------------------------------------------------ |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window. `day` returns hourly buckets, `week`/`month` return daily buckets |
 
 **Response:**
+
 ```json
 {
   "trending": {
@@ -155,9 +178,9 @@ Sale of data opt-in/opt-out totals with top 10 regions.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window |
+| Param   | Type                       | Required | Description |
+| ------- | -------------------------- | -------- | ----------- |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window |
 
 **Response:** Same shape as marketing-chart.
 
@@ -177,9 +200,9 @@ Sale of data consent trends over time.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window |
+| Param   | Type                       | Required | Description |
+| ------- | -------------------------- | -------- | ----------- |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window |
 
 **Response:** Same shape as marketing-trending.
 
@@ -191,11 +214,12 @@ Do Not Track (GPC) signal trends compared with marketing consent trends.
 
 **Query Parameters:**
 
-| Param | Type | Required | Description |
-|-------|------|----------|-------------|
-| `range` | `day` \| `week` \| `month` | Yes | Time window |
+| Param   | Type                       | Required | Description |
+| ------- | -------------------------- | -------- | ----------- |
+| `range` | `day` \| `week` \| `month` | Yes      | Time window |
 
 **Response:**
+
 ```json
 {
   "trending": {
@@ -223,11 +247,14 @@ DNT/GPC signal counts per region, aggregated across day/week/month windows.
 const CONSENTIQ_API = 'https://api.edgetag.io/v1/provider/consentIQ'
 
 async function getConsentOverview(scriptId: string, token: string) {
-  const response = await fetch(`${CONSENTIQ_API}/${scriptId}/analytics/overview`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
+  const response = await fetch(
+    `${CONSENTIQ_API}/${scriptId}/analytics/overview`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  })
+  )
 
   if (!response.ok) {
     throw new Error(`ConsentIQ request failed: ${response.status}`)
@@ -242,9 +269,9 @@ async function getMarketingTrends(scriptId: string, token: string) {
     `${CONSENTIQ_API}/${scriptId}/analytics/marketing-trending?range=week`,
     {
       headers: {
-        'Authorization': `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       },
-    }
+    },
   )
 
   return response.json()

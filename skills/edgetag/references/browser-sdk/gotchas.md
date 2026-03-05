@@ -30,9 +30,9 @@ Loading EdgeTag through GTM defeats the entire purpose:
   window.edgetag =
     window.edgetag ||
     function () {
-      (edgetag.stubs = edgetag.stubs || []).push(arguments);
-    };
-  edgetag("init", { edgeURL: "https://d.mysite.com" });
+      ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+    }
+  edgetag('init', { edgeURL: 'https://d.mysite.com' })
 </script>
 ```
 
@@ -46,7 +46,7 @@ You can still use GTM for other tags (Google Analytics, etc.), but EdgeTag must 
 
 ```javascript
 // WRONG - String instead of object
-edgetag("init", "https://d.mysite.com");
+edgetag('init', 'https://d.mysite.com')
 ```
 
 `init()` expects a configuration **object**, not a string. Passing a string causes:
@@ -60,21 +60,21 @@ edgetag("init", "https://d.mysite.com");
 
 ```javascript
 // CORRECT - Object with edgeURL property
-edgetag("init", {
-  edgeURL: "https://d.mysite.com",
-});
+edgetag('init', {
+  edgeURL: 'https://d.mysite.com',
+})
 ```
 
 ### Debugging
 
 ```javascript
-edgetag("ready", function (state) {
+edgetag('ready', function (state) {
   if (!state.userId) {
     console.error(
-      "init() may not have been called correctly. Check that you passed an object.",
-    );
+      'init() may not have been called correctly. Check that you passed an object.',
+    )
   }
-});
+})
 ```
 
 ---
@@ -91,11 +91,11 @@ See [consent/gotchas.md § Events Silently Blocked Without Consent](../consent/g
 
 ```javascript
 // WRONG - Functions called before init
-edgetag("tag", "PageView");
-edgetag("user", "email", "user@example.com");
+edgetag('tag', 'PageView')
+edgetag('user', 'email', 'user@example.com')
 
 // Init called after
-edgetag("init", { edgeURL: "https://d.mysite.com" });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 ```
 
 While EdgeTag queues calls before initialization, it's bad practice and can cause:
@@ -108,10 +108,10 @@ While EdgeTag queues calls before initialization, it's bad practice and can caus
 
 ```javascript
 // CORRECT - Always init first
-edgetag("init", { edgeURL: "https://d.mysite.com" });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
-edgetag("user", "email", "user@example.com");
-edgetag("tag", "PageView");
+edgetag('user', 'email', 'user@example.com')
+edgetag('tag', 'PageView')
 ```
 
 ---
@@ -123,8 +123,8 @@ edgetag("tag", "PageView");
 ```javascript
 // WRONG - Re-initializing on every page/route change
 function onPageChange() {
-  edgetag("init", { edgeURL: "https://d.mysite.com" }); // Don't do this
-  edgetag("tag", "PageView");
+  edgetag('init', { edgeURL: 'https://d.mysite.com' }) // Don't do this
+  edgetag('tag', 'PageView')
 }
 ```
 
@@ -142,16 +142,16 @@ Calling `init()` multiple times:
   window.edgetag =
     window.edgetag ||
     function () {
-      (edgetag.stubs = edgetag.stubs || []).push(arguments);
-    };
+      ;(edgetag.stubs = edgetag.stubs || []).push(arguments)
+    }
 
   // Initialize ONCE on page load
-  edgetag("init", { edgeURL: "https://d.mysite.com" });
+  edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
   // On SPA route changes, update page URL and track
   function onRouteChange() {
-    edgetag("setConfig", { pageUrl: window.location.href });
-    edgetag("tag", "PageView");
+    edgetag('setConfig', { pageUrl: window.location.href })
+    edgetag('tag', 'PageView')
   }
 </script>
 ```
@@ -184,28 +184,28 @@ Before deploying EdgeTag, verify:
 ### Check Initialization
 
 ```javascript
-edgetag("ready", function (state) {
-  console.log("EdgeTag initialized:", state);
-  console.log("User ID:", state.userId);
-  console.log("Consent:", state.consent);
-});
+edgetag('ready', function (state) {
+  console.log('EdgeTag initialized:', state)
+  console.log('User ID:', state.userId)
+  console.log('Consent:', state.consent)
+})
 ```
 
 ### Check Consent
 
 ```javascript
-edgetag("getConsent", function (consent, error, categories) {
-  console.log("Provider consent:", consent);
-  console.log("Category consent:", categories);
-});
+edgetag('getConsent', function (consent, error, categories) {
+  console.log('Provider consent:', consent)
+  console.log('Category consent:', categories)
+})
 ```
 
 ### Verify User Data
 
 ```javascript
-edgetag("getData", ["email", "phone", "firstName"], function (data) {
-  console.log("Current user data:", data);
-});
+edgetag('getData', ['email', 'phone', 'firstName'], function (data) {
+  console.log('Current user data:', data)
+})
 ```
 
 ### Browser DevTools

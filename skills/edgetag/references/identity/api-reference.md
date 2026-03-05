@@ -7,7 +7,7 @@
 Retrieve the current user's EdgeTag ID (the value of `tag_user_id` cookie).
 
 ```javascript
-const userId = edgetag('getUserId');
+const userId = edgetag('getUserId')
 ```
 
 **Returns**: String - The unique EdgeTag user ID for this user in this domain
@@ -19,9 +19,9 @@ const userId = edgetag('getUserId');
 Set a **single standard key** for the user. Use this for one-at-a-time identity captures.
 
 ```javascript
-edgetag('user', 'email', 'user@example.com');
-edgetag('user', 'phone', '+14155552671');
-edgetag('user', 'firstName', 'john');
+edgetag('user', 'email', 'user@example.com')
+edgetag('user', 'phone', '+14155552671')
+edgetag('user', 'firstName', 'john')
 ```
 
 **Parameters**:
@@ -43,16 +43,16 @@ edgetag('data', {
   email: 'user@example.com',
   phone: '+14155552671',
   firstName: 'john',
-  lastName: 'doe'
-});
+  lastName: 'doe',
+})
 
 // Mix standard and custom keys
 edgetag('data', {
   email: 'user@example.com',
   phone: '+14155552671',
   customAttribute: 'custom-value',
-  loyaltyTier: 'gold'
-});
+  loyaltyTier: 'gold',
+})
 ```
 
 **Parameters**:
@@ -69,14 +69,14 @@ Retrieve identity data for the user.
 
 ```javascript
 edgetag('getData', ['email', 'phone'], (data) => {
-  console.log(data);
+  console.log(data)
   // { email: true, phone: true }
-});
+})
 
 edgetag('getData', ['email', 'customAttr'], (data) => {
-  console.log(data);
+  console.log(data)
   // { email: true, customAttr: 'custom-value' }
-});
+})
 ```
 
 **Parameters**:
@@ -95,7 +95,6 @@ edgetag('getData', ['email', 'customAttr'], (data) => {
 
 ## Standard Keys Reference
 
-
 | Key           | Format                                | Example                      | Notes                                    |
 | ------------- | ------------------------------------- | ---------------------------- | ---------------------------------------- |
 | `email`       | Lowercase, no spaces                  | `john.doe@example.com`       | Must be valid email                      |
@@ -109,7 +108,6 @@ edgetag('getData', ['email', 'customAttr'], (data) => {
 | `zip`         | Lowercase, no spaces, no dash         | `98101`                      | Remove all separators                    |
 | `country`     | 2-letter ISO 3166-1 Alpha 2 lowercase | `us`                         | ISO country code in lowercase            |
 | `ip`          | IPv4 or IPv6                          | `192.0.2.1` or `2001:db8::1` | Valid IP address                         |
-
 
 ---
 
@@ -154,23 +152,23 @@ The `et_uid` is a URL query parameter that transfers the user's identity across 
 
 ```javascript
 // On domain-a.com, construct a URL to domain-b.com
-const userId = edgetag('getUserId');
-const targetUrl = `https://domain-b.com/page?et_uid=${userId}`;
+const userId = edgetag('getUserId')
+const targetUrl = `https://domain-b.com/page?et_uid=${userId}`
 
 // Link to it
-window.location.href = targetUrl;
+window.location.href = targetUrl
 ```
 
 **On domain-b.com**, you must manually read `et_uid` from the URL and pass it to EdgeTag. EdgeTag does **not** automatically capture `et_uid` from URL query parameters (except on the Shopify app).
 
 ```javascript
 // On domain-b.com, read et_uid from URL
-const urlParams = new URLSearchParams(window.location.search);
-const etUid = urlParams.get('et_uid');
+const urlParams = new URLSearchParams(window.location.search)
+const etUid = urlParams.get('et_uid')
 
 // Pass it as userId when initializing
 edgetag('init', {
   edgeURL: 'https://d.domain-b.com',
-  userId: etUid || undefined
-});
+  userId: etUid || undefined,
+})
 ```

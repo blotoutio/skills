@@ -32,20 +32,18 @@ Setup time: 30-60 minutes
 
 ## Quick Comparison
 
-
-| Platform        | Type   | Setup Time | Code Required | Browser Support | CRM Support               |
-| --------------- | ------ | ---------- | ------------- | --------------- | ------------------------- |
-| Shopify         | App    | 10 min     | No            | Yes (App Pixel + App Embed) | Yes (checks every 15 min) |
-| BigCommerce     | App    | 10 min     | No            | Yes             | Yes                       |
-| Salesforce CC   | App    | 30 min     | No            | Yes             | Native                    |
-| WooCommerce     | App    | 15 min     | No            | Yes             | Yes                       |
-| WordPress       | App    | 15 min     | No            | Yes             | Yes                       |
-| Wix             | App    | 10 min     | No            | Yes             | Yes                       |
-| React           | SDK    | 30 min     | Yes           | Yes             | Via webhook               |
-| Next.js         | SDK    | 30 min     | Yes           | Yes             | Via webhook               |
-| Vue             | SDK    | 30 min     | Yes           | Yes             | Via webhook               |
-| Custom/Headless | SDK    | 45-60 min  | Yes           | Yes (if needed) | Via webhook               |
-
+| Platform        | Type | Setup Time | Code Required | Browser Support             | CRM Support               |
+| --------------- | ---- | ---------- | ------------- | --------------------------- | ------------------------- |
+| Shopify         | App  | 10 min     | No            | Yes (App Pixel + App Embed) | Yes (checks every 15 min) |
+| BigCommerce     | App  | 10 min     | No            | Yes                         | Yes                       |
+| Salesforce CC   | App  | 30 min     | No            | Yes                         | Native                    |
+| WooCommerce     | App  | 15 min     | No            | Yes                         | Yes                       |
+| WordPress       | App  | 15 min     | No            | Yes                         | Yes                       |
+| Wix             | App  | 10 min     | No            | Yes                         | Yes                       |
+| React           | SDK  | 30 min     | Yes           | Yes                         | Via webhook               |
+| Next.js         | SDK  | 30 min     | Yes           | Yes                         | Via webhook               |
+| Vue             | SDK  | 30 min     | Yes           | Yes                         | Via webhook               |
+| Custom/Headless | SDK  | 45-60 min  | Yes           | Yes (if needed)             | Via webhook               |
 
 ## Integration Paths
 
@@ -100,4 +98,3 @@ Test payloads before production using Payload Validator channel.
 
 - **Common Pitfalls**: See [gotchas.md](./gotchas.md) to avoid integration mistakes
 - **Implementation Patterns**: See [patterns.md](./patterns.md) for real-world examples
-

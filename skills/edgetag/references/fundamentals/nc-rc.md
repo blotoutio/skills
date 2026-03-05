@@ -14,12 +14,10 @@ NC/RC is an EdgeTag plugin that automatically classifies every purchase as eithe
 
 For every `Purchase` event, EdgeTag fires one additional event:
 
-
 | Event         | Meaning                                                       |
 | ------------- | ------------------------------------------------------------- |
 | `Purchase_NC` | New Customer — first-time buyer, no previous purchase history |
 | `Purchase_RC` | Returning Customer — has at least one prior purchase          |
-
 
 **Key relationship:** `Purchase = Purchase_NC + Purchase_RC` (every purchase is exactly one or the other)
 

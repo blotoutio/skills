@@ -68,8 +68,8 @@ return results.slice(0, 50)
 
 ```javascript
 // WRONG
-row.count  // undefined
-row.total  // undefined
+row.count // undefined
+row.total // undefined
 
 // RIGHT
 row['COUNT(*)']

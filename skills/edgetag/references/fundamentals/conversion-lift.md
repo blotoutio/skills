@@ -23,7 +23,6 @@ EdgeTag sends up to 20 custom events to Meta based on purchase origin:
 
 ### Paid Channel Purchases
 
-
 | Event                    | Rule                                                     |
 | ------------------------ | -------------------------------------------------------- |
 | `Purchase_Paid_Facebook` | In-session purchase with a Facebook click ID             |
@@ -34,9 +33,7 @@ EdgeTag sends up to 20 custom events to Meta based on purchase origin:
 | `Purchase_Paid_Twitter`  | In-session purchase with a Twitter click ID              |
 | `Purchase_Paid_Other`    | In-session purchase with a UTM parameter from a campaign |
 
-
 ### Organic & Direct Purchases
-
 
 | Event                     | Rule                                                         |
 | ------------------------- | ------------------------------------------------------------ |
@@ -47,26 +44,20 @@ EdgeTag sends up to 20 custom events to Meta based on purchase origin:
 | `Purchase_Search_Other`   | In-session purchase from other well-known search providers   |
 | `Purchase_Other`          | Purchase that does not match any of the above rules          |
 
-
 ### Offline Purchases
-
 
 | Event              | Rule                        |
 | ------------------ | --------------------------- |
 | `Purchase_Retail`  | Retail offline purchases    |
 | `Purchase_Offline` | All other offline purchases |
 
-
 ### Platform-Specific Events
-
 
 | Event               | Rule                                                                |
 | ------------------- | ------------------------------------------------------------------- |
 | `Purchase_AppLovin` | In-session purchase when referred by a site using an AppLovin pixel |
 
-
 ### Aggregate Events
-
 
 | Event                   | Rule                                                      |
 | ----------------------- | --------------------------------------------------------- |
@@ -75,10 +66,9 @@ EdgeTag sends up to 20 custom events to Meta based on purchase origin:
 | `Purchase_Organic`      | Triggered when a Google or Bing search event is generated |
 | `Purchase_Custom_Other` | Triggered when other purchase events occur                |
 
-
 ## Why Conversion Lift Matters
 
-Standard attribution models (last-click, multi-touch) tell you which channels were *present* in the conversion path, but not whether they actually *caused* the conversion. Meta's Conversion Lift studies use a randomized experiment design:
+Standard attribution models (last-click, multi-touch) tell you which channels were _present_ in the conversion path, but not whether they actually _caused_ the conversion. Meta's Conversion Lift studies use a randomized experiment design:
 
 - A **test group** sees your Facebook ads as normal
 - A **holdout group** is prevented from seeing your ads
@@ -94,4 +84,3 @@ When querying event data via MCP, these patterns are useful:
 - **Facebook vs non-Facebook:** Compare `Purchase_Paid_Facebook` against all other paid events to understand Facebook's share
 - **Organic vs paid split:** Compare aggregate `Purchase_Organic` against paid events to see how much revenue comes from organic traffic
 - **Offline contribution:** Track `Purchase_Retail` and `Purchase_Offline` to understand the online-to-offline purchase ratio
-

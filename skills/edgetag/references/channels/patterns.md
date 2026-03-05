@@ -56,8 +56,8 @@ init({
     facebook: true,
     googleAdsClicks: true,
     tiktok: true,
-    pinterest: true  // New channel
-  }
+    pinterest: true, // New channel
+  },
 })
 ```
 
@@ -160,7 +160,7 @@ async function logToPurchaseDB(event) {
     currency: event.payload.currency,
     items: event.payload.items,
     timestamp: event.eventTimestamp,
-    source: 'edgetag'
+    source: 'edgetag',
   })
 }
 ```
@@ -212,13 +212,13 @@ An external system (e.g., Shopify, Salesforce, your backend) sends events to Edg
 
 ### Available `params` Helpers
 
-| Helper | Description |
-| --- | --- |
-| `params.request` | The incoming HTTP request object |
-| `params.secrets` | Key-value secrets configured in the dashboard |
-| `params.getUsersByEmail(email)` | Look up EdgeTag users by email in the ID graph |
-| `params.handleTag(payload, user)` | Forward event into EdgeTag's channel pipeline |
-| `params.writeError(label, error)` | Log an error to EdgeTag's error reporting |
+| Helper                            | Description                                    |
+| --------------------------------- | ---------------------------------------------- |
+| `params.request`                  | The incoming HTTP request object               |
+| `params.secrets`                  | Key-value secrets configured in the dashboard  |
+| `params.getUsersByEmail(email)`   | Look up EdgeTag users by email in the ID graph |
+| `params.handleTag(payload, user)` | Forward event into EdgeTag's channel pipeline  |
+| `params.writeError(label, error)` | Log an error to EdgeTag's error reporting      |
 
 ### Implementation: Salesforce + Shopify Order Webhook
 
@@ -436,4 +436,3 @@ async process(params) {
 - Use `params.writeError()` to log errors — they appear in the EdgeTag dashboard under domain errors
 - Wrap external API calls (Salesforce, etc.) in try/catch so one failure doesn't block the event from reaching channels
 - The webhook script runs on EdgeTag servers with a timeout — keep external API calls fast
-

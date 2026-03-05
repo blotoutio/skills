@@ -14,18 +14,18 @@ Used by several events to describe products or items:
 
 ```typescript
 type Content = {
-  id: string;              // Required: unique product identifier
-  quantity: number;        // Required: quantity of this item
-  item_price: number;      // Required: price per unit
-  variantId?: string;      // Optional: product variant ID
-  sku?: string;            // Optional: stock keeping unit
-  title?: string;          // Optional: product name
-  description?: string;    // Optional: product description
-  category?: string;       // Optional: comma-separated categories
-  brand?: string;          // Optional: brand name
-  type?: 'product' | 'product_group'; // Optional: item type
-  image?: string;          // Optional: URL to product image
-  url?: string;            // Optional: URL to product page
+  id: string // Required: unique product identifier
+  quantity: number // Required: quantity of this item
+  item_price: number // Required: price per unit
+  variantId?: string // Optional: product variant ID
+  sku?: string // Optional: stock keeping unit
+  title?: string // Optional: product name
+  description?: string // Optional: product description
+  category?: string // Optional: comma-separated categories
+  brand?: string // Optional: brand name
+  type?: 'product' | 'product_group' // Optional: item type
+  image?: string // Optional: URL to product image
+  url?: string // Optional: URL to product page
 }
 ```
 
@@ -35,9 +35,9 @@ Used by Purchase events:
 
 ```typescript
 type Discount = {
-  code: string;            // Required: discount code or ID
-  type?: 'FLAT' | 'PERCENTAGE'; // Optional: discount type
-  value?: string;          // Optional: discount amount or percentage
+  code: string // Required: discount code or ID
+  type?: 'FLAT' | 'PERCENTAGE' // Optional: discount type
+  value?: string // Optional: discount amount or percentage
 }
 ```
 
@@ -58,21 +58,19 @@ These parameters can be added to any event payload:
 
 Default pixel tracking for page visits. Automatically fired when tracking pixel loads.
 
-
 | Parameter                | Type | Required | Notes                           |
 | ------------------------ | ---- | -------- | ------------------------------- |
 | (no required parameters) | -    | -        | Captures page URL automatically |
 
-
 **Code Example:**
 
 ```javascript
-edgetag('tag', 'PageView');
+edgetag('tag', 'PageView')
 
 // PageView with custom event ID
 edgetag('tag', 'PageView', {
-  eventId: 'pageview-abc123'
-});
+  eventId: 'pageview-abc123',
+})
 ```
 
 **When to use:**
@@ -86,13 +84,11 @@ edgetag('tag', 'PageView', {
 
 User visits a product or landing page. Used to track content consumption.
 
-
 | Parameter | Type      | Required | Notes                              |
 | --------- | --------- | -------- | ---------------------------------- |
 | currency  | string    | Optional | ISO 4217 code (e.g., 'USD', 'EUR') |
 | value     | number    | Optional | Total value of viewed content      |
 | contents  | Content[] | Optional | Array of Content objects           |
-
 
 **Code Example:**
 
@@ -108,10 +104,10 @@ edgetag('tag', 'ViewContent', {
       title: 'Wireless Headphones',
       category: 'audio,electronics',
       brand: 'SoundMax',
-      image: 'https://example.com/headphones.jpg'
-    }
-  ]
-});
+      image: 'https://example.com/headphones.jpg',
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -126,14 +122,12 @@ edgetag('tag', 'ViewContent', {
 
 Product added to shopping cart.
 
-
 | Parameter   | Type      | Required     | Notes                |
 | ----------- | --------- | ------------ | -------------------- |
 | currency    | string    | **Required** | ISO 4217 code        |
 | value       | number    | **Required** | Total cart value     |
 | contents    | Content[] | Optional     | Items added to cart  |
 | checkoutUrl | string    | Optional     | URL to checkout page |
-
 
 **Code Example:**
 
@@ -148,11 +142,11 @@ edgetag('tag', 'AddToCart', {
       item_price: 49.99,
       title: 'Wireless Headphones',
       category: 'audio',
-      sku: 'WH-500-BLK'
-    }
+      sku: 'WH-500-BLK',
+    },
   ],
-  checkoutUrl: 'https://example.com/checkout'
-});
+  checkoutUrl: 'https://example.com/checkout',
+})
 ```
 
 **When to use:**
@@ -167,14 +161,12 @@ edgetag('tag', 'AddToCart', {
 
 Product removed from shopping cart.
 
-
 | Parameter   | Type      | Required     | Notes                          |
 | ----------- | --------- | ------------ | ------------------------------ |
 | currency    | string    | **Required** | ISO 4217 code                  |
 | value       | number    | **Required** | Total cart value after removal |
 | contents    | Content[] | Optional     | Items removed from cart        |
 | checkoutUrl | string    | Optional     | URL to checkout page           |
-
 
 **Code Example:**
 
@@ -187,10 +179,10 @@ edgetag('tag', 'RemoveFromCart', {
       id: 'prod-456',
       quantity: 1,
       item_price: 49.99,
-      title: 'Wireless Headphones'
-    }
-  ]
-});
+      title: 'Wireless Headphones',
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -204,14 +196,12 @@ edgetag('tag', 'RemoveFromCart', {
 
 User enters the checkout flow.
 
-
 | Parameter   | Type      | Required     | Notes                |
 | ----------- | --------- | ------------ | -------------------- |
 | currency    | string    | **Required** | ISO 4217 code        |
 | value       | number    | **Required** | Cart total value     |
 | contents    | Content[] | Optional     | Items in cart        |
 | checkoutUrl | string    | Optional     | URL to checkout page |
-
 
 **Code Example:**
 
@@ -224,17 +214,17 @@ edgetag('tag', 'InitiateCheckout', {
       id: 'prod-456',
       quantity: 1,
       item_price: 49.99,
-      title: 'Wireless Headphones'
+      title: 'Wireless Headphones',
     },
     {
       id: 'prod-789',
       quantity: 1,
       item_price: 99.99,
-      title: 'Phone Stand'
-    }
+      title: 'Phone Stand',
+    },
   ],
-  checkoutUrl: 'https://example.com/checkout'
-});
+  checkoutUrl: 'https://example.com/checkout',
+})
 ```
 
 **When to use:**
@@ -248,13 +238,11 @@ edgetag('tag', 'InitiateCheckout', {
 
 Shipping address submitted during checkout.
 
-
 | Parameter | Type      | Required     | Notes               |
 | --------- | --------- | ------------ | ------------------- |
 | currency  | string    | **Required** | ISO 4217 code       |
 | value     | number    | **Required** | Cart total value    |
 | contents  | Content[] | Optional     | Items being shipped |
-
 
 **Code Example:**
 
@@ -266,10 +254,10 @@ edgetag('tag', 'AddShippingInfo', {
     {
       id: 'prod-456',
       quantity: 1,
-      item_price: 49.99
-    }
-  ]
-});
+      item_price: 49.99,
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -283,13 +271,11 @@ edgetag('tag', 'AddShippingInfo', {
 
 Payment method added during checkout.
 
-
 | Parameter | Type      | Required     | Notes                 |
 | --------- | --------- | ------------ | --------------------- |
 | currency  | string    | **Required** | ISO 4217 code         |
 | value     | number    | **Required** | Cart total value      |
 | contents  | Content[] | Optional     | Items being purchased |
-
 
 **Code Example:**
 
@@ -301,10 +287,10 @@ edgetag('tag', 'AddPaymentInfo', {
     {
       id: 'prod-456',
       quantity: 1,
-      item_price: 49.99
-    }
-  ]
-});
+      item_price: 49.99,
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -319,7 +305,6 @@ edgetag('tag', 'AddPaymentInfo', {
 
 Purchase completed successfully.
 
-
 | Parameter | Type       | Required     | Notes                   |
 | --------- | ---------- | ------------ | ----------------------- |
 | currency  | string     | **Required** | ISO 4217 code           |
@@ -327,7 +312,6 @@ Purchase completed successfully.
 | orderId   | string     | **Required** | Unique order identifier |
 | contents  | Content[]  | Optional     | Items purchased         |
 | discounts | Discount[] | Optional     | Applied discounts       |
-
 
 **Code Example:**
 
@@ -343,23 +327,23 @@ edgetag('tag', 'Purchase', {
       quantity: 1,
       item_price: 49.99,
       title: 'Wireless Headphones',
-      category: 'audio'
+      category: 'audio',
     },
     {
       id: 'prod-789',
       quantity: 1,
       item_price: 99.99,
-      title: 'Phone Stand'
-    }
+      title: 'Phone Stand',
+    },
   ],
   discounts: [
     {
       code: 'SAVE20',
       type: 'PERCENTAGE',
-      value: '20'
-    }
-  ]
-});
+      value: '20',
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -376,13 +360,11 @@ edgetag('tag', 'Purchase', {
 
 Paid subscription created or renewed.
 
-
 | Parameter | Type   | Required | Notes                          |
 | --------- | ------ | -------- | ------------------------------ |
 | currency  | string | Optional | ISO 4217 code                  |
 | value     | number | Optional | Subscription price             |
 | sourceId  | string | Optional | Subscription source identifier |
-
 
 **Code Example:**
 
@@ -390,11 +372,11 @@ Paid subscription created or renewed.
 edgetag('tag', 'Subscribe', {
   currency: 'USD',
   value: 9.99,
-  sourceId: 'stripe-sub-12345'
-});
+  sourceId: 'stripe-sub-12345',
+})
 
 // Minimal example
-edgetag('tag', 'Subscribe');
+edgetag('tag', 'Subscribe')
 ```
 
 **When to use:**
@@ -409,14 +391,12 @@ edgetag('tag', 'Subscribe');
 
 Search query performed by user.
 
-
 | Parameter | Type      | Required | Notes                        |
 | --------- | --------- | -------- | ---------------------------- |
 | currency  | string    | Optional | ISO 4217 code (if monetized) |
 | value     | number    | Optional | Revenue from search results  |
 | contents  | Content[] | Optional | Search results/items         |
 | search    | string    | Optional | Search query string          |
-
 
 **Code Example:**
 
@@ -428,10 +408,10 @@ edgetag('tag', 'Search', {
       id: 'prod-456',
       quantity: 1,
       item_price: 49.99,
-      title: 'Budget Wireless Headphones'
-    }
-  ]
-});
+      title: 'Budget Wireless Headphones',
+    },
+  ],
+})
 
 // With revenue tracking
 edgetag('tag', 'Search', {
@@ -443,10 +423,10 @@ edgetag('tag', 'Search', {
       id: 'prod-999',
       quantity: 1,
       item_price: 199.99,
-      title: 'Premium Studio Headphones'
-    }
-  ]
-});
+      title: 'Premium Studio Headphones',
+    },
+  ],
+})
 ```
 
 **When to use:**
@@ -461,33 +441,31 @@ edgetag('tag', 'Search', {
 
 Sign-up, form submission, or lead capture.
 
-
-| Parameter | Type   | Required | Notes            |
-| --------- | ------ | -------- | ---------------- |
-| currency  | string | Optional | ISO 4217 code    |
-| value     | number | Optional | Lead value       |
+| Parameter | Type   | Required | Notes              |
+| --------- | ------ | -------- | ------------------ |
+| currency  | string | Optional | ISO 4217 code      |
+| value     | number | Optional | Lead value         |
 | name      | string | Optional | Product/page title |
-| category  | string | Optional | Lead category    |
-
+| category  | string | Optional | Lead category      |
 
 **Code Example:**
 
 ```javascript
 edgetag('tag', 'Lead', {
   name: 'Newsletter Signup',
-  category: 'newsletter'
-});
+  category: 'newsletter',
+})
 
 // With value
 edgetag('tag', 'Lead', {
   name: 'Product Demo Request',
   category: 'demo-request',
   currency: 'USD',
-  value: 0
-});
+  value: 0,
+})
 
 // Minimal example
-edgetag('tag', 'Lead');
+edgetag('tag', 'Lead')
 ```
 
 **When to use:**
@@ -508,15 +486,13 @@ edgetag(command, eventName, data?, providers?, options?)
 
 ### Parameters
 
-
-| Parameter | Type                    | Required     | Notes                                          |
-| --------- | ----------------------- | ------------ | ---------------------------------------------- |
-| command   | 'tag'                   | **Required** | Always 'tag' for event tracking                |
-| eventName | string                  | **Required** | Standard event name (PageView, Purchase, etc.) |
-| data      | object                  | Optional     | Event parameters and values                    |
+| Parameter | Type                    | Required     | Notes                                                                                                                                       |
+| --------- | ----------------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| command   | 'tag'                   | **Required** | Always 'tag' for event tracking                                                                                                             |
+| eventName | string                  | **Required** | Standard event name (PageView, Purchase, etc.)                                                                                              |
+| data      | object                  | Optional     | Event parameters and values                                                                                                                 |
 | providers | Record<string, boolean> | Optional     | Target specific channels for custom events (default: all consented channels). Do not use for consent — use the `consent()` function instead |
-| options   | object                  | Optional     | Execution options                              |
-
+| options   | object                  | Optional     | Execution options                                                                                                                           |
 
 ### Options Object
 
@@ -532,26 +508,29 @@ edgetag(command, eventName, data?, providers?, options?)
 
 ```javascript
 // Custom event only relevant to Klaviyo
-edgetag('tag', 'NewsletterSignup',
+edgetag(
+  'tag',
+  'NewsletterSignup',
   { category: 'footer-form' },
-  { klaviyo: true }
-);
+  { klaviyo: true },
+)
 ```
 
 **Example — beacon for pre-navigation event:**
 
 ```javascript
 // Purchase tracked right before redirect to thank-you page
-edgetag('tag', 'Purchase',
+edgetag(
+  'tag',
+  'Purchase',
   {
     currency: 'USD',
     value: 99.99,
-    orderId: 'order-123'
+    orderId: 'order-123',
   },
-  null,  // all consented channels
+  null, // all consented channels
   {
-    method: 'beacon'  // Survives page navigation
-  }
-);
+    method: 'beacon', // Survives page navigation
+  },
+)
 ```
-

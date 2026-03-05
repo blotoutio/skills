@@ -45,7 +45,6 @@ POST https://api.edgetag.io/v1/script
 
 ### Required Fields
 
-
 | Field          | Type          | Description                                |
 | -------------- | ------------- | ------------------------------------------ |
 | `name`         | string        | Channel name, must be unique per domain    |
@@ -53,7 +52,6 @@ POST https://api.edgetag.io/v1/script
 | `tagId`        | string (UUID) | The domain/tag ID                          |
 | `shouldDeploy` | boolean       | Auto-deploy after creation (default: true) |
 | `secrets`      | array         | Must include `EDGE_LAKE_JSON_SCHEMA`       |
-
 
 ### Response
 
@@ -65,13 +63,11 @@ POST https://api.edgetag.io/v1/script
 
 ### Error Codes
 
-
 | Code | Cause                                                                     |
 | ---- | ------------------------------------------------------------------------- |
 | 400  | Invalid request (bad geo regions, duplicate name)                         |
 | 403  | Provider not available for team                                           |
 | 409  | Tag doesn't exist, or Edge Lake already exists on this domain (singleton) |
-
 
 ## Required Secret
 
@@ -85,9 +81,7 @@ The JSON schema defines which fields are captured and stored for each event. The
 
 See **sql-reference.md § Column Reference** for the complete column reference with types and descriptions.
 
-
 ## Provider Characteristics
-
 
 | Property         | Value                                             |
 | ---------------- | ------------------------------------------------- |
@@ -97,7 +91,6 @@ See **sql-reference.md § Column Reference** for the complete column reference w
 | Consent category | `necessary` (no opt-in required)                  |
 | Storage          | Cloudflare R2 with SQL catalog                    |
 | Streaming        | Cloudflare Pipelines (flush every 5 min or 500MB) |
-
 
 ## Infrastructure (Managed Automatically)
 
@@ -110,4 +103,3 @@ For self-managed deployments, the domain's host configuration must include:
 
 - `accountId` — Cloudflare Account ID
 - `accessToken` — Cloudflare API Token with R2 and Analytics permissions
-

@@ -3,8 +3,8 @@
   "private": true,
   "description": "A collection of [Agent Skills](https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills) for implementing Blotout",
   "scripts": {
-    "format": "biome format --write .",
-    "format:check": "biome format ."
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -18,6 +18,6 @@
   },
   "homepage": "https://github.com/blotoutio/skills#readme",
   "devDependencies": {
-    "@biomejs/biome": "2.4.4"
+    "prettier": "^3.8.1"
   }
 }

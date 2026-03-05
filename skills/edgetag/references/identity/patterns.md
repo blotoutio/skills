@@ -9,41 +9,41 @@
 ```javascript
 // Step 1: Sign-up form
 document.getElementById('signupBtn').addEventListener('click', (e) => {
-  const email = document.getElementById('email').value;
-  edgetag('user', 'email', email.toLowerCase().trim());
+  const email = document.getElementById('email').value
+  edgetag('user', 'email', email.toLowerCase().trim())
   // At this point, user is now identified in the identity graph
-});
+})
 
 // Step 2: Profile completion (later)
 document.getElementById('profileBtn').addEventListener('click', (e) => {
-  const firstName = document.getElementById('firstName').value;
-  const lastName = document.getElementById('lastName').value;
-  const phone = document.getElementById('phone').value;
+  const firstName = document.getElementById('firstName').value
+  const lastName = document.getElementById('lastName').value
+  const phone = document.getElementById('phone').value
 
   edgetag('data', {
     firstName: firstName.toLowerCase(),
     lastName: lastName.toLowerCase(),
-    phone: formatPhone(phone) // E.164 format
-  });
-});
+    phone: formatPhone(phone), // E.164 format
+  })
+})
 
 // Step 3: Checkout
 document.getElementById('checkoutBtn').addEventListener('click', (e) => {
-  const state = document.getElementById('state').value;
-  const zip = document.getElementById('zip').value;
+  const state = document.getElementById('state').value
+  const zip = document.getElementById('zip').value
 
   edgetag('data', {
     state: state.toLowerCase(),
-    zip: zip.replace(/\D/g, '')
-  });
-});
+    zip: zip.replace(/\D/g, ''),
+  })
+})
 
 // Helper: Format phone to E.164
 function formatPhone(phone) {
-  const digits = phone.replace(/\D/g, '');
-  if (digits.length === 10) return `+1${digits}`; // Assume US
-  if (digits.length === 11 && digits[0] === '1') return `+${digits}`;
-  return `+${digits}`; // Fallback
+  const digits = phone.replace(/\D/g, '')
+  if (digits.length === 10) return `+1${digits}` // Assume US
+  if (digits.length === 11 && digits[0] === '1') return `+${digits}`
+  return `+${digits}` // Fallback
 }
 ```
 
@@ -65,21 +65,21 @@ function formatPhone(phone) {
 ```javascript
 // On domain-a.com
 function linkToDomainB() {
-  const userId = edgetag('getUserId');
+  const userId = edgetag('getUserId')
   if (!userId) {
-    console.warn('User not yet identified');
-    return;
+    console.warn('User not yet identified')
+    return
   }
 
   // Build URL with et_uid parameter
-  const targetUrl = new URL('https://shop.domain.com/products');
-  targetUrl.searchParams.set('et_uid', userId);
+  const targetUrl = new URL('https://shop.domain.com/products')
+  targetUrl.searchParams.set('et_uid', userId)
 
-  window.location.href = targetUrl.toString();
+  window.location.href = targetUrl.toString()
 }
 
 // HTML
-<button onclick="linkToDomainB()">Go to Shop</button>
+;<button onclick="linkToDomainB()">Go to Shop</button>
 ```
 
 **On domain-b.com** (must read et_uid from URL):
@@ -88,14 +88,14 @@ function linkToDomainB() {
 
 ```javascript
 // Read et_uid from URL query parameter
-const urlParams = new URLSearchParams(window.location.search);
-const etUid = urlParams.get('et_uid');
+const urlParams = new URLSearchParams(window.location.search)
+const etUid = urlParams.get('et_uid')
 
 // Pass it as the userId when initializing EdgeTag
 edgetag('init', {
   edgeURL: 'https://d.shop-domain.com',
-  userId: etUid || undefined // Falls back to generating a new ID if not present
-});
+  userId: etUid || undefined, // Falls back to generating a new ID if not present
+})
 ```
 
 **Verification**:
@@ -103,9 +103,9 @@ edgetag('init', {
 ```javascript
 // On domain-b.com, should see same user ID from domain-a
 window.addEventListener('edgetag-initialized', () => {
-  const userId = edgetag('getUserId');
-  console.log('Same user across domains:', userId);
-});
+  const userId = edgetag('getUserId')
+  console.log('Same user across domains:', userId)
+})
 ```
 
 ---
@@ -134,49 +134,49 @@ edgetag('getUserId', (edgeTagId) => {
   // Save edgeTagId alongside your internal user/customer ID
   fetch('/api/save-edgetag-id', {
     method: 'POST',
-    body: JSON.stringify({ userId: yourUserId, edgeTagId })
-  });
-});
+    body: JSON.stringify({ userId: yourUserId, edgeTagId }),
+  })
+})
 ```
 
 Then, on your server, retrieve the stored EdgeTag ID when sending events:
 
 ```javascript
 // On your server — retrieve the stored EdgeTag ID for this user
-const edgeTagId = await db.getEdgeTagId(yourUserId);
+const edgeTagId = await db.getEdgeTagId(yourUserId)
 
 fetch('https://d.mysite.com/tag', {
   method: 'GET',
   headers: {
     'Content-Type': 'application/json',
-    'EdgeTagUserId': edgeTagId
+    EdgeTagUserId: edgeTagId,
   },
   body: JSON.stringify({
     eventName: 'Purchase',
     timestamp: Date.now(),
-    data: { value: 99.99, currency: 'USD' }
-  })
-});
+    data: { value: 99.99, currency: 'USD' },
+  }),
+})
 ```
 
 **Option B: Via Email**
 
 ```javascript
 // If you only have email (CRM/order data)
-const customerEmail = 'user@example.com';
+const customerEmail = 'user@example.com'
 
 fetch('https://d.mysite.com/data', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'EdgeTagUserId': customerEmail // EdgeTag matches via email
+    EdgeTagUserId: customerEmail, // EdgeTag matches via email
   },
   body: JSON.stringify({
     email: customerEmail.toLowerCase(),
     orderValue: 99.99,
-    orderDate: '2025-02-26'
-  })
-});
+    orderDate: '2025-02-26',
+  }),
+})
 ```
 
 **Option C: Via CRM Integration**
@@ -227,14 +227,14 @@ async function setCustomerType(email) {
   const response = await fetch('/api/customer-history', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  });
+    body: JSON.stringify({ email }),
+  })
 
-  const { orderCount } = await response.json();
-  const isNew = orderCount <= 1;
+  const { orderCount } = await response.json()
+  const isNew = orderCount <= 1
 
   // Set NC/RC via user function (NOT tag)
-  edgetag('user', 'isNewCustomer', isNew);
+  edgetag('user', 'isNewCustomer', isNew)
 }
 ```
 
@@ -251,10 +251,10 @@ async function setCustomerType(email) {
 ```javascript
 // Mobile app (native code)
 // Generate or retrieve your app user ID
-const appUserId = 'app-user-12345';
+const appUserId = 'app-user-12345'
 
 // Deep link to web with app user ID
-const webUrl = `https://site.com/app-link?app_user_id=${appUserId}`;
+const webUrl = `https://site.com/app-link?app_user_id=${appUserId}`
 // Or pass via app-to-web bridge
 ```
 
@@ -262,12 +262,12 @@ const webUrl = `https://site.com/app-link?app_user_id=${appUserId}`;
 
 ```javascript
 // On web, capture the app user ID as custom data
-const appUserId = new URL(window.location).searchParams.get('app_user_id');
+const appUserId = new URL(window.location).searchParams.get('app_user_id')
 
 edgetag('data', {
   email: 'user@example.com',
-  appUserId: appUserId // Custom key
-});
+  appUserId: appUserId, // Custom key
+})
 ```
 
 **Step 3: Match offline app events**
@@ -278,13 +278,12 @@ fetch('https://d.mysite.com/data', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/json',
-    'EdgeTagUserId': 'user@example.com' // Or appUserId if stored
+    EdgeTagUserId: 'user@example.com', // Or appUserId if stored
   },
   body: JSON.stringify({
     email: 'user@example.com',
     appEvent: 'Purchase',
-    appValue: 99.99
-  })
-});
+    appValue: 99.99,
+  }),
+})
 ```
-

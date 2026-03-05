@@ -37,8 +37,10 @@ EdgeTag App (App Pixel + App Embed)
 1. System auto-retrieves your store domain (enter manually if store isn't live yet)
 2. EdgeTag generates a dedicated first-party subdomain
 3. Add the two DNS records provided:
-  - **TXT record** — domain ownership verification
-  - **CNAME record** — traffic routing to EdgeTag infrastructure
+
+- **TXT record** — domain ownership verification
+- **CNAME record** — traffic routing to EdgeTag infrastructure
+
 4. If you lack DNS access, click "Email instructions" to share with IT/DevOps
 
 **4. Enable App Embed**
@@ -297,7 +299,7 @@ The cookie must be set as a response header in the document response.
 
 **Implementation**:
 
-*Node.js/Express*:
+_Node.js/Express_:
 
 ```javascript
 // middleware/edgetag.js
@@ -320,7 +322,7 @@ function edgetagUserMiddleware(req, res, next) {
 
     // Set persistent cookie in document response headers
     res.setHeader('Set-Cookie', [
-      `${COOKIE_NAME}=${newUserId}; SameSite=Lax; Expires=${COOKIE_EXPIRY}; Domain=${COOKIE_DOMAIN}; HttpOnly; Secure`
+      `${COOKIE_NAME}=${newUserId}; SameSite=Lax; Expires=${COOKIE_EXPIRY}; Domain=${COOKIE_DOMAIN}; HttpOnly; Secure`,
     ])
 
     res.locals.edgetagUserId = newUserId
@@ -332,7 +334,7 @@ function edgetagUserMiddleware(req, res, next) {
 module.exports = edgetagUserMiddleware
 ```
 
-*Use in Express app*:
+_Use in Express app_:
 
 ```javascript
 const express = require('express')
@@ -345,7 +347,7 @@ app.use(cookieParser())
 app.use(edgetagUserMiddleware) // Sets truid cookie in response headers
 ```
 
-*Alternative: Next.js middleware*:
+_Alternative: Next.js middleware_:
 
 ```javascript
 // middleware.js
@@ -362,8 +364,9 @@ export function middleware(request) {
 
   if (!existing) {
     const newId = `${uuidv4()}-${Date.now()}`
-    response.headers.set('Set-Cookie',
-      `${COOKIE_NAME}=${newId}; SameSite=Lax; Expires=${COOKIE_EXPIRY}; Domain=${COOKIE_DOMAIN}; HttpOnly; Secure`
+    response.headers.set(
+      'Set-Cookie',
+      `${COOKIE_NAME}=${newId}; SameSite=Lax; Expires=${COOKIE_EXPIRY}; Domain=${COOKIE_DOMAIN}; HttpOnly; Secure`,
     )
   }
 
@@ -380,7 +383,7 @@ import facebook from '@blotoutio/providers-facebook-sdk'
 
 init({
   edgeURL: 'https://d.mysite.com',
-  providers: [facebook]
+  providers: [facebook],
 })
 
 consent({ all: true })
@@ -406,4 +409,3 @@ consent({ all: true })
 // Should see: truid = [UUID-timestamp]
 // Same value on reload = working correctly
 ```
-

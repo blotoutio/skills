@@ -9,17 +9,20 @@ Enable Blotout skills in Codex via native skill discovery. Just clone and symlin
 ## Installation
 
 1. **Clone the skills repository:**
+
    ```bash
    git clone https://github.com/blotoutio/skills.git ~/.codex/blotout-skills
    ```
 
 2. **Create the skills symlink:**
+
    ```bash
    mkdir -p ~/.codex/skills
    ln -s ~/.codex/blotout-skills/skills ~/.codex/skills/blotout
    ```
 
    **Windows (PowerShell):**
+
    ```powershell
    New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.codex\skills"
    cmd /c mklink /J "$env:USERPROFILE\.codex\skills\blotout" "$env:USERPROFILE\.codex\blotout-skills\skills"

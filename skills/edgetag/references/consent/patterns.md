@@ -12,16 +12,16 @@ const edgeTagConsent = {
   googleAdsClicks: allowedMarketing,
   klaviyo: allowedMarketing,
   googleAnalytics4: allowedAnalytics,
-};
+}
 
 const edgeTagConsentCategories = {
   all: false,
   necessary: true,
   advertising: allowedMarketing,
   analytics: allowedAnalytics,
-};
+}
 
-edgetag('consent', edgeTagConsent, edgeTagConsentCategories);
+edgetag('consent', edgeTagConsent, edgeTagConsentCategories)
 ```
 
 **Why**: Without `all: false`, any provider or category not explicitly listed may inherit a previous consent state or default to allowed. Setting `all: false` first creates a deny-by-default baseline, then you opt in only what the user consented to.
@@ -36,18 +36,18 @@ edgetag('consent', edgeTagConsent, edgeTagConsentCategories);
 
 ```javascript
 function checkConsent(consent) {
-  const saleOfDataRegion = window.Shopify.customerPrivacy.saleOfDataRegion();
-  let allowedMarketing = consent.marketing;
-  let allowedAnalytics = consent.analytics;
+  const saleOfDataRegion = window.Shopify.customerPrivacy.saleOfDataRegion()
+  let allowedMarketing = consent.marketing
+  let allowedAnalytics = consent.analytics
 
   // In sale-of-data regions (e.g. CCPA), fall back to saleOfData consent
   // if marketing or analytics were not explicitly granted
   if (saleOfDataRegion) {
     if (!allowedMarketing) {
-      allowedMarketing = consent.saleOfData;
+      allowedMarketing = consent.saleOfData
     }
     if (!allowedAnalytics) {
-      allowedAnalytics = consent.saleOfData;
+      allowedAnalytics = consent.saleOfData
     }
   }
 
@@ -57,16 +57,16 @@ function checkConsent(consent) {
     googleAdsClicks: allowedMarketing,
     klaviyo: allowedMarketing,
     googleAnalytics4: allowedAnalytics,
-  };
+  }
 
   const edgeTagConsentCategories = {
     all: false,
     necessary: true,
     advertising: allowedMarketing,
     analytics: allowedAnalytics,
-  };
+  }
 
-  edgetag('consent', edgeTagConsent, edgeTagConsentCategories);
+  edgetag('consent', edgeTagConsent, edgeTagConsentCategories)
 }
 
 // Apply stored consent on page load
@@ -74,8 +74,8 @@ if (window.Shopify.customerPrivacy) {
   checkConsent({
     analytics: window.Shopify.customerPrivacy.analyticsProcessingAllowed(),
     marketing: window.Shopify.customerPrivacy.marketingAllowed(),
-    saleOfData: window.Shopify.customerPrivacy.saleOfDataAllowed()
-  });
+    saleOfData: window.Shopify.customerPrivacy.saleOfDataAllowed(),
+  })
 }
 
 // Update when user changes consent via Shopify banner
@@ -83,9 +83,9 @@ document.addEventListener('visitorConsentCollected', (event) => {
   checkConsent({
     analytics: event.detail.analyticsAllowed,
     marketing: event.detail.marketingAllowed,
-    saleOfData: event.detail.saleOfDataAllowed
-  });
-});
+    saleOfData: event.detail.saleOfDataAllowed,
+  })
+})
 ```
 
 **Shopify Consent API**:
@@ -108,53 +108,53 @@ document.addEventListener('visitorConsentCollected', (event) => {
 ```javascript
 // 1. Initialize EdgeTag
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // 2. Helper function to parse OneTrust consent
 function getConsentFromOneTrust() {
   // OneTrust stores consent as object with group IDs
-  const groups = window.OnetrustActiveGroups;
+  const groups = window.OnetrustActiveGroups
 
   // Map OneTrust group IDs to EdgeTag providers
   // You need to map your OneTrust group IDs to provider names
   // Example mapping (adjust based on your OneTrust setup):
   const providerMap = {
-    'C0001': 'necessary', // These are actually category names
-    'C0002': 'performance_cookies', // Map to EdgeTag categories
-    'C0003': 'functional_cookies',
-    'C0004': 'targeting_cookies'
-  };
+    C0001: 'necessary', // These are actually category names
+    C0002: 'performance_cookies', // Map to EdgeTag categories
+    C0003: 'functional_cookies',
+    C0004: 'targeting_cookies',
+  }
 
   // For EdgeTag, use categories instead of provider IDs
   const categories = {
     necessary: groups && groups.includes('C0001'),
     analytics: groups && groups.includes('C0002'),
     functional: groups && groups.includes('C0003'),
-    advertising: groups && groups.includes('C0004')
-  };
+    advertising: groups && groups.includes('C0004'),
+  }
 
-  return { categories };
+  return { categories }
 }
 
 // 3. Set initial consent from OneTrust
 function applyConsentFromOneTrust() {
-  const consent = getConsentFromOneTrust();
-  edgetag('consent', null, consent.categories);
+  const consent = getConsentFromOneTrust()
+  edgetag('consent', null, consent.categories)
 }
 
 // 4. Wire OneTrust callback
 window.addEventListener('load', () => {
   // Apply consent on page load
-  applyConsentFromOneTrust();
+  applyConsentFromOneTrust()
 
   // Update when user changes consent in OneTrust banner
   if (window.OneTrust && window.OneTrust.OnConsentChanged) {
-    window.OneTrust.OnConsentChanged(function() {
-      applyConsentFromOneTrust();
-    });
+    window.OneTrust.OnConsentChanged(function () {
+      applyConsentFromOneTrust()
+    })
   }
-});
+})
 ```
 
 **OneTrust Setup Notes**:
@@ -175,60 +175,60 @@ window.addEventListener('load', () => {
 ```javascript
 // 1. Initialize EdgeTag
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // 2. Helper function to parse Cookiebot consent
 function getConsentFromCookiebot() {
   // Cookiebot stores consent in window.Cookiebot.consent
-  const consent = window.Cookiebot ? window.Cookiebot.consent : {};
+  const consent = window.Cookiebot ? window.Cookiebot.consent : {}
 
   // Map Cookiebot categories to EdgeTag categories
   const categories = {
     necessary: consent.necessary === true,
     analytics: consent.statistics === true, // Cookiebot calls this "statistics"
     functional: consent.preferences === true, // Cookiebot calls this "preferences"
-    advertising: consent.marketing === true // Cookiebot calls this "marketing"
-  };
+    advertising: consent.marketing === true, // Cookiebot calls this "marketing"
+  }
 
-  return { categories };
+  return { categories }
 }
 
 // 3. Set initial consent from Cookiebot
 function applyConsentFromCookiebot() {
-  const consent = getConsentFromCookiebot();
-  edgetag('consent', null, consent.categories);
+  const consent = getConsentFromCookiebot()
+  edgetag('consent', null, consent.categories)
 }
 
 // 4. Wire Cookiebot events
 window.addEventListener('load', () => {
   // Apply consent on page load (wait for Cookiebot to be ready)
   if (window.Cookiebot && window.Cookiebot.consent) {
-    applyConsentFromCookiebot();
+    applyConsentFromCookiebot()
   } else {
     window.addEventListener('CookiebotOnConsentReady', () => {
-      applyConsentFromCookiebot();
-    });
+      applyConsentFromCookiebot()
+    })
   }
 
   // Update when user accepts or declines in Cookiebot banner
   window.addEventListener('CookiebotOnAccept', () => {
-    applyConsentFromCookiebot();
-  });
+    applyConsentFromCookiebot()
+  })
   window.addEventListener('CookiebotOnDecline', () => {
-    applyConsentFromCookiebot();
-  });
-});
+    applyConsentFromCookiebot()
+  })
+})
 ```
 
 **Cookiebot Consent Object**:
 
 ```javascript
 window.Cookiebot.consent = {
-  necessary: true,      // Always true
-  preferences: false,   // Functional/preferences
-  statistics: true,     // Analytics/performance
-  marketing: false      // Marketing/advertising
+  necessary: true, // Always true
+  preferences: false, // Functional/preferences
+  statistics: true, // Analytics/performance
+  marketing: false, // Marketing/advertising
 }
 ```
 
@@ -236,7 +236,7 @@ window.Cookiebot.consent = {
 
 ```javascript
 // In browser console
-console.log('Cookiebot consent:', window.Cookiebot.consent);
+console.log('Cookiebot consent:', window.Cookiebot.consent)
 ```
 
 ---
@@ -250,44 +250,44 @@ console.log('Cookiebot consent:', window.Cookiebot.consent);
 ```javascript
 // 1. Initialize EdgeTag
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // 2. Helper function to parse TrustArc consent
 function getConsentFromTrustArc() {
   // TrustArc stores consent in window.truste object
-  if (!window.truste) return {};
+  if (!window.truste) return {}
 
   // TrustArc uses a different API
-  const preferences = window.truste.cma ? window.truste.cma.data : {};
+  const preferences = window.truste.cma ? window.truste.cma.data : {}
 
   const categories = {
     necessary: true, // Always enabled
     analytics: preferences.analytics === true,
     functional: preferences.functional === true,
-    advertising: preferences.marketing === true
-  };
+    advertising: preferences.marketing === true,
+  }
 
-  return { categories };
+  return { categories }
 }
 
 // 3. Set initial consent
 function applyConsentFromTrustArc() {
-  const consent = getConsentFromTrustArc();
-  edgetag('consent', null, consent.categories);
+  const consent = getConsentFromTrustArc()
+  edgetag('consent', null, consent.categories)
 }
 
 // 4. Wire TrustArc callback
 window.addEventListener('load', () => {
-  applyConsentFromTrustArc();
+  applyConsentFromTrustArc()
 
   // TrustArc uses different callback mechanism
   if (window.truste && window.truste.cma) {
-    window.truste.cma.registerPrefCallback(function() {
-      applyConsentFromTrustArc();
-    });
+    window.truste.cma.registerPrefCallback(function () {
+      applyConsentFromTrustArc()
+    })
   }
-});
+})
 ```
 
 ---
@@ -301,44 +301,44 @@ window.addEventListener('load', () => {
 ```javascript
 // 1. Initialize EdgeTag
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // 2. Helper function to parse Osano consent
 function getConsentFromOsano() {
   // Osano stores preferences in window.osano.cm
-  if (!window.osano || !window.osano.cm) return {};
+  if (!window.osano || !window.osano.cm) return {}
 
-  const preferences = window.osano.cm.getPreferences();
+  const preferences = window.osano.cm.getPreferences()
 
   const categories = {
     necessary: true, // Always enabled
     analytics: preferences.analytics === 'granted',
     functional: preferences.functional === 'granted',
     advertising: preferences.advertising === 'granted',
-    share_pii: preferences.marketing === 'granted'
-  };
+    share_pii: preferences.marketing === 'granted',
+  }
 
-  return { categories };
+  return { categories }
 }
 
 // 3. Set initial consent
 function applyConsentFromOsano() {
-  const consent = getConsentFromOsano();
-  edgetag('consent', null, consent.categories);
+  const consent = getConsentFromOsano()
+  edgetag('consent', null, consent.categories)
 }
 
 // 4. Wire Osano callback
 window.addEventListener('load', () => {
-  applyConsentFromOsano();
+  applyConsentFromOsano()
 
   // Osano callback
   if (window.osano && window.osano.cm) {
-    window.osano.cm.onPreferenceExpressed(function() {
-      applyConsentFromOsano();
-    });
+    window.osano.cm.onPreferenceExpressed(function () {
+      applyConsentFromOsano()
+    })
   }
-});
+})
 ```
 
 ---
@@ -351,7 +351,10 @@ window.addEventListener('load', () => {
 
 ```html
 <!-- Simple HTML banner -->
-<div id="consent-banner" style="position: fixed; bottom: 0; width: 100%; background: #333; color: white; padding: 20px;">
+<div
+  id="consent-banner"
+  style="position: fixed; bottom: 0; width: 100%; background: #333; color: white; padding: 20px;"
+>
   <p>We use cookies and tracking technologies for analytics and marketing.</p>
   <button id="accept-all">Accept All</button>
   <button id="reject-all">Reject All</button>
@@ -359,51 +362,51 @@ window.addEventListener('load', () => {
 </div>
 
 <script>
-// Initialize EdgeTag
-edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  // Initialize EdgeTag
+  edgetag('init', {
+    edgeURL: 'https://d.mysite.com',
+  })
 
-// Accept All button
-document.getElementById('accept-all').addEventListener('click', () => {
-  const consent = {
-    all: true
-  };
+  // Accept All button
+  document.getElementById('accept-all').addEventListener('click', () => {
+    const consent = {
+      all: true,
+    }
 
-  edgetag('consent', null, consent);
-  localStorage.setItem('edgetag-consent', JSON.stringify(consent));
-  document.getElementById('consent-banner').style.display = 'none';
-});
+    edgetag('consent', null, consent)
+    localStorage.setItem('edgetag-consent', JSON.stringify(consent))
+    document.getElementById('consent-banner').style.display = 'none'
+  })
 
-// Reject All button
-document.getElementById('reject-all').addEventListener('click', () => {
-  const consent = {
-    all: false
-  };
+  // Reject All button
+  document.getElementById('reject-all').addEventListener('click', () => {
+    const consent = {
+      all: false,
+    }
 
-  edgetag('consent', null, consent);
-  localStorage.setItem('edgetag-consent', JSON.stringify(consent));
-  document.getElementById('consent-banner').style.display = 'none';
-});
+    edgetag('consent', null, consent)
+    localStorage.setItem('edgetag-consent', JSON.stringify(consent))
+    document.getElementById('consent-banner').style.display = 'none'
+  })
 
-// Manage Preferences button
-document.getElementById('manage-consent').addEventListener('click', () => {
-  // Show detailed preferences modal
-  showPreferencesModal();
-});
+  // Manage Preferences button
+  document.getElementById('manage-consent').addEventListener('click', () => {
+    // Show detailed preferences modal
+    showPreferencesModal()
+  })
 
-// Load stored consent
-function loadStoredConsent() {
-  const stored = localStorage.getItem('edgetag-consent');
-  if (stored) {
-    const consent = JSON.parse(stored);
-    edgetag('consent', null, consent);
-    document.getElementById('consent-banner').style.display = 'none';
+  // Load stored consent
+  function loadStoredConsent() {
+    const stored = localStorage.getItem('edgetag-consent')
+    if (stored) {
+      const consent = JSON.parse(stored)
+      edgetag('consent', null, consent)
+      document.getElementById('consent-banner').style.display = 'none'
+    }
   }
-}
 
-// On page load
-window.addEventListener('load', loadStoredConsent);
+  // On page load
+  window.addEventListener('load', loadStoredConsent)
 </script>
 ```
 
@@ -419,54 +422,55 @@ window.addEventListener('load', loadStoredConsent);
 <div id="provider-consent">
   <h3>Marketing Providers</h3>
   <label>
-    <input type="checkbox" id="fb-consent" data-provider="facebook"> Facebook
+    <input type="checkbox" id="fb-consent" data-provider="facebook" /> Facebook
   </label>
   <label>
-    <input type="checkbox" id="ga-consent" data-provider="googleAdsClicks"> Google Ads
+    <input type="checkbox" id="ga-consent" data-provider="googleAdsClicks" />
+    Google Ads
   </label>
   <label>
-    <input type="checkbox" id="kl-consent" data-provider="klaviyo"> Klaviyo
+    <input type="checkbox" id="kl-consent" data-provider="klaviyo" /> Klaviyo
   </label>
   <button id="save-consent">Save Preferences</button>
 </div>
 
 <script>
-edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgetag('init', {
+    edgeURL: 'https://d.mysite.com',
+  })
 
-// Load stored provider consent
-function loadStoredProviderConsent() {
-  const stored = localStorage.getItem('edgetag-provider-consent');
-  if (stored) {
-    const consent = JSON.parse(stored);
-    edgetag('consent', consent); // Provider-based consent
-    updateCheckboxes(consent);
+  // Load stored provider consent
+  function loadStoredProviderConsent() {
+    const stored = localStorage.getItem('edgetag-provider-consent')
+    if (stored) {
+      const consent = JSON.parse(stored)
+      edgetag('consent', consent) // Provider-based consent
+      updateCheckboxes(consent)
+    }
   }
-}
 
-function updateCheckboxes(consent) {
-  Object.entries(consent).forEach(([provider, enabled]) => {
-    const checkbox = document.querySelector(`[data-provider="${provider}"]`);
-    if (checkbox) checkbox.checked = enabled;
-  });
-}
+  function updateCheckboxes(consent) {
+    Object.entries(consent).forEach(([provider, enabled]) => {
+      const checkbox = document.querySelector(`[data-provider="${provider}"]`)
+      if (checkbox) checkbox.checked = enabled
+    })
+  }
 
-// Save button
-document.getElementById('save-consent').addEventListener('click', () => {
-  const consent = {};
+  // Save button
+  document.getElementById('save-consent').addEventListener('click', () => {
+    const consent = {}
 
-  document.querySelectorAll('[data-provider]').forEach(checkbox => {
-    consent[checkbox.dataset.provider] = checkbox.checked;
-  });
+    document.querySelectorAll('[data-provider]').forEach((checkbox) => {
+      consent[checkbox.dataset.provider] = checkbox.checked
+    })
 
-  edgetag('consent', consent);
-  localStorage.setItem('edgetag-provider-consent', JSON.stringify(consent));
-  alert('Preferences saved');
-});
+    edgetag('consent', consent)
+    localStorage.setItem('edgetag-provider-consent', JSON.stringify(consent))
+    alert('Preferences saved')
+  })
 
-// On page load
-window.addEventListener('load', loadStoredProviderConsent);
+  // On page load
+  window.addEventListener('load', loadStoredProviderConsent)
 </script>
 ```
 
@@ -481,40 +485,40 @@ window.addEventListener('load', loadStoredProviderConsent);
 ```javascript
 // Initialize EdgeTag
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // User selects categories from form
 document.getElementById('category-form').addEventListener('submit', (e) => {
-  e.preventDefault();
+  e.preventDefault()
 
   const categories = {
     necessary: true, // Always checked
     advertising: document.getElementById('ad-category').checked,
     analytics: document.getElementById('analytics-category').checked,
     functional: document.getElementById('functional-category').checked,
-    share_pii: document.getElementById('pii-category').checked
-  };
+    share_pii: document.getElementById('pii-category').checked,
+  }
 
   // Set category-based consent
-  edgetag('consent', null, categories);
+  edgetag('consent', null, categories)
 
   // Store for next visit
-  localStorage.setItem('edgetag-categories', JSON.stringify(categories));
+  localStorage.setItem('edgetag-categories', JSON.stringify(categories))
 
-  alert('Consent preferences saved');
-});
+  alert('Consent preferences saved')
+})
 
 // Load stored categories
 function loadStoredCategories() {
-  const stored = localStorage.getItem('edgetag-categories');
+  const stored = localStorage.getItem('edgetag-categories')
   if (stored) {
-    const categories = JSON.parse(stored);
-    edgetag('consent', null, categories);
+    const categories = JSON.parse(stored)
+    edgetag('consent', null, categories)
   }
 }
 
-window.addEventListener('load', loadStoredCategories);
+window.addEventListener('load', loadStoredCategories)
 ```
 
 ---
@@ -529,16 +533,16 @@ window.addEventListener('load', loadStoredCategories);
 // US-only site: no GDPR/CCPA requirements
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  disableConsentCheck: true // Events sent without consent
-});
+  disableConsentCheck: true, // Events sent without consent
+})
 
 // Events now sent immediately
-edgetag('tag', 'Purchase', { value: 99.99 }); // Sent
+edgetag('tag', 'Purchase', { value: 99.99 }) // Sent
 
 // Still good to track consent for UI/CMP purposes
 edgetag('getConsent', (consent) => {
-  console.log('User consent for reporting:', consent);
-});
+  console.log('User consent for reporting:', consent)
+})
 ```
 
 ---
@@ -552,21 +556,25 @@ edgetag('getConsent', (consent) => {
 ```javascript
 // Detect user location (via IP or other means)
 async function getUserCountry() {
-  const response = await fetch('https://ipapi.co/json/');
-  const data = await response.json();
-  return data.country_code;
+  const response = await fetch('https://ipapi.co/json/')
+  const data = await response.json()
+  return data.country_code
 }
 
 // Initialize based on location
 async function initEdgeTagWithLocation() {
-  const country = await getUserCountry();
+  const country = await getUserCountry()
 
   const config = {
-    edgeURL: 'https://d.mysite.com'
-  };
+    edgeURL: 'https://d.mysite.com',
+  }
 
   // GDPR region: require consent
-  if (['DE', 'FR', 'IT', 'AT', 'BE', 'NL', 'ES', 'IE', 'PL', 'SE'].includes(country)) {
+  if (
+    ['DE', 'FR', 'IT', 'AT', 'BE', 'NL', 'ES', 'IE', 'PL', 'SE'].includes(
+      country,
+    )
+  ) {
     // Don't set disableConsentCheck (keep default: consent required)
   }
   // CCPA region: require consent
@@ -575,14 +583,14 @@ async function initEdgeTagWithLocation() {
   }
   // Other regions: no consent required
   else {
-    config.disableConsentCheck = true;
+    config.disableConsentCheck = true
   }
 
-  edgetag('init', config);
+  edgetag('init', config)
 }
 
 // Call on page load
-initEdgeTagWithLocation();
+initEdgeTagWithLocation()
 ```
 
 ---
@@ -595,23 +603,23 @@ initEdgeTagWithLocation();
 
 ```javascript
 edgetag('init', {
-  edgeURL: 'https://d.mysite.com'
-});
+  edgeURL: 'https://d.mysite.com',
+})
 
 // User submits signup form
 document.getElementById('signup').addEventListener('submit', (e) => {
-  const email = document.getElementById('email').value;
-  const consentToMarketing = document.getElementById('marketing-consent').checked;
+  const email = document.getElementById('email').value
+  const consentToMarketing =
+    document.getElementById('marketing-consent').checked
 
   // Set consent first — EdgeTag will skip non-consented channels automatically
   edgetag('consent', null, {
     necessary: true,
     advertising: consentToMarketing,
-    analytics: true
-  });
+    analytics: true,
+  })
 
   // Then capture identity — sent to all consented channels
-  edgetag('user', 'email', email.toLowerCase());
-});
+  edgetag('user', 'email', email.toLowerCase())
+})
 ```
-

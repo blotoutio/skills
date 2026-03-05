@@ -10,26 +10,26 @@
 
 ```javascript
 // INVALID - Neither provided
-edgetag('consent');
+edgetag('consent')
 
 // INVALID - null passed but no categories
-edgetag('consent', null);
+edgetag('consent', null)
 
 // INVALID - Empty objects
-edgetag('consent', {}, {});
+edgetag('consent', {}, {})
 ```
 
 **Right**:
 
 ```javascript
 // Valid - Providers only
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 
 // Valid - Categories only
-edgetag('consent', null, { advertising: true });
+edgetag('consent', null, { advertising: true })
 
 // Valid - Both
-edgetag('consent', { facebook: true }, { advertising: true });
+edgetag('consent', { facebook: true }, { advertising: true })
 ```
 
 ---
@@ -43,10 +43,10 @@ edgetag('consent', { facebook: true }, { advertising: true });
 **Symptom**:
 
 ```javascript
-edgetag('init', { edgeURL: 'https://d.mysite.com' });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
 // No consent set yet
-edgetag('tag', 'Purchase', { value: 99.99 });
+edgetag('tag', 'Purchase', { value: 99.99 })
 
 // This event is SILENTLY BLOCKED
 // No console error, no warning
@@ -59,13 +59,13 @@ edgetag('tag', 'Purchase', { value: 99.99 });
 
 ```javascript
 // Always set consent after init
-edgetag('init', { edgeURL: 'https://d.mysite.com' });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
 // Set consent immediately
-edgetag('consent', { facebook: true, googleAdsClicks: true });
+edgetag('consent', { facebook: true, googleAdsClicks: true })
 
 // NOW events are sent
-edgetag('tag', 'Purchase', { value: 99.99 });
+edgetag('tag', 'Purchase', { value: 99.99 })
 ```
 
 ---
@@ -80,7 +80,7 @@ edgetag('tag', 'Purchase', { value: 99.99 });
 
 ```javascript
 // Set on page load
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 
 // User later changes mind in settings
 // But forgot to call consent() again
@@ -119,20 +119,20 @@ document.getElementById('fbCheckbox').addEventListener('change', (e) => {
 // DANGEROUS if in GDPR/CCPA region
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  disableConsentCheck: true // All events sent, no consent required!
-});
+  disableConsentCheck: true, // All events sent, no consent required!
+})
 
-edgetag('tag', 'Purchase', { value: 99.99 }); // Sent immediately
+edgetag('tag', 'Purchase', { value: 99.99 }) // Sent immediately
 ```
 
 **Right** (GDPR/CCPA):
 
 ```javascript
 // Keep consent enabled (default)
-edgetag('init', { edgeURL: 'https://d.mysite.com' });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
 // Wait for user consent
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 ```
 
 **Right** (non-GDPR/CCPA region):
@@ -141,8 +141,8 @@ edgetag('consent', { facebook: true });
 // Okay to disable consent check
 edgetag('init', {
   edgeURL: 'https://d.mysite.com',
-  disableConsentCheck: true
-});
+  disableConsentCheck: true,
+})
 ```
 
 ---
@@ -156,15 +156,15 @@ edgetag('init', {
 ```javascript
 edgetag('getConsent', (consent, error, categories) => {
   if (error) {
-    console.error('Failed to get consent:', error);
+    console.error('Failed to get consent:', error)
     // Fall back to default (reject all)
-    edgetag('consent', { all: false });
-    return;
+    edgetag('consent', { all: false })
+    return
   }
 
-  console.log('Current consent:', consent);
-  console.log('Categories:', categories);
-});
+  console.log('Current consent:', consent)
+  console.log('Categories:', categories)
+})
 ```
 
 ---
@@ -177,11 +177,15 @@ edgetag('getConsent', (consent, error, categories) => {
 
 ```javascript
 // Set both
-edgetag('consent', {
-  facebook: true // Provider consent
-}, {
-  advertising: false // Category consent
-});
+edgetag(
+  'consent',
+  {
+    facebook: true, // Provider consent
+  },
+  {
+    advertising: false, // Category consent
+  },
+)
 
 // Result: Event to Facebook is blocked because advertising category is false
 // Even though facebook provider is true
@@ -194,13 +198,13 @@ edgetag('consent', {
 edgetag('consent', null, {
   necessary: true,
   advertising: true,
-  analytics: true
-});
+  analytics: true,
+})
 
 // Then use provider consent only to override
 edgetag('consent', {
-  facebook: false // Opt out of Facebook specifically
-});
+  facebook: false, // Opt out of Facebook specifically
+})
 ```
 
 ---
@@ -218,30 +222,38 @@ edgetag('consent', {
   googleAdsClicks: true,
   klaviyo: true,
   linkedIn: true,
-  tiktok: true
+  tiktok: true,
   // Forgot a provider?
-});
+})
 ```
 
 **Better**:
 
 ```javascript
 // Accept all, no worry about missing providers
-edgetag('consent', {
-  all: true
-}, {
-  all: true
-});
+edgetag(
+  'consent',
+  {
+    all: true,
+  },
+  {
+    all: true,
+  },
+)
 ```
 
 **Reject all** (keep only necessary):
 
 ```javascript
-edgetag('consent', {
-  all: false
-}, {
-  necessary: true // Only this (cannot be disabled anyway)
-});
+edgetag(
+  'consent',
+  {
+    all: false,
+  },
+  {
+    necessary: true, // Only this (cannot be disabled anyway)
+  },
+)
 ```
 
 ---
@@ -256,8 +268,8 @@ edgetag('consent', {
 // This doesn't work
 edgetag('consent', null, {
   necessary: false, // IGNORED - necessary is always true
-  advertising: true
-});
+  advertising: true,
+})
 
 // Result: necessary is still true
 ```
@@ -268,8 +280,8 @@ edgetag('consent', null, {
 // Don't try to disable necessary
 edgetag('consent', null, {
   necessary: true, // Always true
-  advertising: false
-});
+  advertising: false,
+})
 ```
 
 ---
@@ -281,7 +293,7 @@ edgetag('consent', null, {
 **Symptom**:
 
 ```javascript
-edgetag('init', { edgeURL: 'https://d.mysite.com' });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
 // User's consent is stored in OneTrust
 // But EdgeTag not told
@@ -291,11 +303,11 @@ edgetag('init', { edgeURL: 'https://d.mysite.com' });
 **Solution**:
 
 ```javascript
-edgetag('init', { edgeURL: 'https://d.mysite.com' });
+edgetag('init', { edgeURL: 'https://d.mysite.com' })
 
 // Immediately read and apply stored consent
-const storedConsent = getConsentFromCMP(); // OneTrust, Cookiebot, etc.
-edgetag('consent', storedConsent.providers, storedConsent.categories);
+const storedConsent = getConsentFromCMP() // OneTrust, Cookiebot, etc.
+edgetag('consent', storedConsent.providers, storedConsent.categories)
 
 // Events now flow if user previously consented
 ```
@@ -312,7 +324,7 @@ edgetag('consent', storedConsent.providers, storedConsent.categories);
 // CMP integration wired once
 OneTrust.OnConsentChanged(() => {
   // But callback not passed to EdgeTag
-});
+})
 
 // User later changes consent in OneTrust
 // EdgeTag still using old consent settings
@@ -323,9 +335,9 @@ OneTrust.OnConsentChanged(() => {
 ```javascript
 // Wire CMP callback to EdgeTag
 OneTrust.OnConsentChanged(() => {
-  const consent = GetConsentFromOneTrust();
-  edgetag('consent', consent.providers, consent.categories);
-});
+  const consent = GetConsentFromOneTrust()
+  edgetag('consent', consent.providers, consent.categories)
+})
 ```
 
 ---
@@ -344,11 +356,11 @@ OneTrust.OnConsentChanged(() => {
 
 ```javascript
 edgetag('consent', {
-  'Google': true, // Case-sensitive
-  'google': true, // Not a valid provider name
+  Google: true, // Case-sensitive
+  google: true, // Not a valid provider name
   'Google Ads': true, // Wrong name
-  'google-ads-clicks': true // Wrong format (kebab-case)
-});
+  'google-ads-clicks': true, // Wrong format (kebab-case)
+})
 ```
 
 **Right**:
@@ -357,8 +369,8 @@ edgetag('consent', {
 edgetag('consent', {
   googleAdsClicks: true, // Google Ads
   googleAnalytics4: true, // Google Analytics
-  facebook: true
-});
+  facebook: true,
+})
 ```
 
 Check your EdgeTag dashboard for exact provider names if unsure.
@@ -373,10 +385,10 @@ Check your EdgeTag dashboard for exact provider names if unsure.
 
 ```javascript
 // 1. Set consent
-edgetag('consent', { facebook: true });
+edgetag('consent', { facebook: true })
 
 // 2. Fire event
-edgetag('tag', 'Purchase', { value: 99.99 });
+edgetag('tag', 'Purchase', { value: 99.99 })
 
 // 3. Check network tab in DevTools
 // Should see request to Facebook pixel URL
@@ -384,8 +396,8 @@ edgetag('tag', 'Purchase', { value: 99.99 });
 
 // 4. Check browser console for warnings
 edgetag('getConsent', (consent) => {
-  console.log('Actual consent:', consent);
-});
+  console.log('Actual consent:', consent)
+})
 ```
 
 ---
@@ -399,21 +411,20 @@ edgetag('getConsent', (consent) => {
 **Wrong** (if instances need different consent):
 
 ```javascript
-edgetag('init', { edgeURL: 'https://d.instance1.com', destination: 'site1' });
-edgetag('init', { edgeURL: 'https://d.instance2.com', destination: 'site2' });
+edgetag('init', { edgeURL: 'https://d.instance1.com', destination: 'site1' })
+edgetag('init', { edgeURL: 'https://d.instance2.com', destination: 'site2' })
 
 // Applies to BOTH site1 and site2
-edgetag('consent', { facebook: true }); // No destination = all instances
+edgetag('consent', { facebook: true }) // No destination = all instances
 ```
 
 **Right**:
 
 ```javascript
-edgetag('init', { edgeURL: 'https://d.instance1.com', destination: 'site1' });
-edgetag('init', { edgeURL: 'https://d.instance2.com', destination: 'site2' });
+edgetag('init', { edgeURL: 'https://d.instance1.com', destination: 'site1' })
+edgetag('init', { edgeURL: 'https://d.instance2.com', destination: 'site2' })
 
 // Specify which instance
-edgetag('consent', { facebook: true }, null, { destination: 'site1' });
-edgetag('consent', { googleAdsClicks: true }, null, { destination: 'site2' });
+edgetag('consent', { facebook: true }, null, { destination: 'site1' })
+edgetag('consent', { googleAdsClicks: true }, null, { destination: 'site2' })
 ```
-

@@ -15,6 +15,7 @@ Ask the user which domain they are implementing EdgeTag for (e.g., `mysite.com`)
 ### Step 2: Discover Configured Channels via MCP
 
 **If EdgeTag MCP is available** (tools like `domains`, `channel`, etc. are accessible):
+
 1. Call the `domains` MCP tool to list all domains and their channels
 2. Find the domain being implemented
 3. For each channel, check its `providerId` against the browser package mapping table below
@@ -22,6 +23,7 @@ Ask the user which domain they are implementing EdgeTag for (e.g., `mysite.com`)
 5. Add all provider imports to the `init()` call
 
 **If EdgeTag MCP is NOT available:**
+
 1. Suggest the user set up EdgeTag MCP for the best experience. See [mcp/setup.md](../mcp/setup.md) for setup instructions.
 2. Ask the user which channels are configured on their domain (e.g., "Which advertising/analytics channels do you have enabled in EdgeTag? For example: Meta/Facebook, Google Ads, TikTok, Pinterest, Snapchat, GA4?")
 3. Install the corresponding npm provider packages based on their answer
@@ -30,13 +32,13 @@ Ask the user which domain they are implementing EdgeTag for (e.g., `mysite.com`)
 
 After installing packages for existing channels, ask the user if they plan to add any additional channels that need browser pixels. Show them the available options:
 
-| Channel | SDK Name | NPM Package |
-|---------|----------|-------------|
-| Meta/Facebook | `facebook` | `@blotoutio/providers-facebook-sdk` |
-| Google Ads | `googleAdsClicks` | `@blotoutio/providers-google-ads-clicks-sdk` |
-| TikTok | `tiktok` | `@blotoutio/providers-tiktok-sdk` |
-| Pinterest | `pinterest` | `@blotoutio/providers-pinterest-sdk` |
-| Snapchat | `snapchat` | `@blotoutio/providers-snapchat-sdk` |
+| Channel            | SDK Name           | NPM Package                                   |
+| ------------------ | ------------------ | --------------------------------------------- |
+| Meta/Facebook      | `facebook`         | `@blotoutio/providers-facebook-sdk`           |
+| Google Ads         | `googleAdsClicks`  | `@blotoutio/providers-google-ads-clicks-sdk`  |
+| TikTok             | `tiktok`           | `@blotoutio/providers-tiktok-sdk`             |
+| Pinterest          | `pinterest`        | `@blotoutio/providers-pinterest-sdk`          |
+| Snapchat           | `snapchat`         | `@blotoutio/providers-snapchat-sdk`           |
 | Google Analytics 4 | `googleAnalytics4` | `@blotoutio/providers-google-analytics-4-sdk` |
 
 Channels like Klaviyo, LinkedIn, Reddit, Bing, Event Sink, and Webhook are **server-side only** and do NOT need npm packages.
@@ -44,6 +46,7 @@ Channels like Klaviyo, LinkedIn, Reddit, Bing, Event Sink, and Webhook are **ser
 ### Step 4: Verify Completeness
 
 Before declaring the implementation complete, verify:
+
 - Every channel with a browser pixel has its npm package installed
 - Every provider is imported and passed to `init({ providers: [...] })`
 - Consent arrays include all channel names
@@ -67,28 +70,28 @@ npm install @blotoutio/providers-facebook-sdk
 
 ```javascript
 // src/edgetag.js
-import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js';
-import facebook from '@blotoutio/providers-facebook-sdk';
+import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js'
+import facebook from '@blotoutio/providers-facebook-sdk'
 
 export function initializeEdgeTag() {
   init({
     edgeURL: 'https://d.mysite.com',
-    providers: [facebook]
-  });
+    providers: [facebook],
+  })
 }
 
-export { tag, user, data, consent };
+export { tag, user, data, consent }
 ```
 
 ### Usage
 
 ```javascript
 // src/main.js
-import { initializeEdgeTag, tag, user } from './edgetag.js';
+import { initializeEdgeTag, tag, user } from './edgetag.js'
 
-initializeEdgeTag();
-tag('PageView');
-user('email', 'user@example.com');
+initializeEdgeTag()
+tag('PageView')
+user('email', 'user@example.com')
 ```
 
 ### Advantages
@@ -143,48 +146,48 @@ Queue events while offline, sync when back online.
 
 ```javascript
 // src/services/offline-sync.js
-import { init, tag } from '@blotoutio/edgetag-sdk-js';
+import { init, tag } from '@blotoutio/edgetag-sdk-js'
 
 class OfflineEventQueue {
   constructor() {
-    this.queue = JSON.parse(localStorage.getItem('edgetag-queue') || '[]');
-    this.listening = false;
+    this.queue = JSON.parse(localStorage.getItem('edgetag-queue') || '[]')
+    this.listening = false
   }
 
   addEvent(eventName, eventData) {
-    this.queue.push({ eventName, eventData, timestamp: Date.now() });
-    this.saveQueue();
+    this.queue.push({ eventName, eventData, timestamp: Date.now() })
+    this.saveQueue()
   }
 
   saveQueue() {
-    localStorage.setItem('edgetag-queue', JSON.stringify(this.queue));
+    localStorage.setItem('edgetag-queue', JSON.stringify(this.queue))
   }
 
   async syncQueue() {
-    if (!navigator.onLine || this.queue.length === 0) return;
+    if (!navigator.onLine || this.queue.length === 0) return
 
     init({
       edgeURL: 'https://d.mysite.com',
-      disableConsentCheck: true
-    });
+      disableConsentCheck: true,
+    })
 
     for (const event of this.queue) {
-      tag(event.eventName, event.eventData);
+      tag(event.eventName, event.eventData)
     }
 
-    this.queue = [];
-    this.saveQueue();
+    this.queue = []
+    this.saveQueue()
   }
 
   startListening() {
-    if (this.listening) return;
-    window.addEventListener('online', () => this.syncQueue());
-    if (navigator.onLine) this.syncQueue();
-    this.listening = true;
+    if (this.listening) return
+    window.addEventListener('online', () => this.syncQueue())
+    if (navigator.onLine) this.syncQueue()
+    this.listening = true
   }
 }
 
-export const offlineQueue = new OfflineEventQueue();
+export const offlineQueue = new OfflineEventQueue()
 ```
 
 ### Server-Side Event Tracking (HTTP API)
@@ -193,22 +196,32 @@ For Node.js/Express backends, use the HTTP API instead of the browser SDK:
 
 ```javascript
 // server/services/tracking.js
-import axios from 'axios';
+import axios from 'axios'
 
 export async function trackServerEvent(userId, eventName, eventData, edgeURL) {
   await axios.post(`${edgeURL}/tag`, {
-    userId, event: eventName, data: eventData, timestamp: Date.now()
-  });
+    userId,
+    event: eventName,
+    data: eventData,
+    timestamp: Date.now(),
+  })
 }
 
 // Usage in route handlers
 app.post('/api/checkout', async (req, res) => {
-  const order = await processOrder(req.body);
-  await trackServerEvent(res.locals.userId, 'Purchase', {
-    orderId: order.id, value: order.total, items: order.items
-  }, process.env.EDGE_URL);
-  res.json({ success: true, orderId: order.id });
-});
+  const order = await processOrder(req.body)
+  await trackServerEvent(
+    res.locals.userId,
+    'Purchase',
+    {
+      orderId: order.id,
+      value: order.total,
+      items: order.items,
+    },
+    process.env.EDGE_URL,
+  )
+  res.json({ success: true, orderId: order.id })
+})
 ```
 
 ---
@@ -223,18 +236,16 @@ See [platforms/patterns.md § Pattern 3: Server-Side Cookie Creation Code](../pl
 
 ## Quick Reference: Pattern Selection
 
-
-| Scenario             | Pattern                        | Complexity |
-| -------------------- | ------------------------------ | ---------- |
-| Modern SPA setup     | Pattern 1 (npm + Providers)    | Low        |
-| React app            | Pattern 2 (React)              | Medium     |
-| CMP integration      | Pattern 3 (Consent)            | Medium     |
-| Progressive capture  | Pattern 4 (Identity)           | Medium     |
-| Unload/exit tracking | Pattern 5 (Beacon)             | Low        |
-| Purchase/redirect    | Pattern 6 (Sync)               | Low        |
-| Offline support      | Pattern 7 (Offline)            | High       |
-| Server-side cookies  | Pattern 8 (Cookie)             | High       |
-
+| Scenario             | Pattern                     | Complexity |
+| -------------------- | --------------------------- | ---------- |
+| Modern SPA setup     | Pattern 1 (npm + Providers) | Low        |
+| React app            | Pattern 2 (React)           | Medium     |
+| CMP integration      | Pattern 3 (Consent)         | Medium     |
+| Progressive capture  | Pattern 4 (Identity)        | Medium     |
+| Unload/exit tracking | Pattern 5 (Beacon)          | Low        |
+| Purchase/redirect    | Pattern 6 (Sync)            | Low        |
+| Offline support      | Pattern 7 (Offline)         | High       |
+| Server-side cookies  | Pattern 8 (Cookie)          | High       |
 
 ---
 
@@ -250,4 +261,3 @@ See [platforms/patterns.md § Pattern 3: Server-Side Cookie Creation Code](../pl
 8. **Use beacon for unload** — standard fetch may not complete on page close
 9. **Use sync only for debugging** — verifies channel delivery but is significantly slower; do not use on pages that navigate away
 10. **Wrap in error boundary** — EdgeTag errors shouldn't crash your app
-

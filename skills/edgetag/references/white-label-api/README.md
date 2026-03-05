@@ -40,10 +40,10 @@ If you only need to **query data**, see the [MCP setup](../mcp/setup.md) or Edge
 
 ## Environments
 
-| Environment | App URL | API Base URL |
-|-------------|---------|--------------|
-| Sandbox | `https://app-sandbox.edgetag.io` | `https://api-sandbox.edgetag.io` |
-| Production | `https://app.edgetag.io` | `https://api.edgetag.io` |
+| Environment | App URL                          | API Base URL                     |
+| ----------- | -------------------------------- | -------------------------------- |
+| Sandbox     | `https://app-sandbox.edgetag.io` | `https://api-sandbox.edgetag.io` |
+| Production  | `https://app.edgetag.io`         | `https://api.edgetag.io`         |
 
 Always develop and test against sandbox first. Production requires a separate account.
 
@@ -51,10 +51,10 @@ Always develop and test against sandbox first. Production requires a separate ac
 
 All API requests require:
 
-| Header | Value | Description |
-|--------|-------|-------------|
-| `Authorization` | `Bearer {access_token}` | Access token (OAuth 2.0 or personal access token) |
-| `Team-Id` | `{team_id}` | The team scope for the request (not required for `GET /user/me`) |
+| Header          | Value                   | Description                                                      |
+| --------------- | ----------------------- | ---------------------------------------------------------------- |
+| `Authorization` | `Bearer {access_token}` | Access token (OAuth 2.0 or personal access token)                |
+| `Team-Id`       | `{team_id}`             | The team scope for the request (not required for `GET /user/me`) |
 
 There are two ways to authenticate:
 
@@ -73,6 +73,7 @@ See [api-reference.md](api-reference.md) § OAuth 2.0 for the full flow.
 Use your own EdgeTag account's access token directly. All customers are managed under your single account — no OAuth redirect needed.
 
 **When to use**:
+
 - Simpler integration — skip the OAuth flow entirely, just use your access token in API calls
 - Self-hosted deployments — required when deploying customers in your own Cloudflare account, since all domains must belong to a single account that owns the Cloudflare infrastructure
 
@@ -98,12 +99,14 @@ For OAuth, step 1 also requires creating an OAuth app first (see [api-reference.
 ## Hosting Models
 
 ### Managed (Recommended for white-label)
+
 - EdgeTag runs infrastructure on Blotout's Cloudflare account
 - Set `managed: true` and `hostId: ""` when creating tags
 - No Cloudflare account needed from your customers
 - Turnkey — EdgeTag handles all infrastructure
 
 ### Self-Hosted
+
 - Your customer's own Cloudflare account
 - Create a host in the EdgeTag dashboard first, then use the `hostId` when creating tags via API
 - Set `managed: false`
@@ -114,15 +117,19 @@ For OAuth, step 1 also requires creating an OAuth app first (see [api-reference.
 ## Key Concepts
 
 ### Tags (Websites/Domains)
+
 A **tag** represents a single website in EdgeTag. Creating a tag (`POST /tag`) generates a `tagId` and a first-party `domain` subdomain. All subsequent operations reference this `tagId`.
 
 ### Scripts (Channels)
+
 A **script** represents a channel integration (Meta CAPI, Google Ads, Klaviyo, etc.). Each channel is added via `POST /script` with a `providerId` identifying the platform and encrypted `secrets` for API credentials.
 
 ### Secret Encryption
+
 All channel credentials (API keys, tokens, pixels) must be **encrypted client-side** before sending to the API. EdgeTag uses hybrid AES + RSA encryption. See [api-reference.md](api-reference.md) § Secret Encryption.
 
 ### Deployments
+
 After adding or modifying channels, changes are deployed to the Cloudflare Workers infrastructure. Set `shouldDeploy: true` on channel creation to deploy immediately, or trigger deployment separately.
 
 ## Documentation Structure

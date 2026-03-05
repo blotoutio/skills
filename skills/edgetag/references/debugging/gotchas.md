@@ -29,10 +29,10 @@ Common mistakes to avoid during EdgeTag implementation and troubleshooting.
 **Fix:** Always check consent state first:
 
 ```javascript
-edgetag("getConsent", (consent, error, categories) => {
-  console.log("Provider consent:", consent);
-  console.log("Category consent:", categories);
-});
+edgetag('getConsent', (consent, error, categories) => {
+  console.log('Provider consent:', consent)
+  console.log('Category consent:', categories)
+})
 ```
 
 Grant all consent and retest. If it works with consent, the issue is consent — not event handling.
@@ -75,11 +75,11 @@ This means an AI assistant using Chrome MCP, a developer filtering Network tab b
 2. **Intercept `navigator.sendBeacon`** — Override the function to log calls:
 
 ```javascript
-const originalBeacon = navigator.sendBeacon.bind(navigator);
+const originalBeacon = navigator.sendBeacon.bind(navigator)
 navigator.sendBeacon = function (url, data) {
-  console.log("[EdgeTag Beacon]", url, JSON.parse(data));
-  return originalBeacon(url, data);
-};
+  console.log('[EdgeTag Beacon]', url, JSON.parse(data))
+  return originalBeacon(url, data)
+}
 ```
 
 3. **Chrome MCP / Puppeteer** — If using browser automation tools, you must intercept beacon calls via CDP (Chrome DevTools Protocol) network events or by injecting the override above before the page loads. The Performance Resource Timing API will not capture them.

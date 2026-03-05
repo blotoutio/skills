@@ -323,9 +323,11 @@ Recommended process for using Payload Validator.
 2. Click "Add Channel"
 3. Select "Payload Validator" from provider list
 4. Configure:
-  - Name: "QA - Payload Validator"
-  - Enabled: ON
-  - Save validation logs: ON
+
+- Name: "QA - Payload Validator"
+- Enabled: ON
+- Save validation logs: ON
+
 5. Verify it appears in channel list
 6. Fire test event
 7. Confirm event appears in Payload Validator
@@ -490,18 +492,25 @@ Recommended dashboard configuration for production monitoring.
 **Widgets to include:**
 
 1. Event Volume (last 24 hours)
-  - X-axis: time
-  - Y-axis: event count
-  - Alert threshold: 10% drop
+
+- X-axis: time
+- Y-axis: event count
+- Alert threshold: 10% drop
+
 2. Event Type Breakdown
-  - Line chart: % of each event type
-  - Watch for unexpected distributions
+
+- Line chart: % of each event type
+- Watch for unexpected distributions
+
 3. Error Rate
-  - Line graph: % of events with errors
-  - Alert threshold: > 5%
+
+- Line graph: % of events with errors
+- Alert threshold: > 5%
+
 4. Channel Delivery Rate
-  - Bar chart: delivery rate per channel
-  - Alert threshold: < 95%
+
+- Bar chart: delivery rate per channel
+- Alert threshold: < 95%
 
 ### Channel Performance Dashboard
 
@@ -510,14 +519,19 @@ Recommended dashboard configuration for production monitoring.
 **Widgets to include:**
 
 1. EMQ Score (Meta specific)
-  - Gauge: current score
-  - Trend: 7-day history
+
+- Gauge: current score
+- Trend: 7-day history
+
 2. Event Volume per Channel
-  - Bar chart: events delivered per channel
-  - Compare to expectations
+
+- Bar chart: events delivered per channel
+- Compare to expectations
+
 3. Channel Errors
-  - Table: error rate and messages per channel
-  - Identifies problematic channels
+
+- Table: error rate and messages per channel
+- Identifies problematic channels
 
 ### Data Quality Dashboard
 
@@ -526,16 +540,21 @@ Recommended dashboard configuration for production monitoring.
 **Widgets to include:**
 
 1. PII Coverage
-  - Metric: % of events with email
-  - Metric: % of events with phone
+
+- Metric: % of events with email
+- Metric: % of events with phone
+
 2. User Identity Metrics
-  - Metric: % of events with valid user_id
-  - Metric: % of events with email/phone combo
-  - Target: 100% valid user_id
+
+- Metric: % of events with valid user_id
+- Metric: % of events with email/phone combo
+- Target: 100% valid user_id
+
 3. Consent Compliance
-  - Metric: % of events respecting consent
-  - Metric: % of users with consent granted
-  - Target: 100% compliance
+
+- Metric: % of events respecting consent
+- Metric: % of users with consent granted
+- Target: 100% compliance
 
 ## Runbook Template
 
@@ -647,5 +666,3 @@ Level 4: [CEO/CTO if critical business impact]
 8. **Maintain runbook** - Keep procedures current
 9. **Test disaster recovery** - What if key component fails?
 10. **Review metrics weekly** - Catch issues early
-
-
