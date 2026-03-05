@@ -8,12 +8,12 @@ EdgeTag's MCP server provides access to ConsentIQ analytics, Edge Lake queries, 
 
 After connecting, these consent analytics tools are available:
 
-| Tool | Description |
-|------|-------------|
-| `consentIQOverview` | Total profiles, marketing opt-in/out by region, 24h changes |
-| `consentIQCategories` | Per-category consent breakdown by region over time |
+| Tool                  | Description                                                 |
+| --------------------- | ----------------------------------------------------------- |
+| `consentIQOverview`   | Total profiles, marketing opt-in/out by region, 24h changes |
+| `consentIQCategories` | Per-category consent breakdown by region over time          |
 
-The MCP server also exposes other tools (`me`, `domains`, `edgeLakeQuery`, `edgeLakeCodeQuery`, `domainAnalytics`, etc.).
+The MCP server also exposes other tools (`me`, `domains`, `domainAnalytics`, etc.).
 
 ## ConsentIQ Workflow
 

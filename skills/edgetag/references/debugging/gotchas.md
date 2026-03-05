@@ -27,12 +27,14 @@ Common mistakes to avoid during EdgeTag implementation and troubleshooting.
 **Impact:** Time wasted debugging the wrong thing.
 
 **Fix:** Always check consent state first:
+
 ```javascript
 edgetag("getConsent", (consent, error, categories) => {
   console.log("Provider consent:", consent);
   console.log("Category consent:", categories);
 });
 ```
+
 Grant all consent and retest. If it works with consent, the issue is consent — not event handling.
 
 ### Initializing Consent After EdgeTag
@@ -56,6 +58,7 @@ Grant all consent and retest. If it works with consent, the issue is consent —
 ### Beacon Requests Are Invisible to Standard Debugging Tools
 
 **Problem:** Events sent with `method: 'beacon'` (e.g., AddToCart before redirect, Purchase before navigation, page unload events) use `navigator.sendBeacon()`, which does NOT appear in:
+
 - Chrome DevTools Performance Resource Timing API
 - Standard XHR/Fetch network filters
 - Chrome MCP / Puppeteer resource timing captures
@@ -70,17 +73,18 @@ This means an AI assistant using Chrome MCP, a developer filtering Network tab b
 1. **Chrome DevTools Network tab** — beacon requests DO appear here, but only if you filter by **All** or **Ping** type (not XHR/Fetch). Look for requests with type "ping" to your edge domain.
 
 2. **Intercept `navigator.sendBeacon`** — Override the function to log calls:
+
 ```javascript
 const originalBeacon = navigator.sendBeacon.bind(navigator);
-navigator.sendBeacon = function(url, data) {
-  console.log('[EdgeTag Beacon]', url, JSON.parse(data));
+navigator.sendBeacon = function (url, data) {
+  console.log("[EdgeTag Beacon]", url, JSON.parse(data));
   return originalBeacon(url, data);
 };
 ```
 
 3. **Chrome MCP / Puppeteer** — If using browser automation tools, you must intercept beacon calls via CDP (Chrome DevTools Protocol) network events or by injecting the override above before the page loads. The Performance Resource Timing API will not capture them.
 
-4. **Server-side verification** — Check the EdgeTag dashboard or use `edgeLakeQuery` via MCP to verify the event was received, rather than relying on client-side network observation.
+4. **Server-side verification** — Check the EdgeTag dashboard or use `domainAnalytics` via MCP to verify the event was received, rather than relying on client-side network observation.
 
 **When to suspect this issue:** If events that fire during navigation (AddToCart → redirect to cart, Purchase → redirect to confirmation, page unload) appear missing in debugging but other non-navigation events work fine, the missing events are likely using beacon and your debugging tool isn't capturing them.
 
@@ -109,6 +113,7 @@ navigator.sendBeacon = function(url, data) {
 **Impact:** Server-side events not delivered, conversion tracking fails.
 
 **Fix:** Install provider packages for headless:
+
 ```bash
 # For Meta browser pixel
 npm install @blotoutio/providers-facebook-sdk
@@ -116,6 +121,7 @@ npm install @blotoutio/providers-facebook-sdk
 # For Google Ads browser pixel
 npm install @blotoutio/providers-google-ads-clicks-sdk
 ```
+
 Pass providers to `init()`: `init({ edgeURL: '...', providers: [facebook, googleAds] })`. Server-side delivery (Meta CAPI, Google) is handled by EdgeTag automatically — no extra packages needed. For the full list of available provider packages, see [Channel Reference](../channels/channel-reference.md).
 
 ### Not Testing Provider Credentials

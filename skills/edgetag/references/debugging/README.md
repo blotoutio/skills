@@ -43,6 +43,7 @@ Add the Chrome DevTools MCP server so the AI agent can see network requests, Jav
 ```
 
 **What the agent can do:**
+
 - See EdgeTag network requests to your edge domain (e.g., `d.mysite.com`)
 - Read JavaScript console errors and warnings
 - Verify event payloads are being sent correctly
@@ -93,6 +94,7 @@ Use the EdgeTag MCP logger tools for real-time visibility into how EdgeTag proce
 3. **`loggerStop`** — End session early and clear buffer.
 
 **What you can see:**
+
 - Events as they arrive at the EdgeTag edge
 - Per-channel outbound requests (what EdgeTag sends to Meta, Google, etc.)
 - Channel response bodies (success/error from each provider)
@@ -141,13 +143,14 @@ Use the EdgeTag MCP logger tools for real-time visibility into how EdgeTag proce
 
 When debugging event issues with an AI agent, combine all three layers for full visibility across the stack:
 
-| Layer | Tool | What It Shows |
-| --- | --- | --- |
-| **Client-side** | Chrome DevTools MCP | Network requests leaving the browser, console errors, page state. Note: beacon requests need interception (see gotchas.md). |
-| **Server-side (real-time)** | EdgeTag MCP Logger (`loggerStart` → `loggerMessages`) | Event processing, per-channel delivery requests/responses, payload parsing, consent enforcement, exceptions. |
-| **Historical** | EdgeTag MCP Analytics (`domainAnalytics`, `domainErrors`, `edgeLakeQuery`) | Event storage verification, error rates over time, channel delivery patterns. |
+| Layer                       | Tool                                                                                                         | What It Shows                                                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| **Client-side**             | Chrome DevTools MCP                                                                                          | Network requests leaving the browser, console errors, page state. Note: beacon requests need interception (see gotchas.md). |
+| **Server-side (real-time)** | EdgeTag MCP Logger (`loggerStart` → `loggerMessages`)                                                        | Event processing, per-channel delivery requests/responses, payload parsing, consent enforcement, exceptions.                |
+| **Historical**              | EdgeTag MCP Analytics (`domainAnalytics`, `domainErrors`, `domainAnalyticsProvider`, `domainAnalyticsEvent`) | Event storage verification, error rates over time, channel delivery patterns.                                               |
 
 **Typical flow:**
+
 1. Start the logger with relevant filters (e.g. `events: ["Purchase"]`, `status: "exception"`)
 2. Use Chrome DevTools MCP to trigger the action in the browser and confirm the request left
 3. Poll `loggerMessages` to see how EdgeTag processed it and what it sent to each channel
@@ -156,7 +159,6 @@ When debugging event issues with an AI agent, combine all three layers for full 
 See [mcp/setup.md](../mcp/setup.md) for MCP setup and tool details.
 
 ## Common Issues at a Glance
-
 
 | Symptom                                  | Likely Cause                                                         | Where to Check                                              |
 | ---------------------------------------- | -------------------------------------------------------------------- | ----------------------------------------------------------- |
@@ -168,7 +170,6 @@ See [mcp/setup.md](../mcp/setup.md) for MCP setup and tool details.
 | SSL certificate not issued               | CNAME not pointing correctly, DNS not propagated, waited < 24 hours  | Certificate status, DNS check, nslookup                     |
 | Consent not enforcing                    | Consent not initialized before tracking, provider misconfigured      | Consent dashboard, event payloads, tracking code order      |
 
-
 For detailed monitoring metrics and thresholds, see **patterns.md** → Monitoring Dashboards and Key Metrics sections.
 
 For validation workflows and QA checklists, see **patterns.md** → Pre-Launch Validation Workflow.
@@ -176,4 +177,3 @@ For validation workflows and QA checklists, see **patterns.md** → Pre-Launch V
 For step-by-step troubleshooting, see **troubleshooting-guide.md**.
 
 For common mistakes to avoid, see **gotchas.md**.
-

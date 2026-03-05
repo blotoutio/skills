@@ -61,7 +61,7 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 3. Browser opens the EdgeTag login page (`https://app.edgetag.io`)
 4. User authenticates with their EdgeTag account
 5. Callback returns tokens to the MCP client
-6. Connection is established — all 20 tools are now available
+6. Connection is established — all 22 tools are now available
 
 ## All Available Tools
 
@@ -80,6 +80,8 @@ Add to your Cursor MCP settings (`.cursor/mcp.json`):
 | --- | --- | --- |
 | `channel` | Get channel configuration, consent category, and geo region restrictions | `channelId` (uuid), `teamId` (uuid) |
 | `domainAnalytics` | Traffic analytics for a domain, split by event status, event name, and channel | `domainId` (uuid), `teamId` (uuid), `type` (enum: status/name/provider), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
+| `domainAnalyticsProvider` | Event breakdown for a specific channel. Given a provider name (e.g. "facebook", "klaviyo"), returns event counts (PageView, Purchase, etc.) over time. Use after `domainAnalytics` with `type: "provider"` to drill down | `domainId` (uuid), `teamId` (uuid), `provider` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
+| `domainAnalyticsEvent` | Channel breakdown for a specific event. Given an event name (e.g. "PageView", "Purchase"), returns counts per channel over time. Use after `domainAnalytics` with `type: "name"` to drill down | `domainId` (uuid), `teamId` (uuid), `event` (string), `range` (number), `rangeType` (enum: MINUTE/HOUR/DAY), `status` (number: 1=success, 0=error), `timezone` (IANA string) |
 | `domainErrors` | Error breakdown for a domain, grouped by channels and categories | `domainId` (uuid), `teamId` (uuid), `startDate` (ISO datetime), `endDate` (ISO datetime) |
 | `metaEMQ` | Facebook Event Match Quality (EMQ) score for the last 24 hours. Requires a channel with `providerId: "facebook"` | `channelId` (uuid), `teamId` (uuid) |
 
@@ -159,7 +161,7 @@ When debugging event issues, use all three layers together for full visibility:
 
 1. **Chrome DevTools MCP** (client-side) — See network requests, console errors, browser state. Confirms events are leaving the browser. Note: beacon requests need special handling (see debugging/gotchas.md).
 2. **Real-Time Logger** (`loggerStart` → `loggerMessages` → `loggerStop`) (server-side real-time) — See events as EdgeTag processes them: event parsing, channel delivery, errors, and per-channel request/response details. Filter by event name, status, path, or method.
-3. **Analytics & Edge Lake** (`domainAnalytics`, `domainErrors`, `edgeLakeQuery`) (historical) — Verify events were stored correctly, query patterns over time, check error rates and channel delivery.
+3. **Analytics & Edge Lake** (`domainAnalytics`, `domainAnalyticsProvider`, `domainAnalyticsEvent`, `domainErrors`, `edgeLakeQuery`) (historical) — Verify events were stored correctly, query patterns over time, check error rates and channel delivery.
 
 This three-layer approach catches issues at every stage: client → edge processing → data storage.
 

@@ -63,6 +63,12 @@ Additionally, **use the EdgeTag MCP** during planning to pull real channel data 
 
 See **[npm-sdk/patterns.md § Channel Discovery](references/npm-sdk/patterns.md)** for the full step-by-step workflow and the channel→npm package mapping table.
 
+## Fundamentals
+
+Core EdgeTag features that are essential for understanding event data and running meaningful analytics. Always consult these when analyzing event data — they explain what derived events mean and how to interpret them.
+
+- **[NC/RC: New Customer vs Returning Customer](references/fundamentals/nc-rc.md)** — Every `Purchase` is automatically classified as `Purchase_NC` (new customer) or `Purchase_RC` (returning customer) based on email history in the CRM. `Purchase = Purchase_NC + Purchase_RC`. Use this to analyze new customer acquisition, nCAC, and channel-level NC attribution.
+
 ## Quick Decision Trees
 
 ### "I need to install EdgeTag"
@@ -124,11 +130,11 @@ See **[npm-sdk/patterns.md § Channel Discovery](references/npm-sdk/patterns.md)
 ### "I need to use EdgeTag MCP"
 
 - Connect Claude Desktop / Cursor / Claude Code → See [mcp/setup.md](references/mcp/setup.md)
-- Query event data → Use `edgeLakeQuery` or `edgeLakeCodeQuery`
+- Query event detailed data → Use `edgeLakeQuery` or `edgeLakeCodeQuery`
 - Get consent analytics → Use `consentIQOverview` or `consentIQCategories`
 - Check Facebook EMQ → Use `metaEMQ`
 - Query user data → Use `domainIDGraph`
-- Get traffic analytics → Use `domainAnalytics` or `edgeLakeTrafficAnalysis`
+- Get traffic/event analytics → Use `domainAnalytics` or `edgeLakeTrafficAnalysis`
 
 ### "I need to build a white-label app / use the EdgeTag API programmatically"
 
@@ -168,6 +174,7 @@ See **[npm-sdk/patterns.md § Channel Discovery](references/npm-sdk/patterns.md)
 
 | Folder | README | API / Guide | Gotchas | Patterns |
 |--------|--------|-------------|---------|----------|
+| [fundamentals/](references/fundamentals/) | [Core features](references/fundamentals/README.md) | [NC/RC](references/fundamentals/nc-rc.md) | — | — |
 | [browser-sdk/](references/browser-sdk/) | [Overview & install](references/browser-sdk/README.md) | [API reference](references/browser-sdk/api-reference.md) | [Common mistakes](references/browser-sdk/gotchas.md) | [Best practices](references/browser-sdk/patterns.md) |
 | [npm-sdk/](references/npm-sdk/) | [Overview & install](references/npm-sdk/README.md) | [API reference](references/npm-sdk/api-reference.md) | [Common mistakes](references/npm-sdk/gotchas.md) | [Best practices](references/npm-sdk/patterns.md) |
 | [events/](references/events/) | [Events overview](references/events/README.md) | [Standard events](references/events/standard-events.md) | [Event pitfalls](references/events/gotchas.md) | [Tracking patterns](references/events/patterns.md) |

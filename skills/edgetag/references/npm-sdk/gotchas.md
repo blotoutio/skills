@@ -223,4 +223,3 @@ getData(["email", "phone", "firstName"], (data) => {
 - **Application → Cookies**: Look for `tag_user_id` first-party cookie
 - **Network tab**: Filter by your edge domain (e.g., `d.mysite.com`) to see requests
 - **Console**: Check for any EdgeTag errors or warnings
-
