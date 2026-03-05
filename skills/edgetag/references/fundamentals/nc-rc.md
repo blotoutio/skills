@@ -14,10 +14,12 @@ NC/RC is an EdgeTag plugin that automatically classifies every purchase as eithe
 
 For every `Purchase` event, EdgeTag fires one additional event:
 
-| Event | Meaning |
-|-------|---------|
+
+| Event         | Meaning                                                       |
+| ------------- | ------------------------------------------------------------- |
 | `Purchase_NC` | New Customer — first-time buyer, no previous purchase history |
-| `Purchase_RC` | Returning Customer — has at least one prior purchase |
+| `Purchase_RC` | Returning Customer — has at least one prior purchase          |
+
 
 **Key relationship:** `Purchase = Purchase_NC + Purchase_RC` (every purchase is exactly one or the other)
 
@@ -25,7 +27,6 @@ For every `Purchase` event, EdgeTag fires one additional event:
 
 - A CRM integration must be connected (Shopify, WooCommerce, BigCommerce, or Salesforce)
 - The NC/RC plugin must be enabled in the EdgeTag dashboard
-- Tags created after September 9th, 2025 have this plugin enabled by default
 
 ## Channel-Specific Setup
 
@@ -43,7 +44,7 @@ NC/RC enables brands to optimize ad spend for **new customer acquisition** rathe
 
 ## Analyzing NC/RC Data
 
-When querying event data (via MCP or Edge Lake), these patterns are useful:
+When querying event data via MCP, these patterns are useful:
 
 - **New customer rate:** `COUNT(Purchase_NC) / COUNT(Purchase)` — what percentage of purchases are first-time buyers
 - **NC vs RC revenue:** Compare `SUM(value)` for `Purchase_NC` vs `Purchase_RC` to understand revenue mix
@@ -52,7 +53,7 @@ When querying event data (via MCP or Edge Lake), these patterns are useful:
 
 ### Example: NC/RC Breakdown with MCP
 
-Use `domainAnalytics` to get an overview of Purchase, Purchase_NC, and Purchase_RC event counts. For deeper analysis, use `edgeLakeQuery` to query by time range, channel, or other dimensions.
+Use `domainAnalyticsProvider` to get an overview of Purchase, Purchase_NC, and Purchase_RC event counts. For deeper analysis, use `edgeLakeQuery` to get details like revenue.
 
 ## Related Feature: First Click (FC)
 
