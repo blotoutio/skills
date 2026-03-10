@@ -1,20 +1,16 @@
 ---
 name: edgetag
 description: |
-  Comprehensive EdgeTag (by Blotout) implementation skill covering the JavaScript SDK, server-side event tracking,
-  identity graph, consent management, channel integrations (Meta CAPI, Google Ads, TikTok, Klaviyo, 50+ more),
-  platform deployments (Shopify, WooCommerce, WordPress, Wix, React, Next.js), HTTP API, cross-domain identity
-  stitching, webhook ingestion, offline events, audience uploads, and data warehouse delivery.
+  EdgeTag (by Blotout) implementation skill covering JS SDK, server-side event tracking, identity graph, consent,
+  channel integrations (Meta CAPI, Google Ads, TikTok, Klaviyo, 50+ more), platform deployments (Shopify,
+  WooCommerce, WordPress, React, Next.js), HTTP API, cross-domain identity stitching, and white-label API.
 
-  Use this skill for ANY EdgeTag or Blotout implementation task — installing the SDK, sending events, configuring
-  consent, setting up channels, debugging event delivery, building identity graphs, cross-domain tracking,
-  webhook integrations, HTTP API calls, audience uploads, headless implementations, or building white-label
-  apps on top of the EdgeTag REST API.
+  Use for ANY EdgeTag/Blotout task: SDK install, events, consent, channels, debugging, identity, HTTP API,
+  audience uploads, headless implementations, or white-label apps.
 
-  Also use when the developer mentions: edgetag, blotout, @blotoutio, server-side tagging, first-party data
-  infrastructure, CAPI, conversion API, event match quality, EMQ, identity stitching, tag_user_id, et_uid, edge tagging,
-  first-party cookie, server-side pixel, signal recovery, edgetag-sdk-js, white-label edgetag, edgetag API,
-  edgetag oauth, or programmatic edgetag setup.
+  Trigger keywords: edgetag, blotout, @blotoutio, server-side tagging, first-party data, CAPI, conversion API,
+  EMQ, identity stitching, tag_user_id, et_uid, first-party cookie, server-side pixel, signal recovery,
+  edgetag-sdk-js, white-label edgetag, edgetag API, edgetag oauth.
 ---
 
 # EdgeTag Implementation Skill
