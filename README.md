@@ -103,6 +103,10 @@ Cloudflare Workers architecture, DNS/CNAME setup, managed vs self-hosted deploym
 
 Browser dev tools, Payload Validator channel, live logs, EMQ scoring, troubleshooting guides, and QA checklists.
 
+### Playground
+
+Custom code inside the EdgeTag ecosystem. **Destination Playground** lets you build new channels from scratch — outbound HTTP, identity-graph access, D1/KV/R2 bindings, cron jobs, and first-party API endpoints on your domain. **Transformation Playground** reshapes events flowing through existing channels — drop, enrich, rename, fan out, or hash PII uniformly. Code runs on Cloudflare Workers and in the browser, with built-in simulation against sample events.
+
 ## Support
 
 - **Email**: [support@blotout.io](mailto:support@blotout.io)

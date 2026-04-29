@@ -22,6 +22,7 @@ Your knowledge of EdgeTag APIs may be outdated. Always retrieve current document
 - **npm**: `import { init, tag, user, data, consent } from '@blotoutio/edgetag-sdk-js'`
 - **HTTP API**: GET `/tag` (events), POST `/data` (user enrichment)
 - **Script URL**: `https://d.yourdomain.com/load` (NOT track.js)
+- **Playground**: write custom Destination (new channels) or Transformation (reshape existing events) code; see `skills/edgetag/references/playground/`
 
 ## Docs
 

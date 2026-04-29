@@ -10,7 +10,8 @@ description: |
 
   Trigger keywords: edgetag, blotout, @blotoutio, server-side tagging, first-party data, CAPI, conversion API,
   EMQ, identity stitching, tag_user_id, et_uid, first-party cookie, server-side pixel, signal recovery,
-  edgetag-sdk-js, white-label edgetag, edgetag API, edgetag oauth.
+  edgetag-sdk-js, white-label edgetag, edgetag API, edgetag oauth, playground, destination playground,
+  transformation playground, custom channel, custom destination, event transformation, event plugin.
 ---
 
 # EdgeTag Implementation Skill
@@ -155,6 +156,16 @@ Core EdgeTag features that are essential for understanding event data and runnin
 - QA test cases checklist → See [debugging/troubleshooting-guide.md](references/debugging/troubleshooting-guide.md) § QA Test Cases
 - Implementation checklist → See [debugging/patterns.md](references/debugging/patterns.md)
 
+### "I need to write custom code in EdgeTag (Playground)"
+
+- Overview / when to use → See [playground/README.md](references/playground/README.md)
+- Build a new channel from scratch → See [playground/destination/README.md](references/playground/destination/README.md)
+- Modify events in existing channels → See [playground/transformation/README.md](references/playground/transformation/README.md)
+- Available `params.*` APIs (Destination) → See [playground/destination/api-reference.md](references/playground/destination/api-reference.md)
+- Available `params.*` APIs (Transformation) → See [playground/transformation/api-reference.md](references/playground/transformation/api-reference.md)
+- Common mistakes → See [playground/destination/gotchas.md](references/playground/destination/gotchas.md) or [playground/transformation/gotchas.md](references/playground/transformation/gotchas.md)
+- Code examples → See [playground/destination/patterns.md](references/playground/destination/patterns.md) or [playground/transformation/patterns.md](references/playground/transformation/patterns.md)
+
 ### "I need infrastructure / DNS setup"
 
 - Onboarding flow → See [infrastructure/setup-guide.md](references/infrastructure/setup-guide.md)
@@ -168,22 +179,25 @@ Core EdgeTag features that are essential for understanding event data and runnin
 
 ## Reference Folder Index
 
-| Folder                                          | README                                                       | API / Guide                                                      | Gotchas                                                | Patterns                                                       |
-| ----------------------------------------------- | ------------------------------------------------------------ | ---------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------- |
-| [fundamentals/](references/fundamentals/)       | [Core features](references/fundamentals/README.md)           | [NC/RC](references/fundamentals/nc-rc.md)                        | —                                                      | —                                                              |
-| [browser-sdk/](references/browser-sdk/)         | [Overview & install](references/browser-sdk/README.md)       | [API reference](references/browser-sdk/api-reference.md)         | [Common mistakes](references/browser-sdk/gotchas.md)   | [Best practices](references/browser-sdk/patterns.md)           |
-| [npm-sdk/](references/npm-sdk/)                 | [Overview & install](references/npm-sdk/README.md)           | [API reference](references/npm-sdk/api-reference.md)             | [Common mistakes](references/npm-sdk/gotchas.md)       | [Best practices](references/npm-sdk/patterns.md)               |
-| [events/](references/events/)                   | [Events overview](references/events/README.md)               | [Standard events](references/events/standard-events.md)          | [Event pitfalls](references/events/gotchas.md)         | [Tracking patterns](references/events/patterns.md)             |
-| [identity/](references/identity/)               | [Identity system](references/identity/README.md)             | [Identity APIs](references/identity/api-reference.md)            | [Identity pitfalls](references/identity/gotchas.md)    | [Identity patterns](references/identity/patterns.md)           |
-| [consent/](references/consent/)                 | [Consent system](references/consent/README.md)               | [Consent APIs](references/consent/api-reference.md)              | [Consent pitfalls](references/consent/gotchas.md)      | [CMP integrations](references/consent/patterns.md)             |
-| [channels/](references/channels/)               | [Channels overview](references/channels/README.md)           | [Channel reference](references/channels/channel-reference.md)    | [Channel pitfalls](references/channels/gotchas.md)     | [Channel patterns](references/channels/patterns.md)            |
-| [platforms/](references/platforms/)             | [Platform overview](references/platforms/README.md)          | [Platform guides](references/platforms/platform-guides.md)       | [Platform pitfalls](references/platforms/gotchas.md)   | [Platform patterns](references/platforms/patterns.md)          |
-| [http-api/](references/http-api/)               | [HTTP API overview](references/http-api/README.md)           | [API reference](references/http-api/api-reference.md)            | [API pitfalls](references/http-api/gotchas.md)         | [Integration patterns](references/http-api/patterns.md)        |
-| [infrastructure/](references/infrastructure/)   | [Architecture](references/infrastructure/README.md)          | [Setup guide](references/infrastructure/setup-guide.md)          | [Setup pitfalls](references/infrastructure/gotchas.md) | [DNS & hosting](references/infrastructure/patterns.md)         |
-| [white-label-api/](references/white-label-api/) | [White-label overview](references/white-label-api/README.md) | [API reference](references/white-label-api/api-reference.md)     | [API pitfalls](references/white-label-api/gotchas.md)  | [Integration patterns](references/white-label-api/patterns.md) |
-| [debugging/](references/debugging/)             | [Debug tools](references/debugging/README.md)                | [Troubleshooting](references/debugging/troubleshooting-guide.md) | [Debug pitfalls](references/debugging/gotchas.md)      | [QA workflows](references/debugging/patterns.md)               |
-| [mcp/](references/mcp/)                         | —                                                            | [MCP Setup](references/mcp/setup.md)                             | —                                                      | —                                                              |
-| [pr/](references/pr/)                           | [Product reference](references/pr/README.md)                 | —                                                                | —                                                      | —                                                              |
+| Folder                                                              | README                                                                    | API / Guide                                                            | Gotchas                                                    | Patterns                                                       |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------- |
+| [fundamentals/](references/fundamentals/)                           | [Core features](references/fundamentals/README.md)                        | [NC/RC](references/fundamentals/nc-rc.md)                              | —                                                          | —                                                              |
+| [browser-sdk/](references/browser-sdk/)                             | [Overview & install](references/browser-sdk/README.md)                    | [API reference](references/browser-sdk/api-reference.md)               | [Common mistakes](references/browser-sdk/gotchas.md)       | [Best practices](references/browser-sdk/patterns.md)           |
+| [npm-sdk/](references/npm-sdk/)                                     | [Overview & install](references/npm-sdk/README.md)                        | [API reference](references/npm-sdk/api-reference.md)                   | [Common mistakes](references/npm-sdk/gotchas.md)           | [Best practices](references/npm-sdk/patterns.md)               |
+| [events/](references/events/)                                       | [Events overview](references/events/README.md)                            | [Standard events](references/events/standard-events.md)                | [Event pitfalls](references/events/gotchas.md)             | [Tracking patterns](references/events/patterns.md)             |
+| [identity/](references/identity/)                                   | [Identity system](references/identity/README.md)                          | [Identity APIs](references/identity/api-reference.md)                  | [Identity pitfalls](references/identity/gotchas.md)        | [Identity patterns](references/identity/patterns.md)           |
+| [consent/](references/consent/)                                     | [Consent system](references/consent/README.md)                            | [Consent APIs](references/consent/api-reference.md)                    | [Consent pitfalls](references/consent/gotchas.md)          | [CMP integrations](references/consent/patterns.md)             |
+| [channels/](references/channels/)                                   | [Channels overview](references/channels/README.md)                        | [Channel reference](references/channels/channel-reference.md)          | [Channel pitfalls](references/channels/gotchas.md)         | [Channel patterns](references/channels/patterns.md)            |
+| [platforms/](references/platforms/)                                 | [Platform overview](references/platforms/README.md)                       | [Platform guides](references/platforms/platform-guides.md)             | [Platform pitfalls](references/platforms/gotchas.md)       | [Platform patterns](references/platforms/patterns.md)          |
+| [http-api/](references/http-api/)                                   | [HTTP API overview](references/http-api/README.md)                        | [API reference](references/http-api/api-reference.md)                  | [API pitfalls](references/http-api/gotchas.md)             | [Integration patterns](references/http-api/patterns.md)        |
+| [infrastructure/](references/infrastructure/)                       | [Architecture](references/infrastructure/README.md)                       | [Setup guide](references/infrastructure/setup-guide.md)                | [Setup pitfalls](references/infrastructure/gotchas.md)     | [DNS & hosting](references/infrastructure/patterns.md)         |
+| [white-label-api/](references/white-label-api/)                     | [White-label overview](references/white-label-api/README.md)              | [API reference](references/white-label-api/api-reference.md)           | [API pitfalls](references/white-label-api/gotchas.md)      | [Integration patterns](references/white-label-api/patterns.md) |
+| [debugging/](references/debugging/)                                 | [Debug tools](references/debugging/README.md)                             | [Troubleshooting](references/debugging/troubleshooting-guide.md)       | [Debug pitfalls](references/debugging/gotchas.md)          | [QA workflows](references/debugging/patterns.md)               |
+| [mcp/](references/mcp/)                                             | —                                                                         | [MCP Setup](references/mcp/setup.md)                                   | —                                                          | —                                                              |
+| [pr/](references/pr/)                                               | [Product reference](references/pr/README.md)                              | —                                                                      | —                                                          | —                                                              |
+| [playground/](references/playground/)                               | [Playground overview](references/playground/README.md)                    | —                                                                      | —                                                          | —                                                              |
+| [playground/destination/](references/playground/destination/)       | [Destination overview](references/playground/destination/README.md)       | [API reference](references/playground/destination/api-reference.md)    | [Gotchas](references/playground/destination/gotchas.md)    | [Patterns](references/playground/destination/patterns.md)      |
+| [playground/transformation/](references/playground/transformation/) | [Transformation overview](references/playground/transformation/README.md) | [API reference](references/playground/transformation/api-reference.md) | [Gotchas](references/playground/transformation/gotchas.md) | [Patterns](references/playground/transformation/patterns.md)   |
 
 ## Key Principles for Implementation
 

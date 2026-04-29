@@ -1,6 +1,6 @@
 {
   "name": "edgetag",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Skills for EdgeTag by Blotout: server-side tracking, first-party data infrastructure, identity stitching, consent management, and 50+ channel integrations",
   "author": {
     "name": "Blotout",
