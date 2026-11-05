@@ -1,0 +1,37 @@
+---
+description: All UI development (components, pages, layouts, forms, styling, UI bug fixes, UI reviews) in projects whose package.json depends on @blotoutio/design-system, or when the developer asks to adopt it. Build, design and migrate React UI with Blotout design system components and tokens.
+alwaysApply: false
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.css"
+---
+
+# Blotout Design System
+
+Applies to every piece of UI work (a component, a page, a style tweak, a UI bug fix) when `package.json` depends on `@blotoutio/design-system`, or when the developer asks to adopt it. Otherwise ignore this rule.
+
+If the `design-system` skill is installed, follow it. This rule is the short version.
+
+## Rules
+
+- Every component and icon comes from `@blotoutio/design-system`. No shadcn copies, Radix, `@base-ui/react` directly, MUI, AntD, Chakra, `lucide-react` or `sonner`.
+- Tokens only: `bg-background`, `bg-card`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `rounded-lg`. Status goes through `Badge` / `Alert` / `Banner` variants (by meaning), not status text tokens. No hex, no `bg-blue-500`, no `p-[13px]`, no inline colour/spacing styles.
+- Check props in https://design.blotout.io/api.md. Examples in https://design.blotout.io/llms-full.txt can be stale; api.md wins.
+- One `Button variant='default'` per view; others `outline`/`ghost`. Destructive actions confirm with `AlertDialog`. Results → `toast()` with `<Toaster />` at the root.
+
+## Base UI pitfalls (shadcn habits that break)
+
+1. `render={<Button />}`, never `asChild`. `Button` as a link: `nativeButton={false} render={<Link />}`.
+2. Menu and command items use `onClick`; `onSelect` compiles but never fires.
+3. `Select` needs `items` or the trigger shows raw values.
+4. Errors: `<Field invalid={!!e}>` + `<FieldError match={!!e}>{e}</FieldError>`; without `match` the text never shows. `FieldGroup` is side-by-side columns; stack fields with `flex flex-col gap-4`.
+5. Accordion/ToggleGroup: no `type`; values are arrays. Tabs style variant goes on `TabsList`. `CollapsibleContent` → `CollapsiblePanel`. Sheet → `Drawer direction`.
+6. Toast: `toast.success({ title, description })`, `timeout` not `duration`, no `type` option.
+7. Compiles but renders wrong: `AlertDialogHeader` needs `AlertDialogText` around title + description; `NavbarBrand` is a 36px logo slot (no text); DataTable columns via `col.columns([...])` without a type annotation; RadioCard/CheckboxCard/SwitchCard take no children; MetricText percent takes 12.6 not 0.126; `PaginationRange`/`PaginationControls` render nothing outside `Pagination`.
+
+## Docs
+
+- Storybook: https://design.blotout.io
+- Index: https://design.blotout.io/llms.txt
+- API: https://design.blotout.io/api.md
