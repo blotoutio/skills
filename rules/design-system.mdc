@@ -19,6 +19,8 @@ If the `design-system` skill is installed, follow it. This rule is the short ver
 - Tokens only: `bg-background`, `bg-card`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `rounded-lg`. Status goes through `Badge` / `Alert` / `Banner` variants (by meaning), not status text tokens. No hex, no `bg-blue-500`, no `p-[13px]`, no inline colour/spacing styles.
 - Check props in https://design.blotout.io/api.md. Examples in https://design.blotout.io/llms-full.txt can be stale; api.md wins.
 - One `Button variant='default'` per view; others `outline`/`ghost`. Destructive actions confirm with `AlertDialog`. Results → `toast()` with `<Toaster />` at the root.
+- Tables are borderless (no `Card` wrapper; `<Table bordered>` only when asked; not in DS 0.1.0, so there use a `rounded-lg border border-border` wrapper + `TODO(design-system)`). Row actions are icon-only `Button variant='link' size='icon-sm'` with `aria-label` + `Tooltip`; text labels only when asked; all actions inline, overflow menu only when asked or more than four.
+- Settings / configuration pages are a stack of section rows, not titled cards: `<section className="flex flex-col gap-4 border-b py-6 last:border-b-0 lg:flex-row lg:gap-8">`, title + description left (`w-full lg:w-75 lg:shrink-0`), headerless `<Card className="flex-1 gap-4 p-4 md:p-6">` right, save button `w-full md:w-auto md:self-end`. Code-only section: code block on the right without a Card.
 
 ## Base UI pitfalls (shadcn habits that break)
 

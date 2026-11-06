@@ -43,8 +43,8 @@ for code too (then continue in BUILD).
   (`CardTitle render={<h2 />}`).
 - **Page header:** breadcrumb (when nested), title (`text-2xl font-semibold tracking-tight`), one-line
   description in `text-muted-foreground`, actions on the right (primary last).
-- **Content width:** dashboards and tables `max-w-screen-xl`; forms and settings `max-w-3xl`; reading
-  `max-w-prose`. A mixed page (settings plus a table or card grid) takes the width of its widest
+- **Content width:** dashboards and tables `max-w-screen-xl`; settings and configuration pages
+  (section rows, below) `max-w-5xl`; a standalone form `max-w-3xl`; reading `max-w-prose`. A mixed page (settings plus a table or card grid) takes the width of its widest
   region. Left-aligned within the content area (no `mx-auto`). Don't centre app pages in the viewport
   (exception: auth pages, a single centred `Card`; see [build.md](build.md)).
 - **Grids:** KPI tiles `sm:grid-cols-2 lg:grid-cols-4`; card grids `md:grid-cols-2 xl:grid-cols-3`;
@@ -83,12 +83,57 @@ for code too (then continue in BUILD).
 - Status: `Badge` variants with a fixed meaning: `success` healthy/done, `alert` needs attention,
   `destructive` failed/blocked, `rest` inactive/neutral, `secondary` informational.
 
+## Tables
+
+- **Borderless by default.** Don't wrap a table in a `Card` and don't set `bordered`. Use
+  `<Table bordered>` only when the design or the developer asks for a bordered table. `bordered`
+  isn't in 0.1.0: if the installed types don't have it, wrap the table in
+  `<div className='overflow-hidden rounded-lg border border-border'>`, mark it
+  `TODO(design-system): Table bordered`, and report it as a version gap.
+- **Row actions are `link` buttons.** Use `Button variant='link'`, not `outline` or `ghost`, for
+  actions in a row.
+- **Icons over text.** Row actions are icon-only by default:
+  `<Button variant='link' size='icon-sm' aria-label='Retry'>` wrapping a DS icon, with a `Tooltip`
+  that names the action. Use text labels (`<Button variant='link' size='sm'>Retry</Button>`) only
+  when asked. Keep every row action inline, destructive ones included (four is fine). Use the
+  `DataTableRowActions` overflow menu only when asked, or when there are more than four actions.
+  Then the most used actions stay inline.
+- A destructive row action follows the same rule: an icon `link` button that opens an `AlertDialog`,
+  and only the dialog's confirming action is `destructive`.
+
+## Settings and configuration pages
+
+A settings or configuration page is a stack of sections, never a stack of titled cards.
+
+**Layout**
+
+- Each section is a row. The title and description sit on the left, 300px wide and fixed
+  (`lg:w-75`). The content sits on the right and fills the rest. The two are 32px apart (`lg:gap-8`).
+- Sections are separated by a 1px `border-b` with 24px vertical padding (`py-6`). The last section
+  has no border (`last:border-b-0`).
+- The right side is a `Card` (24px padding, 16px gap: `gap-4 p-4 md:p-6`) with no `CardHeader`,
+  `CardTitle` or `CardFooter`. The left side is the section's heading (`<h2>`).
+- If a section holds only code snippets, skip the `Card` and place the code block directly on the
+  right. Mixed code and controls go back in a `Card`.
+- A section's save button sits at the bottom right of its card, default size, never full width
+  (`md:w-auto md:self-end`).
+
+**Responsive**
+
+- Below 1024px (`lg`), the title and description move above the content. Both are full width and
+  16px apart (`gap-4`).
+- Below 768px (`md`), card padding drops to 16px (`p-4`), fields go one per row, and the save button
+  goes full width (`w-full`).
+
+The markup is in [build.md](build.md) under "Settings / configuration page".
+
 ## Forms
 
 - One column. Label above the control. Help text under it in `FieldDescription`; error replaces or
   follows it in `FieldError`.
 - Stack fields with `flex flex-col gap-4`; put a pair side by side (first/last name) with `FieldGroup`;
-  split long forms into `Card` sections with a title each.
+  split long forms into sections. On a settings page, use the section rows under "Settings and
+  configuration pages", not a `Card` with a title per section.
 - Primary submit at the end, aligned end, with `loading` while submitting; secondary "Cancel" as
   `outline`/`ghost` before it.
 - Validate on blur or submit, not on every keystroke. Keep what the user typed after an error.

@@ -96,16 +96,53 @@ in the page header actions (controlled pattern in gotchas). Charts: `Chart` if t
 exports it. Otherwise a placeholder `Card` (dashed border, muted text, `TODO(design-system): Chart`)
 unless the app already has a chart library; don't add a chart library without asking the developer.
 
-### Settings / form page
+### Settings / configuration page
 
-`max-w-3xl`. One `Card` per settings group with `CardHeader` (title + description), `CardContent`
-holding the fields in a `flex flex-col gap-4` stack (`FieldGroup` only for
-side-by-side pairs like first/last name), and `CardFooter` with the save `Button` aligned end. Instant toggles use
-`Switch` and save on change with a toast; forms with several fields save on submit.
+`max-w-5xl`. The page is a stack of section rows, never stacked titled cards. The rules are in
+[design-philosophy.md](design-philosophy.md) under "Settings and configuration pages".
+
+```tsx
+<div className="flex flex-col">
+  <section
+    aria-labelledby="general-title"
+    className="flex flex-col gap-4 border-b border-border py-6 last:border-b-0 lg:flex-row lg:gap-8"
+  >
+    <div className="flex w-full flex-col gap-1 lg:w-75 lg:shrink-0">
+      <h2 id="general-title" className="text-base font-medium">
+        General
+      </h2>
+      <p className="text-sm text-muted-foreground">
+        Name and contact details for this workspace.
+      </p>
+    </div>
+    <Card className="flex-1 gap-4 p-4 md:p-6">
+      {/* fields, one per row; a pair side by side only from md: */}
+      <div className="grid gap-4 md:grid-cols-2">…</div>
+      <Button className="w-full md:w-auto md:self-end">Save changes</Button>
+    </Card>
+    {/* code-only section: <div className="min-w-0 flex-1">…code block…</div> instead of the Card */}
+  </section>
+</div>
+```
+
+- Put fields straight in the `Card`: no `CardHeader`, `CardContent` or `CardFooter` (the left
+  column is the heading). Padding and gap on this `Card` are layout classes, so they're allowed.
+- `lg:w-75` is 300px on the standard scale; don't write `lg:w-[300px]` (the scanner flags it).
+- Fields stack one per row (`flex flex-col gap-4`, or the `Card`'s own gap). A pair side by side
+  (first/last name) is `grid gap-4 md:grid-cols-2`, so it collapses to one column below 768px.
+- Instant toggles use `Switch`, save on change and confirm with a toast. That section has no save
+  button. Sections with several fields save on submit, each with its own save button.
+- Code blocks: monospace on `bg-muted`, with a copy button (compose: gotchas).
+
+A standalone form that isn't a settings page (create project, invite user) stays one `Card` with
+`CardHeader`, `CardContent` and `CardFooter`, at `max-w-3xl`.
 
 ### List / table page
 
-Header with title + primary action, then one `Card` (or bare) holding the table. Which table:
+Header with title + primary action, then the table, bare: no `Card` wrapper and no `bordered`
+unless the design asks for a bordered table. Row actions are icon-only `Button variant='link'`
+buttons with `aria-label` and a `Tooltip`. Use text labels only when asked (see design-philosophy.md
+"Tables"). Which table:
 
 - Rows the user selects (bulk actions) or sorts and filters by column, client-side data: `DataTable`
   with its toolbar search and filters.
@@ -113,8 +150,9 @@ Header with title + primary action, then one `Card` (or bare) holding the table.
   `InputGroup` search above it. DataTable's footer always shows "0 of N row(s) selected" (see gotchas).
 - Server-side pagination or sorting: `Table` family + `Pagination` (DataTable is client-side only).
 
-`DataTable` has no row-click handler: put a link in the name cell (to a detail page) or a
-`DataTableRowActions` menu / button cell that opens a `Drawer`.
+`DataTable` has no row-click handler. Put a link in the name cell (to a detail page), or an
+actions cell of icon `link` buttons, one of which can open a `Drawer`. Use the
+`DataTableRowActions` menu only when asked or for more than four actions.
 
 ### Detail page
 

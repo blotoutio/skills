@@ -75,7 +75,8 @@ Tie-breakers:
    the developer asks), look at the page (verification.md step 3).
 
 5. **Don't restyle DS components.** No `className` overrides of their colour, height, radius or font.
-   Layout classes on them (`w-full`, `col-span-2`, `self-end`) are fine.
+   Layout classes on them (`w-full`, `col-span-2`, `self-end`, and padding/gap on a settings-section
+   `Card`) are fine.
 6. **Accessible by default.** Every control has a label (`Field` + `FieldLabel`, or `aria-label`),
    icon-only buttons have `aria-label`, dialogs have a title.
 7. **Stay in scope.** Change only what the task needs. Don't edit files under `node_modules` or
