@@ -59,11 +59,22 @@ Clone this repo and copy the skill folders into the appropriate directory for yo
 
 Skills are contextual and auto-loaded based on your conversation. When a request matches a skill's triggers, the agent loads and applies the relevant skill to provide accurate, up-to-date guidance.
 
-| Skill     | Useful for                                                                                                                                                                                                                                                                                                |
-| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| edgetag   | Comprehensive EdgeTag skill covering the JS SDK, server-side event tracking, identity graph, consent management, 50+ channel integrations (Meta CAPI, Google Ads, TikTok, Klaviyo), platform deployments (Shopify, WooCommerce, React, Next.js), HTTP API, cross-domain identity stitching, and debugging |
-| consentiq | Consent analytics and compliance monitoring — marketing opt-in/opt-out rates, per-category breakdown, regional analysis (EU, UK, CA), and consent trends over time                                                                                                                                        |
-| edge-lake | Querying event data via SQL on Cloudflare R2, funnel analysis, attribution reporting, revenue trends, traffic analysis, bot detection, and WAF attack analysis                                                                                                                                            |
+| Skill         | Useful for                                                                                                                                                                                                                                                                                                |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| edgetag       | Comprehensive EdgeTag skill covering the JS SDK, server-side event tracking, identity graph, consent management, 50+ channel integrations (Meta CAPI, Google Ads, TikTok, Klaviyo), platform deployments (Shopify, WooCommerce, React, Next.js), HTTP API, cross-domain identity stitching, and debugging |
+| consentiq     | Consent analytics and compliance monitoring — marketing opt-in/opt-out rates, per-category breakdown, regional analysis (EU, UK, CA), and consent trends over time                                                                                                                                        |
+| edge-lake     | Querying event data via SQL on Cloudflare R2, funnel analysis, attribution reporting, revenue trends, traffic analysis, bot detection, and WAF attack analysis                                                                                                                                            |
+| design-system | Build, design and migrate Blotout app UI with `@blotoutio/design-system` (React 19, Tailwind CSS v4, Base UI). Picks up all UI work (components, pages, styling, UI fixes) in projects that depend on the package. Storybook: https://design.blotout.io                                                   |
+
+### Using `design-system` in a Blotout app
+
+Agents choose skills from the request text alone, before they read `package.json`, so a plain request like "add a settings page" often won't load the skill. Add this line to the app's `CLAUDE.md` (or `AGENTS.md`) so every UI task uses it:
+
+```md
+UI: this app uses @blotoutio/design-system. For any UI work (components, pages, layouts, styling, UI bug fixes, UI reviews), use the design-system skill first.
+```
+
+In trigger tests on a sample app, 3 of 10 UI requests loaded the skill without this line, and 10 of 10 with it. Non-UI requests (tests, API routes, EdgeTag tracking, SQL, CI) didn't load it either way. Cursor picks up `rules/design-system.mdc` from the `.tsx`, `.jsx` and `.css` globs.
 
 ## What's Covered
 

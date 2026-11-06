@@ -1,0 +1,34 @@
+import { Badge, Button, Card, CardContent, CardHeader, CardTitle, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, Field, FieldError, FieldLabel, Checkbox, Input, MoreHorizontalIcon } from '@blotoutio/design-system'
+
+export function Good({ error, onEdit, size, i }: { error?: string; onEdit: () => void; size: 'sm' | 'lg'; i: number }) {
+  return (
+    <div className='grid grid-cols-[1fr_auto] gap-4 p-4 md:p-6 data-[state=open]:bg-muted [&>svg]:size-4 w-[calc(100%-2rem)] max-w-(--container-navbar)'>
+      <a href='#top' className='text-muted-foreground'>Top</a>
+      <Card>
+        <CardHeader><CardTitle render={<h2 />}>Members</CardTitle></CardHeader>
+        <CardContent className='flex flex-col gap-4'>
+          <Field invalid={!!error}>
+            <FieldLabel>Email</FieldLabel>
+            <Input type='email' />
+            <FieldError match={!!error}>{error}</FieldError>
+          </Field>
+          <Field className='flex-row items-center gap-2'><Checkbox /><FieldLabel>Email me updates</FieldLabel></Field>
+          <input type='hidden' name='csrf' value='x' />
+          {/* <button>old</button> */}
+          <span className={`text-${size}`} style={{ background: `var(--chart-${i})` }} />
+          <Button nativeButton={false} render={<a href='/docs' />}>Docs</Button>
+          <Badge variant='success'>Active</Badge>
+          <DropdownMenu>
+            <DropdownMenuTrigger render={<Button variant='ghost' size='icon' aria-label='More' />}>
+              <MoreHorizontalIcon />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuItem onClick={onEdit}>Edit</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div className='h-[600px]'>{/* ds-allow: fixed-height third-party embed */}</div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}

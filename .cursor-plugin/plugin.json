@@ -1,7 +1,7 @@
 {
   "name": "edgetag",
-  "version": "1.0.1",
-  "description": "Skills for EdgeTag by Blotout: server-side tracking, first-party data infrastructure, identity stitching, consent management, and 50+ channel integrations",
+  "version": "1.1.0",
+  "description": "Skills for EdgeTag by Blotout: server-side tracking, first-party data infrastructure, identity stitching, consent management, and 50+ channel integrations, and UI design system usage (build, design and migrate app UI with @blotoutio/design-system)",
   "author": {
     "name": "Blotout",
     "email": "support@blotout.io",
@@ -21,6 +21,12 @@
     "tiktok",
     "klaviyo",
     "shopify",
-    "tracking"
+    "tracking",
+    "design-system",
+    "react",
+    "tailwind",
+    "ui",
+    "base-ui",
+    "migration"
   ]
 }

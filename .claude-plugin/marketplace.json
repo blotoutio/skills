@@ -9,7 +9,7 @@
     {
       "name": "blotout",
       "source": "./",
-      "description": "Skills for Blotout EdgeTag: server-side tracking, first-party data infrastructure, identity stitching, 50+ channel integrations, consent analytics (ConsentIQ), and event data lake with SQL queries (Edge Lake)"
+      "description": "Skills for Blotout EdgeTag: server-side tracking, first-party data infrastructure, identity stitching, 50+ channel integrations, consent analytics (ConsentIQ), and event data lake with SQL queries (Edge Lake), and UI design system usage (build, design and migrate app UI with @blotoutio/design-system)"
     }
   ]
 }
