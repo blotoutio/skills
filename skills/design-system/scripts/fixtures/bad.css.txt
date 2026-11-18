@@ -1,0 +1,6 @@
+:root {
+  --background: #ffffff;
+  --foreground: oklch(0.145 0 0);
+}
+.panel { @apply bg-slate-50; }
+.title { color: tomato; padding: 13px; }
