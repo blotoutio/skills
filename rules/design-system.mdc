@@ -1,0 +1,42 @@
+---
+description: All UI development (components, pages, layouts, forms, styling, UI bug fixes, UI reviews) in projects whose package.json depends on @blotout/design-system (or the older @blotoutio/design-system), or when the developer asks to adopt it. Build, design and migrate React UI with Blotout design system components and tokens.
+alwaysApply: false
+globs:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.css"
+---
+
+# Blotout Design System
+
+Applies to every piece of UI work (a component, a page, a style tweak, a UI bug fix) when `package.json` depends on `@blotout/design-system` (or the older `@blotoutio/design-system`), or when the developer asks to adopt it. Otherwise ignore this rule.
+
+If the `design-system` skill is installed, follow it. This rule is the short version.
+
+## Rules
+
+- Every component and icon comes from `@blotout/design-system`. No shadcn copies, Radix, `@base-ui/react` directly, MUI, AntD, Chakra, `lucide-react` or `sonner`.
+- Tokens only: `bg-background`, `bg-card`, `bg-muted`, `text-foreground`, `text-muted-foreground`, `border-border`, `rounded-lg`. Status goes through `Badge` / `Alert` / `Banner` variants (by meaning), not status text tokens. No hex, no `bg-blue-500`, no `p-[13px]`, no inline colour/spacing styles.
+- The installed package's type definitions (typecheck, editor go-to-definition) decide whether a prop or variant exists. https://design.blotout.io/api.md is the quick reference; up to 0.1.3 it is missing `PageHeader*` and `TabsList variant='header'`, so trust the types for those. Examples in https://design.blotout.io/llms-full.txt were fixed in 0.1.3; older copies may still show `asChild` or Radix-style props, and the types win. Never use a prop you haven't seen in the API docs or the installed types.
+- One `Button variant='default'` per view; others `outline`, `secondary` or `ghost`. Destructive actions confirm with `AlertDialog`. Results → `toast()` with `<Toaster />` at the root.
+- Pages are full width (`w-full`, no `max-w-*` container). Page header: `PageHeader` (0.1.3+): `PageHeaderBanner` > `PageHeaderHeading` > `PageHeaderTitleRow` (icon, `PageHeaderTitle`, status badge in `PageHeaderAddons`) + `PageHeaderDescription`, then `PageHeaderActions`; a page-scope selector (instance, account, dataset) goes first in the actions, never in its own row.
+- Sub-pages of an app (main view, settings) are header tabs (`PageHeaderTabs` + `PageHeaderTabsList`, or `<TabsList variant='header'>`), one URL per tab; never a button that jumps to another page of the app. External sites: `Button variant='outline'` as an `<a target='_blank'>` with `ExternalLinkIcon` and sr-only "(opens in a new tab)". Text links only inside running text.
+- Sections: heading row above (`<h2 className='text-lg font-semibold'>`, description, then filters → actions → search last, all 32px), a plain `Card` + `CardContent` below holding only the data, notes under it.
+- Tables are bordered with no `Card` around them: `<Table bordered>` (0.1.3+; older: `rounded-lg border border-border` wrapper). Header labels muted, first column `font-medium`. `DataTable` has no `bordered` prop: frame its inner table in a shared `BorderedDataTable`. A `size='sm'` select in a heading row gets `h-8` to match 32px buttons. Default size 40px header / 36px rows; `lg` (expandable tables) 42px / 48px with 16px cell padding. When the installed `Table` has a `size` prop (DS #33, after 0.1.3), use `<Table bordered size='lg'>`; until then set the sizes in one shared app table component. Per-item breakdowns are expandable tables (`TableRowGroup`, first cell `<div className='flex items-center gap-2.5'><TableExpandToggle aria-label=…/><TableCellContent>…</TableCellContent></div>`, `TableExpandedRow`, `TableDetailList`), not cards. Row actions are icon-only `Button variant='link' size='icon-sm'` with `aria-label` + `Tooltip`; text labels only when asked; all actions inline, overflow menu only when asked or more than four.
+- Settings / configuration pages are a stack of section rows, not titled cards: `<section className="flex flex-col gap-4 border-b py-6 last:border-b-0 lg:flex-row lg:gap-8">`, title + description left (`w-full lg:w-75 lg:shrink-0`), headerless `<Card className="flex-1 gap-4 p-4 md:p-6">` right, save button `w-full md:w-auto md:self-end`. Code-only section: code block on the right without a Card. A settings page is a tab of its app.
+
+## Base UI pitfalls (shadcn habits that break)
+
+1. `render={<Button />}`, never `asChild`. `Button` as a link: `nativeButton={false} render={<Link />}`.
+2. Menu and command items use `onClick`; `onSelect` compiles but never fires.
+3. `Select` needs `items` or the trigger shows raw values.
+4. Errors: `<Field invalid={!!e}>` + `<FieldError match={!!e}>{e}</FieldError>`; without `match` the text never shows. `FieldGroup` is side-by-side columns that never collapse; stack fields with `flex flex-col gap-4`, and put a pair side by side with `grid gap-4 md:grid-cols-2`.
+5. Accordion/ToggleGroup: no `type`; values are arrays. Tabs style variant goes on `TabsList`. `CollapsibleContent` → `CollapsiblePanel`. Sheet → `Drawer direction`.
+6. Toast: `toast.success({ title, description })`, `timeout` not `duration`, no `type` option.
+7. Compiles but renders wrong: `AlertDialogHeader` needs `AlertDialogText` around title + description; `NavbarBrand` is a 36px logo slot (no text); DataTable columns via `col.columns([...])` without a type annotation; RadioCard/CheckboxCard/SwitchCard take no children; MetricText percent takes 12.6 not 0.126; `PaginationRange`/`PaginationControls` render nothing outside `Pagination`.
+
+## Docs
+
+- Storybook: https://design.blotout.io
+- Index: https://design.blotout.io/llms.txt
+- API: https://design.blotout.io/api.md
